@@ -1,0 +1,16 @@
+import React from 'react';
+
+interface ├── resumeProps {
+  // Define props here
+}
+
+const ├── resume: React.FC<├── resumeProps> = () => {
+  return (
+    <div className="resume">
+      <h1>├── resume Component</h1>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default ├── resume;

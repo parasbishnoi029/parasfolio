@@ -1,0 +1,16 @@
+import React from 'react';
+
+interface │   ├── homeProps {
+  // Define props here
+}
+
+const │   ├── home: React.FC<│   ├── homeProps> = () => {
+  return (
+    <div className="home">
+      <h1>│   ├── home Component</h1>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default │   ├── home;

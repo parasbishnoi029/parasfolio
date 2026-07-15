@@ -1,0 +1,16 @@
+import React from 'react';
+
+interface │   ├── portfolioProps {
+  // Define props here
+}
+
+const │   ├── portfolio: React.FC<│   ├── portfolioProps> = () => {
+  return (
+    <div className="portfolio">
+      <h1>│   ├── portfolio Component</h1>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default │   ├── portfolio;

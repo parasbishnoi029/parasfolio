@@ -1,0 +1,16 @@
+import React from 'react';
+
+interface │   └── mobileProps {
+  // Define props here
+}
+
+const │   └── mobile: React.FC<│   └── mobileProps> = () => {
+  return (
+    <div className="mobile">
+      <h1>│   └── mobile Component</h1>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default │   └── mobile;

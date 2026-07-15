@@ -1,0 +1,16 @@
+import React from 'react';
+
+interface │   ├── profileProps {
+  // Define props here
+}
+
+const │   ├── profile: React.FC<│   ├── profileProps> = () => {
+  return (
+    <div className="profile">
+      <h1>│   ├── profile Component</h1>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default │   ├── profile;
