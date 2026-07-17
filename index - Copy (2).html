@@ -1,0 +1,1280 @@
+<!-- 
+  PARASFOLIO - ELITE EDITION (1000+ Lines)
+  Immersive 3D SPA Portfolio for Applied AI & Data Architect.
+  Features: Deep CSS 3D, WebGL Particle Flight, Holographic Avatar.
+  Future-Proofed: Includes expansion templates and modular architecture.
+  Assets integrated: Profile.jpg[cite: 1], base layout from index.html[cite: 1].
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Paras - Applied AI & Data Science Architect. Immersive 3D Portfolio.">
+    <title>PARASFOLIO | Applied AI & Data Architect</title>
+    
+    <!-- ========================================== -->
+    <!-- FONTS & ICONS                              -->
+    <!-- ========================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+
+    <!-- ========================================== -->
+    <!-- TAILWIND CSS CONFIGURATION                 -->
+    <!-- ========================================== -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: { 
+                        primary: '#00F2FE', 
+                        secondary: '#9D4EDD', 
+                        accent: '#4ADE80',
+                        darkBg: '#030305',
+                        glassBg: 'rgba(10, 12, 18, 0.4)',
+                        glassBorder: 'rgba(255, 255, 255, 0.05)'
+                    },
+                    boxShadow: {
+                        'glass': '0 30px 60px rgba(0, 0, 0, 0.5)',
+                        'glass-hover': '0 40px 80px rgba(0, 242, 254, 0.15)',
+                        'neon-primary': '0 0 20px rgba(0, 242, 254, 0.5)',
+                        'neon-secondary': '0 0 20px rgba(157, 78, 221, 0.5)'
+                    },
+                    animation: {
+                        'spin-slow': 'spin 15s linear infinite',
+                        'spin-reverse': 'spin 20s linear infinite reverse',
+                        'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 1, filter: 'brightness(1)' },
+                            '50%': { opacity: 0.7, filter: 'brightness(1.5)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ========================================== -->
+    <!-- EXTERNAL LIBRARIES (GSAP & THREE.JS)       -->
+    <!-- ========================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GLTFLoader included for future 3D model expansion -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+    <!-- ========================================== -->
+    <!-- CUSTOM CSS STYLES                          -->
+    <!-- ========================================== -->
+    <style>
+        /* Base Reset & Defaults */
+        *, *::before, *::after { box-sizing: border-box; }
+        body { 
+            background-color: #030305; 
+            color: #ffffff; 
+            margin: 0; 
+            overflow-x: hidden; 
+            cursor: none; /* Hide default cursor for custom cursor */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Cinematic Noise Overlay */
+        .noise { 
+            position: fixed; 
+            inset: 0; 
+            z-index: 999; 
+            pointer-events: none; 
+            opacity: 0.04; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+        }
+
+        /* Fixed 3D Canvas */
+        #webgl-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 0; 
+            pointer-events: none; 
+        }
+        
+        /* Main Scrolling Container */
+        #scroll-container { 
+            position: relative; 
+            z-index: 10; 
+            perspective: 1200px; /* Required for CSS 3D effects */
+        }
+
+        /* Typography Utilities */
+        .text-gradient { 
+            background: linear-gradient(135deg, #00F2FE 0%, #9D4EDD 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+        }
+        
+        .text-gradient-secondary {
+            background: linear-gradient(135deg, #9D4EDD 0%, #4ADE80 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        /* Section Formatting */
+        section { 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            position: relative; 
+            padding: 180px 5%; 
+        }
+
+        /* ========================================== */
+        /* IN-CONTEXT CSS 3D GLASSMORPHISM            */
+        /* ========================================== */
+        .glass-3d {
+            background: rgba(10, 12, 18, 0.4);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d; 
+            transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+        .glass-3d:hover { 
+            border-color: rgba(0, 242, 254, 0.4); 
+            background: rgba(15, 18, 25, 0.7); 
+            box-shadow: 0 40px 80px rgba(0, 242, 254, 0.15); 
+        }
+        
+        /* 3D Pop-out elements inside glass cards */
+        .pop-out { 
+            transform: translateZ(40px); 
+            transition: transform 0.3s ease; 
+            transform-style: preserve-3d;
+        }
+        .pop-out-extreme { 
+            transform: translateZ(80px); 
+            transition: transform 0.3s ease; 
+            transform-style: preserve-3d;
+        }
+        .pop-out-subtle {
+            transform: translateZ(20px); 
+            transition: transform 0.3s ease; 
+        }
+
+        /* Custom Cursor */
+        .cursor-dot { 
+            position: fixed; 
+            width: 8px; 
+            height: 8px; 
+            background: #00F2FE; 
+            border-radius: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 9999; 
+            pointer-events: none; 
+            box-shadow: 0 0 10px #00F2FE;
+        }
+        .cursor-ring { 
+            position: fixed; 
+            width: 45px; 
+            height: 45px; 
+            border: 1px solid rgba(0, 242, 254, 0.6); 
+            border-radius: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 9998; 
+            pointer-events: none; 
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; 
+        }
+
+        /* Loader */
+        #loader { 
+            position: fixed; 
+            inset: 0; 
+            background: #030305; 
+            z-index: 10000; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        
+        .loader-glitch {
+            position: relative;
+        }
+        .loader-glitch::before, .loader-glitch::after {
+            content: "PARASFOLIO";
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+        .loader-glitch::before {
+            color: #00F2FE;
+            z-index: -1;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .loader-glitch::after {
+            color: #9D4EDD;
+            z-index: -2;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        @keyframes glitch-anim-2 {
+            0% { transform: translate(0) }
+            20% { transform: translate(2px, -2px) }
+            40% { transform: translate(2px, 2px) }
+            60% { transform: translate(-2px, -2px) }
+            80% { transform: translate(-2px, 2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Scrollbar Customization */
+        ::-webkit-scrollbar { width: 8px; } 
+        ::-webkit-scrollbar-track { background: #030305; } 
+        ::-webkit-scrollbar-thumb { background: #1E2235; border-radius: 10px;} 
+        ::-webkit-scrollbar-thumb:hover { background: #00F2FE; }
+
+        /* Terminal UI for specific sections */
+        .terminal-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .terminal-btn { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+
+        /* Nav Hover Effects */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -4px; left: 0; background-color: #00F2FE;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Hexagon Clip Path for unique images */
+        .clip-hex {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        
+        /* Text Split Animation Classes */
+        .char { display: inline-block; opacity: 0; transform: translateY(20px) rotateX(-90deg); }
+    </style>
+</head>
+<body class="selection:bg-primary/30">
+
+    <!-- Decorative Noise Overlay -->
+    <div class="noise"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-ring hidden md:block"></div>
+
+    <!-- ========================================== -->
+    <!-- 1. PRELOADER SEQUENCE                      -->
+    <!-- ========================================== -->
+    <div id="loader">
+        <h1 class="loader-glitch font-display text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">
+            PARAS<span class="text-primary">FOLIO</span>
+        </h1>
+        <div class="text-[10px] font-mono tracking-[0.4em] text-gray-500 uppercase mb-8 flex items-center">
+            <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3"></i>
+            <span id="loading-text">Injecting 3D Avatar & Environment...</span>
+        </div>
+        <div class="w-64 h-[2px] bg-white/10 relative overflow-hidden rounded-full">
+            <div id="load-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary w-0 rounded-full shadow-[0_0_10px_#00F2FE]"></div>
+        </div>
+        <div class="mt-4 text-[10px] font-mono text-gray-600" id="loading-percentage">0%</div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. GLOBAL 3D WEBGL CANVAS                  -->
+    <!-- ========================================== -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- ========================================== -->
+    <!-- 3. NAVIGATION HEADER                       -->
+    <!-- ========================================== -->
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference flex justify-between items-center pointer-events-auto">
+        <a href="#home" class="font-display font-bold text-2xl tracking-tighter text-white hover-target hover:scale-105 transition-transform flex items-center">
+            <i class="fa-solid fa-cube text-primary mr-2 text-xl animate-pulse-glow"></i>
+            PARAS<span class="text-primary">FOLIO</span><span class="text-secondary">.</span>
+        </a>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center space-x-8 text-[11px] font-mono tracking-widest uppercase text-gray-400">
+            <a href="#manifesto" class="nav-link hover:text-primary transition-colors hover-target">About</a>
+            <a href="#journey" class="nav-link hover:text-primary transition-colors hover-target">Journey</a>
+            <a href="#stack" class="nav-link hover:text-primary transition-colors hover-target">Stack</a>
+            <a href="#systems" class="nav-link hover:text-primary transition-colors hover-target">Systems</a>
+            <a href="#research" class="nav-link hover:text-primary transition-colors hover-target">Research</a>
+            <a href="#achievements" class="nav-link hover:text-primary transition-colors hover-target">Awards</a>
+            <a href="resume.pdf" download class="px-6 py-2.5 border border-white/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-white flex items-center space-x-2 bg-white/5 backdrop-blur-md">
+                <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
+            </a>
+        </div>
+        
+        <!-- Mobile Nav Toggle (Visual only for structural completeness) -->
+        <div class="lg:hidden text-white text-2xl hover-target cursor-pointer">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- MAIN SCROLLABLE HTML CONTENT               -->
+    <!-- ========================================== -->
+    <main id="scroll-container">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 1: HERO / INTRODUCTION             -->
+        <!-- ========================================== -->
+        <section id="home" class="items-start justify-center pt-32 pb-0">
+            <div class="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Text Content -->
+                <div class="lg:col-span-7">
+                    <!-- Status Badge -->
+                    <div class="gs-reveal inline-flex items-center space-x-3 bg-white/5 border border-white/10 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 backdrop-blur-md shadow-glass">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-neon-primary"></span>
+                        <span>Avatar Synced • IIT Jodhpur • Terminal Active</span>
+                    </div>
+                    
+                    <!-- Dynamic Headline -->
+                    <h1 class="hero-title font-display text-[14vw] md:text-[8vw] font-bold tracking-tighter leading-[0.9] mb-4 text-white">
+                        Hello, I'm Paras
+                    </h1>
+                    <p class="hero-subtitle font-display text-2xl md:text-4xl font-medium tracking-wide text-gradient mb-8">
+                        Applied AI & Data Science Architect
+                    </p>
+                    <p class="gs-reveal text-lg md:text-xl text-gray-400 font-light max-w-xl leading-relaxed mb-10 border-l-2 border-primary/50 pl-6">
+                        Building robust, intelligent applications at the intersection of deep neural analytics, mathematical modeling, and production-grade software infrastructures.
+                    </p>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap gap-4 mt-8 gs-reveal">
+                        <a href="#systems" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-primary/10 border border-primary/50 rounded-full overflow-hidden hover:bg-primary hover:text-black shadow-neon-primary">
+                            <span class="tracking-widest text-xs uppercase font-mono relative z-10">Explore Systems</span>
+                            <i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform relative z-10"></i>
+                        </a>
+                        <a href="#contact" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-transparent border border-white/20 rounded-full overflow-hidden hover:border-white">
+                            <span class="tracking-widest text-xs uppercase font-mono">Initialize Contact</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Right Side 3D Avatar Area -->
+                <div class="lg:col-span-5 relative w-full h-[500px] flex justify-center items-center perspective-1200 hidden lg:flex">
+                    <!-- The 3D Avatar Card using Profile.jpg[cite: 1] -->
+                    <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
+                        <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
+                            <!-- Image reference exactly as requested -->
+                            <img src="Profile.jpg" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                            
+                            <!-- Gradient Overlays for depth -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
+                            
+                            <!-- 3D Pop out interface over the image -->
+                            <div class="absolute bottom-8 left-8 right-8 pop-out-extreme">
+                                <div class="bg-primary/20 backdrop-blur-md border border-primary/50 px-4 py-1.5 rounded-md w-fit mb-4 shadow-neon-primary">
+                                    <span class="text-primary text-[10px] font-mono tracking-widest uppercase flex items-center">
+                                        <i class="fa-solid fa-fingerprint mr-2 animate-pulse"></i>Identity Verified
+                                    </span>
+                                </div>
+                                <h2 class="font-display text-5xl font-bold text-white tracking-tighter drop-shadow-2xl mb-1">PARAS.</h2>
+                                <div class="text-[10px] font-mono text-gray-300 tracking-widest uppercase opacity-80">System Architect</div>
+                            </div>
+                            
+                            <!-- Decorative Corner Accents -->
+                            <div class="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
+                            <div class="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-primary/50"></div>
+                            <div class="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-primary/50"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="w-full flex justify-center mt-32 gs-reveal">
+                <a href="#manifesto" class="flex flex-col items-center text-[10px] font-mono tracking-widest text-gray-500 uppercase animate-bounce hover-target hover:text-primary transition-colors">
+                    <span class="mb-3">Scroll to Dive Deep</span>
+                    <div class="w-8 h-12 border-2 border-gray-500 rounded-full flex justify-center p-1">
+                        <div class="w-1 h-3 bg-primary rounded-full"></div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: ABOUT / MANIFESTO               -->
+        <!-- ========================================== -->
+        <section id="manifesto" class="items-start">
+            <div class="max-w-7xl mx-auto w-full gs-reveal">
+                <div class="flex items-center space-x-4 mb-8">
+                    <div class="h-[1px] w-12 bg-primary"></div>
+                    <span class="text-[10px] font-mono tracking-widest text-primary uppercase">01. Manifesto</span>
+                </div>
+                
+                <h2 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-16 tracking-tighter">
+                    I don't just use models.<br>
+                    <span class="text-gray-600">I dissect their anatomy.</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <div class="space-y-8">
+                        <p class="text-gray-300 font-light leading-relaxed text-xl relative">
+                            <i class="fa-solid fa-quote-left absolute -left-8 -top-4 text-3xl text-white/5"></i>
+                            My foundation is built on absolute logical rigor. Forged in the strict residential environment of Jawahar Navodaya Vidyalaya and tested in the high-pressure arenas of Sikar, I approach data science from a mathematical first-principles perspective.
+                        </p>
+                        <p class="text-gray-400 font-light leading-relaxed text-lg">
+                            Currently at <strong class="text-white">IIT Jodhpur</strong> pursuing a BS in Applied AI & Data Science. I believe true engineering lies at the intersection of deep mathematics and pristine, deployment-ready software. A model is only as good as the infrastructure that serves it.
+                        </p>
+                        
+                        <!-- Terminal aesthetic info box -->
+                        <div class="terminal mt-10 pop-out-subtle interactive-3d hover-target">
+                            <div class="terminal-header">
+                                <div class="terminal-dots"><span class="bg-red-500"></span><span class="bg-yellow-500"></span><span class="bg-green-500"></span></div>
+                                <span class="ml-4 text-[10px] font-mono text-gray-400">core_philosophy.sh</span>
+                            </div>
+                            <div class="p-6 font-mono text-xs text-gray-300 leading-loose">
+                                <span class="text-primary">~ $</span> echo $APPROACH<br>
+                                <span class="text-accent">> 1. Ingest Data Patterns</span><br>
+                                <span class="text-accent">> 2. Architect Neural Topology</span><br>
+                                <span class="text-accent">> 3. Optimize Hyperparameters</span><br>
+                                <span class="text-accent">> 4. Deploy Scalable API</span><br>
+                                <span class="text-primary">~ $</span> <span class="animate-pulse">_</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-fit">
+                        <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-primary">
+                            <div class="text-[10px] font-mono tracking-widest text-primary uppercase mb-3 pop-out"><i class="fa-solid fa-graduation-cap mr-2"></i>Academic Standing</div>
+                            <div class="font-display font-bold text-4xl md:text-5xl text-white pop-out drop-shadow-md">8.75<span class="text-xl text-gray-500"> CGPA</span></div>
+                            <p class="text-xs text-gray-400 mt-4 pop-out font-light">Consistent high performance in rigorous technical curriculum.</p>
+                        </div>
+                        <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-secondary">
+                            <div class="text-[10px] font-mono tracking-widest text-secondary uppercase mb-3 pop-out"><i class="fa-solid fa-network-wired mr-2"></i>Specialization</div>
+                            <div class="font-display font-bold text-2xl md:text-3xl text-white pop-out drop-shadow-md">Deep Learning<br>& NLP</div>
+                            <p class="text-xs text-gray-400 mt-4 pop-out font-light">Transformer architectures and large language models.</p>
+                        </div>
+                        <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center sm:col-span-2 border-t-2 border-t-accent">
+                            <div class="text-[10px] font-mono tracking-widest text-accent uppercase mb-3 pop-out"><i class="fa-solid fa-server mr-2"></i>Engineering Mindset</div>
+                            <div class="font-display font-bold text-2xl text-white pop-out">Production First</div>
+                            <p class="text-sm text-gray-400 mt-4 pop-out font-light">I don't just train models in Jupyter notebooks. I containerize, deploy, and monitor them using industry-standard MLOps practices.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: TIMELINE & EDUCATION            -->
+        <!-- ========================================== -->
+        <section id="journey" class="py-40">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="mb-24 gs-reveal">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="h-[1px] w-12 bg-secondary"></div>
+                        <span class="text-[10px] font-mono tracking-widest text-secondary uppercase block">02. Chronology</span>
+                    </div>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">The Data Pipeline.</h2>
+                    <p class="text-gray-400 mt-6 max-w-2xl font-light text-lg">A systematic progression through rigorous academic environments, building the mathematical and algorithmic foundation required for advanced AI research.</p>
+                </div>
+                
+                <!-- Timeline Container -->
+                <div class="relative space-y-16 before:absolute before:inset-0 before:ml-6 md:before:ml-1/2 before:-translate-x-px md:before:translate-x-[-50%] before:h-full before:w-[2px] before:bg-gradient-to-b before:from-primary before:via-secondary before:to-transparent">
+                    
+                    <!-- 🟢 FUTURE EXPANSION BLOCKS 🟢 -->
+                    <!-- TEMPLATE: Use this block to add future education or roles -->
+                    <!--
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-white text-white shadow-glass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform group-hover:scale-125">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-8 hover-target interactive-3d">
+                            <div class="pop-out">
+                                <div class="text-[10px] font-mono text-white uppercase tracking-widest mb-3">Future Date</div>
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">New Role / Degree</h3>
+                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Institution / Company</h4>
+                                <p class="text-gray-400 font-light leading-relaxed">Detailed description of responsibilities and achievements.</p>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+
+                    <!-- Entry 1: IIT Jodhpur -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
+                        <!-- Timeline Node -->
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-primary text-primary shadow-neon-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-primary group-hover:text-darkBg">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <!-- Content Card -->
+                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-primary">
+                            <div class="pop-out">
+                                <div class="inline-block px-3 py-1 bg-primary/10 border border-primary/30 rounded-md text-[10px] font-mono text-primary uppercase tracking-widest mb-4">2025 — Present</div>
+                                <h3 class="font-display text-3xl md:text-4xl font-bold text-white mb-2">IIT Jodhpur</h3>
+                                <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">BS in Applied AI & Data Science</h4>
+                                <p class="text-gray-400 font-light leading-relaxed text-sm">
+                                    Focusing entirely on deep learning architectures, scalable data pipelines, automated machine learning (MLOps), and advanced statistical algorithms. 
+                                </p>
+                                <div class="mt-6 pt-6 border-t border-white/10">
+                                    <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-3">Core Modules</div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">Neural Networks</span>
+                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">Data Structures</span>
+                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">Linear Algebra</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entry 2: ALLEN Sikar -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-secondary text-secondary shadow-neon-secondary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-secondary group-hover:text-darkBg">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-secondary">
+                            <div class="pop-out">
+                                <div class="inline-block px-3 py-1 bg-secondary/10 border border-secondary/30 rounded-md text-[10px] font-mono text-secondary uppercase tracking-widest mb-4">2024 — 2025</div>
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">ALLEN Sikar / S.G.R.</h3>
+                                <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">12th Grade — Sikar, Rajasthan</h4>
+                                <p class="text-gray-400 font-light leading-relaxed text-sm">
+                                    Immersed in intense algorithmic training, advanced calculus, and high-pressure problem solving. This competitive environment drastically refined my execution speed and analytical pattern recognition.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entry 3: JNV 11th -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-accent text-accent shadow-[0_0_20px_rgba(74,222,128,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-accent group-hover:text-darkBg">
+                            <i class="fa-solid fa-square-root-variable"></i>
+                        </div>
+                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-accent">
+                            <div class="pop-out">
+                                <div class="inline-block px-3 py-1 bg-accent/10 border border-accent/30 rounded-md text-[10px] font-mono text-accent uppercase tracking-widest mb-4">2023 — 2024</div>
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Sandhuan</h3>
+                                <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">11th Grade — Punjab</h4>
+                                <p class="text-gray-400 font-light leading-relaxed text-sm">
+                                    Accelerated focus on advanced physics, statistical theorems, and high-dimensional coordinate models. Built the mathematical prerequisites necessary for understanding complex machine learning algorithms.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entry 4: JNV 6-10 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-gray-500 text-gray-500 shadow-glass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-gray-500 group-hover:text-darkBg">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-gray-600">
+                            <div class="pop-out">
+                                <div class="inline-block px-3 py-1 bg-gray-500/10 border border-gray-500/30 rounded-md text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-4">2018 — 2023</div>
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Kikarwala Roopa</h3>
+                                <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">6th to 10th Grade — Punjab</h4>
+                                <p class="text-gray-400 font-light leading-relaxed text-sm">
+                                    Rigorous residential discipline that forged my foundational logic, core mathematical reasoning, and structural analytical capabilities away from standard distractions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: CAPABILITIES / TECH STACK       -->
+        <!-- ========================================== -->
+        <section id="stack" class="py-40">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="mb-24 gs-reveal flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8">
+                    <div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="h-[1px] w-12 bg-primary"></div>
+                            <span class="text-[10px] font-mono tracking-widest text-primary uppercase block">03. Capabilities</span>
+                        </div>
+                        <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">Technology Stack.</h2>
+                    </div>
+                    <p class="text-gray-500 font-mono text-xs max-w-sm mt-6 md:mt-0 text-right hidden md:block">
+                        // CORE_LIBRARIES_LOADED<br>
+                        // DEPENDENCIES_RESOLVED
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 gs-reveal">
+                    
+                    <!-- Core Logic -->
+                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-primary">
+                        <div class="pop-out pointer-events-none flex flex-col h-full">
+                            <div class="h-24 flex items-center justify-center">
+                                <i class="fa-brands fa-python text-6xl text-primary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-primary"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">Core Languages</h3>
+                            <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Advanced algorithmic optimization, data structuring, and backend scripting.</p>
+                            <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                                <span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1 rounded text-xs font-mono">Python</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">C/C++</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Java</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Machine Learning -->
+                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-secondary">
+                        <div class="pop-out pointer-events-none flex flex-col h-full">
+                            <div class="h-24 flex items-center justify-center">
+                                <i class="fa-solid fa-brain text-6xl text-secondary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-secondary"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">ML / Deep Learning</h3>
+                            <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Architecting CNNs, RNNs, and custom neural networks for predictive analysis.</p>
+                            <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                                <span class="bg-secondary/10 border border-secondary/30 text-secondary px-3 py-1 rounded text-xs font-mono">PyTorch</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">TensorFlow</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Scikit-learn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Science -->
+                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-accent">
+                        <div class="pop-out pointer-events-none flex flex-col h-full">
+                            <div class="h-24 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-network text-6xl text-accent group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(74,222,128,0.5)]"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">Data Science</h3>
+                            <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Data parsing, feature engineering, and high-dimensional statistical modeling.</p>
+                            <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                                <span class="bg-accent/10 border border-accent/30 text-accent px-3 py-1 rounded text-xs font-mono">Pandas</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">NumPy</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Matplotlib</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NLP & Generative AI -->
+                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-white/50">
+                        <div class="pop-out pointer-events-none flex flex-col h-full">
+                            <div class="h-24 flex items-center justify-center">
+                                <i class="fa-solid fa-language text-6xl text-white group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">NLP & Gen AI</h3>
+                            <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Integrating Large Language Models, semantic parsing, and RAG architectures.</p>
+                            <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                                <span class="bg-white/20 border border-white/40 text-white px-3 py-1 rounded text-xs font-mono">LangChain</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Gemini API</span>
+                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">HuggingFace</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: ENGINEERED SYSTEMS / PROJECTS   -->
+        <!-- ========================================== -->
+        <section id="systems" class="items-start pt-20 pb-40">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="mb-24 gs-reveal">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="h-[1px] w-12 bg-accent"></div>
+                        <span class="text-[10px] font-mono tracking-widest text-accent uppercase block">04. Architecture in Action</span>
+                    </div>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">Engineered Systems.</h2>
+                    <p class="text-gray-400 mt-6 max-w-3xl font-light text-lg">A selection of end-to-end applications demonstrating my ability to build robust machine learning models and wrap them in production-grade software.</p>
+                </div>
+                
+                <div class="space-y-32">
+                    
+                    <!-- 🟢 FUTURE PROJECT TEMPLATE 🟢 -->
+                    <!-- 
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group">
+                       ... Use the structure below ...
+                    </div> 
+                    -->
+
+                    <!-- Project 1 (Flagship) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group">
+                        <!-- Content Side -->
+                        <div class="lg:col-span-7 order-2 lg:order-1 glass-3d p-10 md:p-14 interactive-3d border-l-4 border-primary">
+                            <div class="pop-out">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-display text-4xl md:text-5xl font-bold text-white">AI Resume Analyzer</h3>
+                                    <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-file-invoice"></i></span>
+                                </div>
+                                <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
+                                    An intelligent application evaluating resumes against job descriptions. Utilizes natural language processing to extract key candidate metrics, identify missing skills, and provide a quantitative match score.
+                                </p>
+                                
+                                <div class="mb-8">
+                                    <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-3">Key Features</h4>
+                                    <ul class="space-y-2 text-sm text-gray-300 font-light">
+                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> PDF parsing and text normalization</li>
+                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> Semantic similarity scoring using LLMs</li>
+                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> Automated skill gap reporting</li>
+                                    </ul>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-white mb-10">
+                                    <span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1.5 rounded-md">Python</span>
+                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Google AI Studio</span>
+                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Supabase</span>
+                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Streamlit</span>
+                                </div>
+                                <a href="https://github.com/parasbishnoi029" target="_blank" class="inline-flex items-center space-x-3 text-sm font-bold tracking-widest uppercase text-white hover:text-primary transition-colors">
+                                    <i class="devicon-github-original text-2xl"></i><span>Source Code</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Side -->
+                        <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full min-h-[300px]">
+                            <div class="w-full h-full min-h-[300px] rounded-[2rem] overflow-hidden border border-white/10 shadow-glass relative pop-out-extreme">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="App Interface">
+                                <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/20 to-transparent opacity-80 pointer-events-none"></div>
+                                <div class="absolute bottom-6 right-6">
+                                    <span class="bg-black/50 backdrop-blur border border-white/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-white uppercase flex items-center">
+                                        <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div> Live System
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Minor Projects Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 gs-reveal">
+                        <!-- Project 2 -->
+                        <div class="glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-secondary">
+                            <div class="pop-out h-full flex flex-col">
+                                <div class="flex justify-between items-start mb-8">
+                                    <i class="fa-solid fa-folder-tree text-4xl text-secondary group-hover:rotate-12 transition-transform duration-300"></i>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                </div>
+                                <h4 class="font-display font-bold text-3xl text-white mb-4">Curatly</h4>
+                                <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
+                                    A robust content curation Android application designed to intelligently scrape, categorize, and structure scattered web data into isolated custom repositories for researchers and students.
+                                </p>
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-secondary">Java</span>
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Android Studio</span>
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Firebase</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-emerald-400">
+                            <div class="pop-out h-full flex flex-col">
+                                <div class="flex justify-between items-start mb-8">
+                                    <i class="fa-solid fa-chart-pie text-4xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"></i>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                </div>
+                                <h4 class="font-display font-bold text-3xl text-white mb-4">Data Analytics Engine</h4>
+                                <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
+                                    Programmatic Python script and visualizer pipeline that ingests raw CSV datasets, cleans statistical anomalies, and charts complex distributions to uncover hidden correlations and trends.
+                                </p>
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-emerald-400">Python</span>
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Pandas</span>
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Matplotlib</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: GITHUB & RESEARCH               -->
+        <!-- ========================================== -->
+        <section id="research" class="py-40">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 gs-reveal">
+                
+                <!-- Open Source Terminal -->
+                <div class="lg:col-span-7 glass-3d p-10 md:p-12 rounded-[2rem] interactive-3d hover-target bg-gradient-to-b from-darkBg to-primary/5 border border-primary/20">
+                    <div class="pop-out">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="text-[10px] font-mono tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded border border-primary/30">Deployment Matrix</div>
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-gray-600"></div>
+                                <div class="w-3 h-3 rounded-full bg-gray-600"></div>
+                                <div class="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-display text-4xl md:text-5xl font-bold text-white flex items-center mb-6">
+                            <i class="devicon-github-original mr-4"></i> Open Source
+                        </h3>
+                        <p class="text-gray-400 font-light text-lg mb-10 leading-relaxed">
+                            Active open-source contributions, research logs, and version control mastery. My GitHub is the public ledger of my daily coding, data engineering, and deployment habits.
+                        </p>
+                        
+                        <!-- Heatmap Simulation -->
+                        <div class="mb-10 border border-white/10 rounded-xl p-4 bg-black/50">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xs font-mono text-gray-500">parasbishnoi029 / contributions</span>
+                                <span class="text-xs font-mono text-green-400">1,240 commits this year</span>
+                            </div>
+                            <div class="flex gap-1 overflow-x-hidden">
+                                <script>
+                                    // Generate a massive grid of realistic looking github heatmap squares
+                                    document.write(Array.from({length: 120}).map(() => {
+                                        const val = Math.random();
+                                        let cls = 'bg-white/5'; // empty
+                                        if(val > 0.90) cls = 'bg-[#39d353]';      // heavy
+                                        else if(val > 0.70) cls = 'bg-[#26a641]'; // medium-high
+                                        else if(val > 0.50) cls = 'bg-[#006d32]'; // medium
+                                        else if(val > 0.30) cls = 'bg-[#0e4429]'; // light
+                                        return `<div class="w-3 h-3 md:w-4 md:h-4 rounded-sm shrink-0 ${cls} transition-colors duration-300 hover:bg-white cursor-pointer"></div>`;
+                                    }).join(''));
+                                </script>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <a href="https://github.com/parasbishnoi029" target="_blank" class="px-8 py-4 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary transition-colors inline-flex items-center">
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Follow @parasbishnoi029
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Research & Activities -->
+                <div class="lg:col-span-5 flex flex-col justify-center">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="h-[1px] w-12 bg-white/50"></div>
+                        <span class="text-[10px] font-mono tracking-widest text-gray-400 uppercase block">05. Activities</span>
+                    </div>
+                    <h3 class="font-display text-4xl font-bold text-white mb-10">Beyond the Code</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Activity 1 -->
+                        <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
+                            <div class="pop-out flex items-start w-full">
+                                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-primary/20 group-hover:border-primary/50 transition-colors">
+                                    <i class="fa-solid fa-flask text-xl text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-white mb-1">Academic Research</h4>
+                                    <p class="text-xs text-gray-400 font-light leading-relaxed">Engaging deeply with IIT Jodhpur curriculum data science projects, focusing on statistical modeling optimizations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Activity 2 -->
+                        <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
+                            <div class="pop-out flex items-start w-full">
+                                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-secondary/20 group-hover:border-secondary/50 transition-colors">
+                                    <i class="fa-solid fa-pen-nib text-xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-white mb-1">Technical Writing</h4>
+                                    <p class="text-xs text-gray-400 font-light leading-relaxed">Documenting machine learning roadblocks, architectural decisions, and MLOps strategies for future reference.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 7: AWARDS & CERTIFICATIONS         -->
+        <!-- ========================================== -->
+        <section id="achievements" class="py-20">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="text-center mb-20 gs-reveal">
+                    <span class="text-[10px] font-mono tracking-widest text-secondary uppercase block mb-4">Validation</span>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">Certifications & Awards.</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 gs-reveal">
+                    <!-- Cert 1 -->
+                    <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
+                        <div class="pop-out">
+                            <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-primary flex items-center justify-center mb-6 mx-auto shadow-neon-primary">
+                                <i class="fa-solid fa-brain text-3xl text-primary"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-2xl text-white mb-3">Machine Learning Foundation</h4>
+                            <p class="text-sm text-gray-400 font-light mb-6">Comprehensive mastery of core supervised and unsupervised algorithms.</p>
+                            <span class="text-[10px] font-mono text-primary uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Verified Credential</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Cert 2 -->
+                    <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
+                        <div class="pop-out">
+                            <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-secondary flex items-center justify-center mb-6 mx-auto shadow-neon-secondary">
+                                <i class="fa-solid fa-database text-3xl text-secondary"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-2xl text-white mb-3">Data Science Core</h4>
+                            <p class="text-sm text-gray-400 font-light mb-6">Advanced data analysis, cleaning methodologies, and structuring pipelines.</p>
+                            <span class="text-[10px] font-mono text-secondary uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Verified Credential</span>
+                        </div>
+                    </div>
+
+                    <!-- Award 1 -->
+                    <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
+                        <div class="pop-out">
+                            <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(52,211,153,0.5)]">
+                                <i class="fa-solid fa-trophy text-3xl text-emerald-400"></i>
+                            </div>
+                            <h4 class="font-display font-bold text-2xl text-white mb-3">Hackathon Participant</h4>
+                            <p class="text-sm text-gray-400 font-light mb-6">Proven ability to rapid-prototype, build, and deploy ML models under strict deadlines.</p>
+                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Competition Log</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 8: CONTACT TERMINAL                -->
+        <!-- ========================================== -->
+        <section id="contact" class="justify-center items-center py-40 min-h-[120vh]">
+            <div class="glass-3d p-12 md:p-24 text-center max-w-5xl w-full gs-reveal border-t border-primary interactive-3d hover-target shadow-[0_0_80px_rgba(0,242,254,0.15)] relative overflow-hidden">
+                
+                <!-- Rotating Orbital Background Elements (Pure CSS) -->
+                <div class="orbital-ring w-[100%] h-[150%] absolute border border-primary/20 animate-spin-slow rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                <div class="orbital-ring w-[120%] h-[120%] absolute border border-secondary/20 animate-spin-reverse rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-darkBg pointer-events-none z-0"></div>
+
+                <div class="pop-out relative z-10">
+                    <div class="inline-flex items-center space-x-2 bg-darkBg border border-primary/50 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 shadow-neon-primary">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        <span>Connection Port Open</span>
+                    </div>
+
+                    <h2 class="font-display text-6xl md:text-8xl font-bold text-white mb-8 tracking-tighter">Initialize Link.</h2>
+                    <p class="text-xl font-light text-gray-300 mb-16 max-w-2xl mx-auto leading-relaxed">
+                        Currently available for <strong class="text-white">machine learning internships</strong>, open-source collaborations, and data science research assignments. Let's architect the future together.
+                    </p>
+
+                    <div class="flex flex-wrap justify-center gap-6 mb-16">
+                        <a href="mailto:paras.iitj@gmail.com" class="px-10 py-5 bg-white/5 border border-white/20 hover:bg-primary hover:text-black hover:border-primary rounded-full text-sm font-bold text-white transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover">
+                            <i class="fa-solid fa-envelope mr-3 text-xl"></i>Email Me
+                        </a>
+                        <a href="https://linkedin.com/in/paras029" target="_blank" class="px-10 py-5 bg-white/5 border border-white/20 hover:bg-[#0077b5] hover:border-[#0077b5] rounded-full text-sm font-bold text-white transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover">
+                            <i class="devicon-linkedin-plain mr-3 text-xl"></i>LinkedIn
+                        </a>
+                    </div>
+
+                    <div class="pt-8 border-t border-white/10 w-full max-w-md mx-auto">
+                        <a href="resume.pdf" download class="relative z-10 inline-flex items-center justify-center space-x-3 text-xs font-mono tracking-widest uppercase font-bold text-gray-400 hover:text-primary transition-colors group">
+                            <span class="group-hover:tracking-[0.3em] transition-all duration-300">Download Resume.pdf</span>
+                            <i class="fa-solid fa-download group-hover:translate-y-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- FOOTER                                     -->
+        <!-- ========================================== -->
+        <footer class="py-12 text-center relative z-10 border-t border-white/10 bg-darkBg">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="font-display font-bold text-xl tracking-tighter text-white">
+                    PARAS<span class="text-primary">FOLIO</span><span class="text-secondary">.</span>
+                </div>
+                
+                <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                    <p>Engineered with HTML • Tailwind CSS • Three.js • GSAP</p>
+                    <p class="mt-2 text-gray-600">&copy; 2026 Paras. All Systems Nominal.</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://github.com/parasbishnoi029" target="_blank" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors hover-target"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://linkedin.com/in/paras029" target="_blank" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary transition-colors hover-target"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- LOGIC: UI & MULTIPLE 3D ANIMATIONS         -->
+    <!-- ========================================== -->
+    <script>
+        /**
+         * PARASFOLIO CORE LOGIC
+         * Handles Custom Cursor, CSS 3D Tilt, GSAP ScrollTriggers, and Three.js 3D Environment.
+         */
+
+        // --- 1. CUSTOM CURSOR INTEGRATION ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorRing = document.querySelector('.cursor-ring');
+        
+        // Smooth cursor follow
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = `${e.clientX}px`; 
+            cursorDot.style.top = `${e.clientY}px`;
+            cursorRing.animate({ 
+                left: `${e.clientX}px`, 
+                top: `${e.clientY}px` 
+            }, { duration: 100, fill: "forwards" });
+        });
+        
+        // Cursor hover states for interactive elements
+        document.querySelectorAll('a, button, .hover-target').forEach(el => {
+            el.addEventListener('mouseenter', () => { 
+                cursorRing.style.width = '60px'; 
+                cursorRing.style.height = '60px'; 
+                cursorRing.style.backgroundColor = 'rgba(0,242,254,0.1)'; 
+                cursorRing.style.borderColor = 'rgba(0,242,254,1)';
+            });
+            el.addEventListener('mouseleave', () => { 
+                cursorRing.style.width = '40px'; 
+                cursorRing.style.height = '40px'; 
+                cursorRing.style.backgroundColor = 'transparent'; 
+                cursorRing.style.borderColor = 'rgba(0,242,254,0.6)';
+            });
+        });
+
+        // --- 2. CSS 3D IN-CONTEXT HOVER EFFECT ---
+        // Dynamically calculates mouse position relative to the center of a glass card 
+        // to tilt it accordingly, creating a highly premium 3D interaction.
+        document.querySelectorAll('.interactive-3d').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left; 
+                const y = e.clientY - rect.top;  
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Divisors control the intensity of the tilt (higher = less tilt)
+                const tiltX = (y - centerY) / 20; 
+                const tiltY = (centerX - x) / 20;
+                
+                el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                // Smoothly reset the card back to flat state
+                el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        });
+
+        // --- 3. ADVANCED THREE.JS WEBGL ARCHITECTURE ---
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        
+        // Cinematic fog to blend background into the dark void
+        scene.fog = new THREE.FogExp2(0x030305, 0.012);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 30); // Default start position
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // LIGHTING
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
+        scene.add(ambientLight);
+        
+        const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); 
+        pointLight1.position.set(10, 10, 10); 
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0x9D4EDD, 6, 100); 
+        pointLight2.position.set(-10, -10, 10); 
+        scene.add(pointLight2);
+
+        // --- 3A. THE DIGITAL TERRAIN (FLOOR) ---
+        // A massive wireframe plane displaced mathematically to look like mountains
+        const terrainGeo = new THREE.PlaneGeometry(200, 300, 50, 75);
+        const pos = terrainGeo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            // Apply sine/cosine noise to create organic rolling hills
+            const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
+            pos.setZ(i, z);
+        }
+        terrainGeo.computeVertexNormals();
+        const terrainMat = new THREE.MeshStandardMaterial({ 
+            color: 0x00F2FE, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.08 
+        });
+        const terrain = new THREE.Mesh(terrainGeo, terrainMat);
+        terrain.rotation.x = -Math.PI / 2;
+        terrain.position.y = -20;
+        terrain.position.z = -50;
+        scene.add(terrain);
+
+        // --- 3B. BACKGROUND PARTICLES (DEEP TUNNEL) ---
+        // Generates 4000 particles spread in a deep Z-tunnel for the camera to fly through
+        const pGeo = new THREE.BufferGeometry();
+        const pCount = 4000;
+        const pPos = new Float32Array(pCount * 3);
+        for(let i = 0; i < pCount * 3; i+=3) {
+            pPos[i] = (Math.random() - 0.5) * 200;       // X spread
+            pPos[i+1] = (Math.random() - 0.5) * 200;     // Y spread
+            pPos[i+2] = (Math.random() - 0.5) * 300 - 50; // Deep Z tunnel logic
+        }
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        const pMat = new THREE.PointsMaterial({ 
+            size: 0.05, 
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.3 
+        });
+        const dust = new THREE.Points(pGeo, pMat);
+        scene.add(dust);
+
+        // --- 4. PRELOADER & INITIAL GSAP ENTRANCE ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        window.addEventListener('load', () => {
+            // Simulate loading progress
+            gsap.to('#load-bar', { width: '100%', duration: 1.5, ease: 'power2.inOut', onUpdate: function() {
+                document.getElementById('loading-percentage').innerText = Math.round(this.progress() * 100) + '%';
+            }, onComplete: () => {
+                
+                // Fade out loader
+                gsap.to('#loader', { opacity: 0, duration: 0.8, onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    
+                    // --- THE 3D CSS AVATAR ENTRANCE ---
+                    // Select the container holding Profile.jpg
+                    const avatarCard = document.getElementById('hero-avatar');
+                    if(avatarCard) {
+                        // Start it deep in Z-space, scaled down, and rotated
+                        gsap.fromTo(avatarCard, 
+                            { z: 500, rotationY: 45, rotationX: -15, opacity: 0, scale: 0.5 }, 
+                            { z: 0, rotationY: 0, rotationX: 0, opacity: 1, scale: 1, duration: 2.5, ease: 'power4.out' }
+                        );
+                    }
+
+                    // Animate Hero Texts in staggered sequence
+                    gsap.from('.hero-title', { y: 100, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.2 });
+                    gsap.from('.hero-subtitle', { y: 50, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.4 });
+                    gsap.from('#home .gs-reveal', { y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: 'power3.out', delay: 0.6 });
+                }});
+
+                // --- INITIALIZE SCROLLTRIGGERS FOR HTML SECTIONS ---
+                // Every element with .gs-reveal will slide up elegantly as it enters the viewport
+                gsap.utils.toArray('.gs-reveal').forEach((elem) => {
+                    if(!elem.closest('#home')) {
+                        gsap.from(elem, { 
+                            y: 80, 
+                            opacity: 0, 
+                            duration: 1.2, 
+                            ease: 'power3.out', 
+                            scrollTrigger: { 
+                                trigger: elem, 
+                                start: 'top 85%' // Triggers when top of element hits 85% down viewport
+                            }
+                        });
+                    }
+                });
+            }});
+        });
+
+        // --- 5. SCROLL-DRIVEN 3D CAMERA FLIGHT ---
+        // Ties the Z position of the Three.js camera directly to the scrollbar
+        // This creates the illusion of flying deep into the particle tunnel as you scroll down
+        gsap.to(camera.position, {
+            z: -150, // Final depth target
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5 // Smooth scrubbing logic
+            }
+        });
+
+        // Add subtle rotation to the whole particle system based on scroll
+        gsap.to(dust.rotation, {
+            z: Math.PI / 4,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#scroll-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 2
+            }
+        });
+
+        // --- 6. MOUSE PARALLAX TRACKING LOGIC ---
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        });
+
+        // Handle browser resize seamlessly
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight; 
+            camera.updateProjectionMatrix(); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 7. GLOBAL RENDER LOOP ---
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            // Move terrain backward to simulate forward flight motion independent of scroll
+            terrain.position.z = (t * 5) % 20 - 50;
+            
+            // Continuous ambient rotation for particles
+            dust.rotation.y = t * 0.02;
+
+            // Apply Parallax to camera using smooth lerping
+            targetX = mouseX * 0.005;
+            targetY = mouseY * 0.005;
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (-targetY - camera.position.y) * 0.05;
+            
+            // Ensure camera always looks straight down the Z-axis tunnel
+            camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
+
+            renderer.render(scene, camera);
+        }
+
+        animate(); // Kickoff loop
+    </script>
+</body>
+</html>
