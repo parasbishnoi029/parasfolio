@@ -1,10 +1,9 @@
-
 <!-- 
   PARASFOLIO - ELITE EDITION (1000+ Lines)
-  Immersive 3D SPA Portfolio for Applied AI & Data Architect.
+  Immersive 3D SPA Portfolio for Applied AI & Data Science Architect.
   Features: Deep CSS 3D, WebGL Particle Flight, Holographic Avatar.
   Future-Proofed: Includes expansion templates and modular architecture.
-  Assets integrated: Profile.jpg[cite: 1], base layout from index.html[cite: 1].
+  Assets integrated: Profile.jpg, base layout from index.html.
 -->
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
@@ -82,7 +81,6 @@
     <!-- EXTERNAL LIBRARIES (GSAP & THREE.JS)       -->
     <!-- ========================================== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GLTFLoader included for future 3D model expansion -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -99,7 +97,7 @@
             color: #ffffff; 
             margin: 0; 
             overflow-x: hidden; 
-            cursor: none; /* Hide default cursor for custom cursor */
+            cursor: none; 
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -129,7 +127,7 @@
         #scroll-container { 
             position: relative; 
             z-index: 10; 
-            perspective: 1200px; /* Required for CSS 3D effects */
+            perspective: 1200px; 
         }
  
         /* Typography Utilities */
@@ -300,7 +298,7 @@
         .char { display: inline-block; opacity: 0; transform: translateY(20px) rotateX(-90deg); }
     </style>
 </head>
-<body class="selection:bg-primary/30">
+<body class="selection:bg-primary/20">
  
     <!-- Decorative Noise Overlay -->
     <div class="noise"></div>
@@ -320,7 +318,7 @@
             <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3"></i>
             <span id="loading-text">Dreamer & Doer</span>
         </div>
-        <div class="w-64 h-[2px] bg-white/10 relative overflow-hidden rounded-full">
+        <div class="w-64 h-[1px] bg-white/10 relative overflow-hidden rounded-full">
             <div id="load-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary w-0 rounded-full shadow-[0_0_10px_#00F2FE]"></div>
         </div>
         <div class="mt-4 text-[10px] font-mono text-gray-600" id="loading-percentage">0%</div>
@@ -355,7 +353,7 @@
             </a>
         </div>
         
-        <!-- Mobile Nav Toggle (Visual only for structural completeness) -->
+        <!-- Mobile Nav Toggle -->
         <div class="lg:hidden text-white text-2xl hover-target cursor-pointer">
             <i class="fa-solid fa-bars-staggered"></i>
         </div>
@@ -384,7 +382,7 @@
                     <h1 class="hero-title font-display text-[14vw] md:text-[8vw] font-bold tracking-tighter leading-[0.9] mb-4 text-white">
                         Hello, I'm Paras
                     </h1>
-                    <p class="hero-subtitle font-display text-2xl md:text-4xl font-medium tracking-wide text-gradient mb-8">
+                    <p class="hero-subtitle font-display text-xl md:text-3xl font-medium tracking-wide text-gradient mb-8">
                         BS in Applied AI & Data Science @ IIT Jodhpur
                     </p>
                     <p class="gs-reveal text-lg md:text-xl text-gray-400 font-light max-w-xl leading-relaxed mb-10 border-l-2 border-primary/50 pl-6">
@@ -405,11 +403,9 @@
                 
                 <!-- Right Side 3D Avatar Area -->
                 <div class="lg:col-span-5 relative w-full h-[500px] flex justify-center items-center perspective-1200 hidden lg:flex">
-                    <!-- The 3D Avatar Card using Profile.jpg[cite: 1] -->
                     <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
                         <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
-                            <!-- Image reference exactly as requested -->
-                            <img src="Profile.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                            <img src="Profile.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
                             
                             <!-- Gradient Overlays for depth -->
                             <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
@@ -469,7 +465,7 @@
                         <p class="text-gray-400 font-light leading-relaxed text-lg">
                             Currently at <strong class="text-white">IIT Jodhpur</strong> pursuing a BS in Applied AI & Data Science. I believe true engineering lies at the intersection of deep mathematics and pristine, deployment-ready software. A model is only as good as the infrastructure that serves it.
                         </p>
-                        <p class="text-xl leading-relaxed text-gray-300">
+                        <p class="text-xl leading-relaxed text-gray-300 font-light">
                             I'm a BS student in Applied AI & Data Science at IIT Jodhpur who enjoys building practical AI-powered applications. My interests include Machine Learning, Android Development, Data Science, and Full-Stack Web Development. I learn by building real-world projects, experimenting with new technologies, and continuously improving my skills.
                         </p>
                         
@@ -529,7 +525,7 @@
                         </h2>
  
                         <p class="mt-8 text-gray-400 font-light leading-relaxed text-lg">
-                            Currently pursuing a BS in Applied AI & Data Science  with a strong focus on Machine Learning, Artificial Intelligence, Statistics, Programming, and Data Analytics.
+                            Currently pursuing a BS in Applied AI & Data Science with a strong focus on Machine Learning, Artificial Intelligence, Statistics, Programming, and Data Analytics.
                         </p>
  
                         <div class="grid grid-cols-2 gap-6 mt-12">
@@ -551,7 +547,7 @@
                     <div class="glass-3d overflow-hidden rounded-3xl interactive-3d hover-target">
                         <img
                             src="assets/iit-campus.webp"
-                            onerror="this.src='https://www.google.com/imgres?q=iit%20jodhpur%20landscape%204k%20photo&imgurl=https%3A%2F%2Fiitj.ac.in%2FPageImages%2FGallery%2F08-2025%2FSlider-638899029792478951.png&imgrefurl=https%3A%2F%2Fiitj.ac.in%2Ftechscape%2F&docid=R8KMXIbmsNz8pM&tbnid=D8acXNfyCR1MdM&vet=12ahUKEwj21a2-6tiVAxWa1DgGHQ9rM-MQnPAOegQIRxAA..i&w=1000&h=288&hcb=2&ved=2ahUKEwj21a2-6tiVAxWa1DgGHQ9rM-MQnPAOegQIRxAA'"
+                            onerror="this.src='https://iitj.ac.in/PageImages/Gallery/08-2025/Slider-638899029792478951.png'"
                             loading="lazy"
                             alt="IIT Jodhpur Campus"
                             class="w-full h-[550px] object-cover">
@@ -559,7 +555,7 @@
  
                 </div>
             </div>
-        </section>
+        </section> 
  
         <!-- ========================================== -->
         <!-- SECTION 3: TIMELINE & EDUCATION            -->
@@ -576,33 +572,13 @@
                 </div>
                 
                 <!-- Timeline Container -->
-                <div class="relative space-y-16 before:absolute before:inset-0 before:ml-6 md:before:ml-1/2 before:-translate-x-px md:before:translate-x-[-50%] before:h-full before:w-[2px] before:bg-gradient-to-b before:from-primary before:via-secondary before:to-transparent">
-                    
-                    <!-- 🟢 FUTURE EXPANSION BLOCKS 🟢 -->
-                    <!-- TEMPLATE: Use this block to add future education or roles -->
-                    <!--
-                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
-                        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-white text-white shadow-glass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform group-hover:scale-125">
-                            <i class="fa-solid fa-briefcase"></i>
-                        </div>
-                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-8 hover-target interactive-3d">
-                            <div class="pop-out">
-                                <div class="text-[10px] font-mono text-white uppercase tracking-widest mb-3">Future Date</div>
-                                <h3 class="font-display text-3xl font-bold text-white mb-2">New Role / Degree</h3>
-                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Institution / Company</h4>
-                                <p class="text-gray-400 font-light leading-relaxed">Detailed description of responsibilities and achievements.</p>
-                            </div>
-                        </div>
-                    </div>
-                    -->
+                <div class="relative space-y-16 before:absolute before:inset-0 before:ml-6 md:before:ml-1/2 before:-translate-x-px md:before:translate-x-[-50%] before:h-full before:w-[2px] before:bg-gradient-to-b before:from-transparent before:via-white/20 before:to-transparent">
  
                     <!-- Entry 1: IIT Jodhpur -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
-                        <!-- Timeline Node -->
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-primary text-primary shadow-neon-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-primary group-hover:text-darkBg">
                             <i class="fa-solid fa-microchip"></i>
                         </div>
-                        <!-- Content Card -->
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-primary">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-primary/10 border border-primary/30 rounded-md text-[10px] font-mono text-primary uppercase tracking-widest mb-4">2025 — Present</div>
@@ -634,7 +610,7 @@
                                 <h3 class="font-display text-3xl font-bold text-white mb-2">ALLEN Sikar / S.G.R.</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">12th Grade — Sikar, Rajasthan</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
-                                    JEE Prepration and 12th
+                                    JEE Preparation and 12th board diagnostics execution. Intensive quantitative problem solving.
                                 </p>
                             </div>
                         </div>
@@ -651,7 +627,7 @@
                                 <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Sandhuan</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">11th Grade — Punjab</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
-                                    11th standard
+                                    11th standard systematic progression under residential system criteria.
                                 </p>
                             </div>
                         </div>
@@ -662,13 +638,13 @@
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-gray-500 text-gray-500 shadow-glass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-gray-500 group-hover:text-darkBg">
                             <i class="fa-solid fa-building-columns"></i>
                         </div>
-                        <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-gray-600">
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-gray-600">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-gray-500/10 border border-gray-500/30 rounded-md text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-4">2018 — 2023</div>
                                 <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Kikarwala Roopa</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">6th to 10th Grade — Punjab</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
-                                    6th - 10th standard
+                                    6th - 10th standard foundational reasoning modules execution.
                                 </p>
                             </div>
                         </div>
@@ -845,14 +821,7 @@
                 
                 <div class="space-y-32">
                     
-                    <!-- 🟢 FUTURE PROJECT TEMPLATE 🟢 -->
-                    <!-- 
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group">
-                       ... Use the structure below ...
-                    </div> 
-                    -->
- 
-                    <!-- Project 1 (Flagship) -->
+                    <!-- Flagship Project (AI Resume Analyzer) -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group">
                         <!-- Content Side -->
                         <div class="lg:col-span-7 order-2 lg:order-1 glass-3d p-10 md:p-14 interactive-3d border-l-4 border-primary">
@@ -880,20 +849,35 @@
                                     <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Supabase</span>
                                     <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Streamlit</span>
                                 </div>
-                                <a href="https://github.com/parasbishnoi029" target="_blank" class="inline-flex items-center space-x-3 text-sm font-bold tracking-widest uppercase text-white hover:text-primary transition-colors">
-                                    <i class="devicon-github-original text-2xl"></i><span>Source Code</span>
-                                </a>
+
+                                <!-- Action Links Flex Container -->
+                                <div class="flex flex-wrap items-center gap-6">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-primary transition-colors hover-target">
+                                        <i class="devicon-github-original text-xl"></i><span>Source Code</span>
+                                    </a>
+                                    <a href="https://www.linkedin.com/posts/paras029_google-googleaistudio-geminiai-ugcPost-7464556938668843008-rR0_/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF60u9IBpVmvRsrkMAd5SUnLs9uxbs9DkL8" target="_blank" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-[#0077b5] transition-colors hover-target">
+                                        <i class="fa-brands fa-linkedin text-xl"></i><span>Post Overview</span>
+                                    </a>
+                                    <a href="resume-analyzer-demo.apk" download class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-[#4ADE80] transition-colors hover-target">
+                                        <i class="fa-solid fa-android text-xl"></i><span>Download APK</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Image Side -->
-                        <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full min-h-[300px]">
-                            <div class="w-full h-full min-h-[300px] rounded-[2rem] overflow-hidden border border-white/10 shadow-glass relative pop-out-extreme">
-                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="App Interface">
-                                <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/20 to-transparent opacity-80 pointer-events-none"></div>
-                                <div class="absolute bottom-6 right-6">
-                                    <span class="bg-black/50 backdrop-blur border border-white/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-white uppercase flex items-center">
-                                        <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div> Live System
+                        <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full flex justify-center items-center">
+   
+                                  <!-- Changed width constraints and added aspect-[9/19.5] to match standard smartphone ratios -->
+                          <div class="w-full max-w-[280px] md:max-w-[320px] aspect-[9/19.5] rounded-[2rem] overflow-hidden border border-white/10 shadow-glass relative pop-out-extreme">
+                                         <!-- Kept object-cover to gracefully fill the phone shape wrapper -->
+                                 <img src="AIResumeanalyser.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="App Interface">
+        
+                                  <!-- Subtle shadow gradient at the bottom so the tag remains highly legible -->
+                                  <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/10 to-transparent opacity-80 pointer-events-none"></div>
+                                  <div class="absolute bottom-6 right-6">
+                                        <span class="bg-black/50 backdrop-blur border border-white/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-white uppercase flex items-center">
+                                          <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div> Live System
                                     </span>
                                 </div>
                             </div>
@@ -911,7 +895,7 @@
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-white mb-4">Curatly</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
-                                    A robust content curation Android application designed to intelligently scrape, categorize, and structure scattered web data into isolated custom repositories for researchers and students.
+                                    A robust content curation Android application designed to intelligently structure web data fields neatly into responsive, custom cloud database systems.
                                 </p>
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
                                     <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-secondary">Java</span>
@@ -930,7 +914,7 @@
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-white mb-4">Data Analytics Engine</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
-                                    Programmatic Python script and visualizer pipeline that ingests raw CSV datasets, cleans statistical anomalies, and charts complex distributions to uncover hidden correlations and trends.
+                                    Programmatic Python script and visualizer pipeline that ingests raw datasets, handles mathematical regressions, and produces highly granular diagnostic telemetry.
                                 </p>
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
                                     <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-emerald-400">Python</span>
@@ -1070,7 +1054,7 @@
                             </div>
                         </div>
                         
-                        <div class="flex flex-wrap gap-4">
+                        <div class="flex flex-wrap gap-4 mt-6">
                             <a href="https://github.com/parasbishnoi029" target="_blank" class="px-8 py-4 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary transition-colors inline-flex items-center">
                                 <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Follow @parasbishnoi029
                             </a>
@@ -1307,8 +1291,6 @@
         });
  
         // --- 2. CSS 3D IN-CONTEXT HOVER EFFECT ---
-        // Dynamically calculates mouse position relative to the center of a glass card 
-        // to tilt it accordingly, creating a highly premium 3D interaction.
         document.querySelectorAll('.interactive-3d').forEach(el => {
             el.addEventListener('mousemove', (e) => {
                 const rect = el.getBoundingClientRect();
@@ -1317,14 +1299,12 @@
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                // Divisors control the intensity of the tilt (higher = less tilt)
                 const tiltX = (y - centerY) / 20; 
                 const tiltY = (centerX - x) / 20;
                 
                 el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
             });
             el.addEventListener('mouseleave', () => {
-                // Smoothly reset the card back to flat state
                 el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
         });
@@ -1332,12 +1312,10 @@
         // --- 3. ADVANCED THREE.JS WEBGL ARCHITECTURE ---
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
-        
-        // Cinematic fog to blend background into the dark void
         scene.fog = new THREE.FogExp2(0x030305, 0.012);
  
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 30); // Default start position
+        camera.position.set(0, 0, 30); 
  
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -1356,11 +1334,9 @@
         scene.add(pointLight2);
  
         // --- 3A. THE DIGITAL TERRAIN (FLOOR) ---
-        // A massive wireframe plane displaced mathematically to look like mountains
         const terrainGeo = new THREE.PlaneGeometry(200, 300, 50, 75);
         const pos = terrainGeo.attributes.position;
         for (let i = 0; i < pos.count; i++) {
-            // Apply sine/cosine noise to create organic rolling hills
             const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
             pos.setZ(i, z);
         }
@@ -1378,14 +1354,13 @@
         scene.add(terrain);
  
         // --- 3B. BACKGROUND PARTICLES (DEEP TUNNEL) ---
-        // Generates 4000 particles spread in a deep Z-tunnel for the camera to fly through
         const pGeo = new THREE.BufferGeometry();
         const pCount = 4000;
         const pPos = new Float32Array(pCount * 3);
         for(let i = 0; i < pCount * 3; i+=3) {
-            pPos[i] = (Math.random() - 0.5) * 200;       // X spread
-            pPos[i+1] = (Math.random() - 0.5) * 200;     // Y spread
-            pPos[i+2] = (Math.random() - 0.5) * 300 - 50; // Deep Z tunnel logic
+            pPos[i] = (Math.random() - 0.5) * 200;       
+            pPos[i+1] = (Math.random() - 0.5) * 200;     
+            pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
         }
         pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
         const pMat = new THREE.PointsMaterial({ 
@@ -1401,34 +1376,26 @@
         gsap.registerPlugin(ScrollTrigger);
         
         window.addEventListener('load', () => {
-            // Simulate loading progress
             gsap.to('#load-bar', { width: '100%', duration: 1.5, ease: 'power2.inOut', onUpdate: function() {
                 document.getElementById('loading-percentage').innerText = Math.round(this.progress() * 100) + '%';
             }, onComplete: () => {
                 
-                // Fade out loader
                 gsap.to('#loader', { opacity: 0, duration: 0.8, onComplete: () => {
                     document.getElementById('loader').style.display = 'none';
                     
-                    // --- THE 3D CSS AVATAR ENTRANCE ---
-                    // Select the container holding Profile.jpg
                     const avatarCard = document.getElementById('hero-avatar');
                     if(avatarCard) {
-                        // Start it deep in Z-space, scaled down, and rotated
                         gsap.fromTo(avatarCard, 
                             { z: 500, rotationY: 45, rotationX: -15, opacity: 0, scale: 0.5 }, 
                             { z: 0, rotationY: 0, rotationX: 0, opacity: 1, scale: 1, duration: 2.5, ease: 'power4.out' }
                         );
                     }
  
-                    // Animate Hero Texts in staggered sequence
                     gsap.from('.hero-title', { y: 100, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.2 });
                     gsap.from('.hero-subtitle', { y: 50, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.4 });
                     gsap.from('#home .gs-reveal', { y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: 'power3.out', delay: 0.6 });
                 }});
  
-                // --- INITIALIZE SCROLLTRIGGERS FOR HTML SECTIONS ---
-                // Every element with .gs-reveal will slide up elegantly as it enters the viewport
                 gsap.utils.toArray('.gs-reveal').forEach((elem) => {
                     if(!elem.closest('#home')) {
                         gsap.from(elem, { 
@@ -1438,7 +1405,7 @@
                             ease: 'power3.out', 
                             scrollTrigger: { 
                                 trigger: elem, 
-                                start: 'top 85%' // Triggers when top of element hits 85% down viewport
+                                start: 'top 85%' 
                             }
                         });
                     }
@@ -1447,20 +1414,17 @@
         });
  
         // --- 5. SCROLL-DRIVEN 3D CAMERA FLIGHT ---
-        // Ties the Z position of the Three.js camera directly to the scrollbar
-        // This creates the illusion of flying deep into the particle tunnel as you scroll down
         gsap.to(camera.position, {
-            z: -150, // Final depth target
+            z: -150, 
             ease: "none",
             scrollTrigger: {
                 trigger: "#scroll-container",
                 start: "top top",
                 end: "bottom bottom",
-                scrub: 1.5 // Smooth scrubbing logic
+                scrub: 1.5 
             }
         });
  
-        // Add subtle rotation to the whole particle system based on scroll
         gsap.to(dust.rotation, {
             z: Math.PI / 4,
             ease: "none",
@@ -1483,7 +1447,6 @@
             mouseY = (event.clientY - windowHalfY);
         });
  
-        // Handle browser resize seamlessly
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight; 
             camera.updateProjectionMatrix(); 
@@ -1497,25 +1460,20 @@
             requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
  
-            // Move terrain backward to simulate forward flight motion independent of scroll
             terrain.position.z = (t * 5) % 20 - 50;
-            
-            // Continuous ambient rotation for particles
             dust.rotation.y = t * 0.02;
  
-            // Apply Parallax to camera using smooth lerping
             targetX = mouseX * 0.005;
             targetY = mouseY * 0.005;
             camera.position.x += (targetX - camera.position.x) * 0.05;
             camera.position.y += (-targetY - camera.position.y) * 0.05;
             
-            // Ensure camera always looks straight down the Z-axis tunnel
             camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
  
             renderer.render(scene, camera);
         }
  
-        animate(); // Kickoff loop
+        animate(); 
     </script>
 </body>
 </html>
