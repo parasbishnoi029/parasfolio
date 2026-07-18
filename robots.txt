@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parasbishnoi029.github.io/parasfolio/sitemap.xml
