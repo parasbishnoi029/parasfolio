@@ -924,77 +924,42 @@
             </div>
         </section>
  
+               <!-- ========================================== -->
+        <!-- SECTION 5B: SYSTEM GALLERY (HORIZONTAL)    -->
         <!-- ========================================== -->
-        <!-- SECTION 5B: SYSTEM GALLERY                 -->
-        <!-- ========================================== -->
-        <section id="gallery" class="py-40">
-            <div class="max-w-7xl mx-auto w-full">
- 
-                <div class="text-center mb-20 gs-reveal">
-                    <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
-                    <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
-                    <p class="text-gray-400 max-w-2xl mx-auto mt-6 font-light text-lg">
-                        Projects, UI designs, application demos and development journey.
-                    </p>
+        <section id="gallery" class="horizontal-wrapper bg-[#010103] py-0 relative border-y border-white/10">
+            <div class="absolute top-20 left-10 z-10 gs-reveal">
+                <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
+                <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
+            </div>
+            
+            <div class="horizontal-container">
+                <div style="width: 20vw;"></div> <!-- Spacer -->
+                
+                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0">
+                    <img src="assets/gallery/resume.webp" onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 </div>
- 
-                <div class="grid md:grid-cols-3 gap-7 gs-reveal">
- 
-                    <div class="glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group">
-                        <img src="assets/gallery/resume.webp"
-                            onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'"
-                            loading="lazy" alt="AI Resume Analyzer preview"
-                            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
- 
-                    <div class="glass-3d overflow-hidden rounded-3xl md:col-span-2 interactive-3d hover-target relative">
-                        <!-- Custom Video Player Container Configured for Mobile Demos -->
-                        <div class="w-full h-full min-h-[320px] bg-black/40 flex items-center justify-center relative overflow-hidden group/vid">
-                            <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80 group-hover/vid:scale-105 transition-transform duration-700">
-                                <source src="assets/videos/demo.mp4" type="video/mp4">
-                                <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
-                            </video>
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkBg/90 via-darkBg/20 to-transparent pointer-events-none"></div>
-                            
-                            <!-- Overlay Video Meta Frame UI -->
-                            <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                                <span>stream_analyzer.log</span>
-                            </div>
-                            
-                            <div class="absolute bottom-6 left-6">
-                                <span class="bg-black/50 backdrop-blur border border-white/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-white uppercase flex items-center shadow-neon-primary">
-                                    <i class="fa-solid fa-play mr-2 text-primary animate-pulse"></i> Live Analytics Preview
-                                </span>
-                            </div>
+
+                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0 relative">
+                    <div class="w-full h-full bg-black/40 flex items-center justify-center relative overflow-hidden group/vid">
+                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80 group-hover/vid:scale-105 transition-transform duration-700">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                            <span>stream_analyzer.log</span>
                         </div>
                     </div>
- 
-                    <div class="glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group">
-                        <img src="assets/gallery/project2.webp"
-                            onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop'"
-                            loading="lazy" alt="Curatly preview"
-                            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
- 
-                    <div class="glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group">
-                        <img src="assets/gallery/project3.webp"
-                            onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'"
-                            loading="lazy" alt="Data Analytics Engine preview"
-                            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
- 
-                    <div class="glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group">
-                        <img src="assets/gallery/workspace.webp"
-                            onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'"
-                            loading="lazy" alt="Development workspace"
-                            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
- 
                 </div>
+
+                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0">
+                    <img src="assets/gallery/workspace.webp" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                </div>
+                
+                <div style="width: 10vw;"></div> <!-- Spacer -->
             </div>
         </section>
- 
+
         <!-- ========================================== -->
         <!-- SECTION 6: GITHUB & RESEARCH               -->
         <!-- ========================================== -->
