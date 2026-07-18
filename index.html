@@ -296,6 +296,114 @@
         
         /* Text Split Animation Classes */
         .char { display: inline-block; opacity: 0; transform: translateY(20px) rotateX(-90deg); }
+
+        /* ========================================== */
+        /* GALLERY: PINNED HORIZONTAL SCROLL SYSTEM   */
+        /* ========================================== */
+        #gallery-pin {
+            overflow: hidden;
+        }
+        #gallery-track {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            will-change: transform;
+            padding: 4rem 6vw;
+        }
+        .gallery-card {
+            position: relative;
+            flex: 0 0 auto;
+            width: min(72vw, 460px);
+            border-radius: 28px;
+            overflow: hidden;
+            transform: translate3d(0,0,0) scale(0.85);
+            opacity: 0.5;
+            transition: box-shadow 0.4s ease;
+            will-change: transform, opacity;
+        }
+        .gallery-card:nth-child(even) { margin-top: 4rem; }
+        .gallery-card:nth-child(odd) { margin-bottom: 4rem; }
+
+        .gallery-card-inner {
+            position: relative;
+            border-radius: 28px;
+            background: rgba(10, 12, 18, 0.55);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.08);
+            transform-style: preserve-3d;
+            overflow: hidden;
+        }
+        .gallery-card-glow {
+            position: absolute;
+            inset: -1px;
+            border-radius: 28px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0,242,254,0.6), rgba(157,78,221,0.5), transparent 60%);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .gallery-card:hover .gallery-card-glow { opacity: 1; }
+        .gallery-card:hover .gallery-card-inner { box-shadow: 0 40px 90px rgba(0,242,254,0.18); }
+
+        .gallery-card-media {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+        }
+        .gallery-card-media img,
+        .gallery-card-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.08);
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+        .gallery-card:hover .gallery-card-media img,
+        .gallery-card:hover .gallery-card-media video {
+            transform: scale(1.18);
+        }
+        .gallery-card-media::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(3,3,5,0) 40%, rgba(3,3,5,0.95) 100%);
+        }
+
+        .gallery-card-body {
+            padding: 1.75rem 2rem 2rem;
+            transform: translateY(8px);
+            opacity: 0.85;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .gallery-card:hover .gallery-card-body { transform: translateY(0); opacity: 1; }
+
+        .gallery-progress-track {
+            position: relative;
+            max-width: 420px;
+            margin: 0 auto;
+            height: 2px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .gallery-progress-fill {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 0%;
+            background: linear-gradient(90deg, #00F2FE, #9D4EDD);
+            box-shadow: 0 0 12px rgba(0,242,254,0.6);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gallery-card, .gallery-card-media img, .gallery-card-media video, .gallery-card-body {
+                transition: none !important;
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-primary/20">
@@ -924,42 +1032,174 @@
             </div>
         </section>
  
-               <!-- ========================================== -->
-        <!-- SECTION 5B: SYSTEM GALLERY (HORIZONTAL)    -->
         <!-- ========================================== -->
-        <section id="gallery" class="horizontal-wrapper bg-[#010103] py-0 relative border-y border-white/10">
-            <div class="absolute top-20 left-10 z-10 gs-reveal">
-                <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
-                <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
+        <!-- SECTION 5B: SYSTEM GALLERY (PINNED HORIZONTAL SCROLL) -->
+        <!-- ========================================== -->
+        <section id="gallery" class="py-0">
+            <div class="max-w-7xl mx-auto w-full px-[5%] pt-40">
+                <div class="text-center mb-16 gs-reveal">
+                    <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto mt-6 font-light text-lg">
+                        Projects, UI designs, application demos and development journey — scroll to fly through.
+                    </p>
+                </div>
             </div>
-            
-            <div class="horizontal-container">
-                <div style="width: 20vw;"></div> <!-- Spacer -->
-                
-                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0">
-                    <img src="assets/gallery/resume.webp" onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                </div>
 
-                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0 relative">
-                    <div class="w-full h-full bg-black/40 flex items-center justify-center relative overflow-hidden group/vid">
-                        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80 group-hover/vid:scale-105 transition-transform duration-700">
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
-                        </video>
-                        <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                            <span>stream_analyzer.log</span>
+            <div id="gallery-pin" class="w-full">
+                <div id="gallery-track">
+
+                    <!-- Gallery Card 1 -->
+                    <article class="gallery-card hover-target" data-index="0">
+                        <div class="gallery-card-glow"></div>
+                        <div class="gallery-card-inner">
+                            <div class="gallery-card-media">
+                                <img src="assets/gallery/resume.webp"
+                                    onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'"
+                                    loading="lazy" alt="AI Resume Analyzer preview">
+                            </div>
+                            <div class="gallery-card-body">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-display text-2xl font-bold text-white">AI Resume Analyzer</h3>
+                                    <i class="fa-solid fa-file-invoice text-primary"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">NLP-driven resume-to-job matching with automated skill gap reporting.</p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="bg-primary/10 border border-primary/30 text-primary px-2.5 py-1 rounded text-[10px] font-mono">Python</span>
+                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Supabase</span>
+                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streamlit</span>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="resume-analyzer-demo.apk" download class="text-xs font-bold uppercase tracking-widest text-white hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-play"></i>Live Demo</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </article>
 
-                <div class="w-[60vw] max-w-[800px] h-[60vh] glass-3d overflow-hidden rounded-3xl interactive-3d hover-target group shrink-0">
-                    <img src="assets/gallery/workspace.webp" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <!-- Gallery Card 2: Video -->
+                    <article class="gallery-card hover-target" data-index="1">
+                        <div class="gallery-card-glow"></div>
+                        <div class="gallery-card-inner">
+                            <div class="gallery-card-media">
+                                <video autoplay loop muted playsinline>
+                                    <source src="assets/videos/demo.mp4" type="video/mp4">
+                                    <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
+                                </video>
+                                <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider z-10">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                    <span>stream_analyzer.log</span>
+                                </div>
+                            </div>
+                            <div class="gallery-card-body">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-display text-2xl font-bold text-white">Live Analytics Preview</h3>
+                                    <i class="fa-solid fa-chart-line text-secondary"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">A behind-the-scenes look at the analyzer's real-time processing pipeline.</p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Real-time</span>
+                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streaming</span>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Gallery Card 3: Curatly -->
+                    <article class="gallery-card hover-target" data-index="2">
+                        <div class="gallery-card-glow"></div>
+                        <div class="gallery-card-inner">
+                            <div class="gallery-card-media">
+                                <img src="assets/gallery/project2.webp"
+                                    onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop'"
+                                    loading="lazy" alt="Curatly preview">
+                            </div>
+                            <div class="gallery-card-body">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-display text-2xl font-bold text-white">Curatly</h3>
+                                    <i class="fa-solid fa-folder-tree text-accent"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Android content curation app structuring web data into cloud databases.</p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="bg-accent/10 border border-accent/30 text-accent px-2.5 py-1 rounded text-[10px] font-mono">Java</span>
+                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Firebase</span>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Gallery Card 4: Data Analytics Engine -->
+                    <article class="gallery-card hover-target" data-index="3">
+                        <div class="gallery-card-glow"></div>
+                        <div class="gallery-card-inner">
+                            <div class="gallery-card-media">
+                                <img src="assets/gallery/project3.webp"
+                                    onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'"
+                                    loading="lazy" alt="Data Analytics Engine preview">
+                            </div>
+                            <div class="gallery-card-body">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-display text-2xl font-bold text-white">Data Analytics Engine</h3>
+                                    <i class="fa-solid fa-chart-pie text-primary"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Python pipeline ingesting raw datasets and producing diagnostic telemetry.</p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="bg-primary/10 border border-primary/30 text-primary px-2.5 py-1 rounded text-[10px] font-mono">Pandas</span>
+                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Matplotlib</span>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Gallery Card 5: Workspace -->
+                    <article class="gallery-card hover-target" data-index="4">
+                        <div class="gallery-card-glow"></div>
+                        <div class="gallery-card-inner">
+                            <div class="gallery-card-media">
+                                <img src="assets/gallery/workspace.webp"
+                                    onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'"
+                                    loading="lazy" alt="Development workspace">
+                            </div>
+                            <div class="gallery-card-body">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-display text-2xl font-bold text-white">Development Workspace</h3>
+                                    <i class="fa-solid fa-laptop-code text-secondary"></i>
+                                </div>
+                                <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Where the models get trained, the bugs get squashed, and the coffee runs out.</p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Daily Grind</span>
+                                </div>
+                                <div class="flex items-center gap-5">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
                 </div>
-                
-                <div style="width: 10vw;"></div> <!-- Spacer -->
+            </div>
+
+            <!-- Progress indicator -->
+            <div class="max-w-7xl mx-auto w-full px-[5%] mt-10">
+                <div class="gallery-progress-track">
+                    <div id="gallery-progress-fill" class="gallery-progress-fill"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-3 max-w-[420px] mx-auto">
+                    <span>Scroll</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i>Fly through projects</span>
+                </div>
             </div>
         </section>
-
+ 
         <!-- ========================================== -->
         <!-- SECTION 6: GITHUB & RESEARCH               -->
         <!-- ========================================== -->
@@ -1277,6 +1517,21 @@
                 el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
         });
+
+        // --- 2B. GALLERY CARD 3D TILT (separate from .interactive-3d so hover scale/opacity stack cleanly) ---
+        document.querySelectorAll('.gallery-card-inner').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const tiltX = ((y - rect.height / 2) / rect.height) * -10;
+                const tiltY = ((x - rect.width / 2) / rect.width) * 10;
+                el.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = `rotateX(0deg) rotateY(0deg)`;
+            });
+        });
  
         // --- 3. ADVANCED THREE.JS WEBGL ARCHITECTURE ---
         const canvas = document.getElementById('webgl-canvas');
@@ -1394,8 +1649,61 @@
                         });
                     }
                 });
+
+                // --- GALLERY: PINNED HORIZONTAL SCROLL SETUP ---
+                initGalleryScroll();
             }});
         });
+
+        // --- GALLERY SCROLL LOGIC ---
+        function initGalleryScroll() {
+            const pinWrap = document.getElementById('gallery-pin');
+            const track = document.getElementById('gallery-track');
+            const cards = gsap.utils.toArray('.gallery-card');
+            const progressFill = document.getElementById('gallery-progress-fill');
+            if (!pinWrap || !track || !cards.length) return;
+
+            const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
+
+            const galleryTween = gsap.to(track, {
+                x: () => -getScrollDistance(),
+                ease: 'none',
+                force3D: true,
+                scrollTrigger: {
+                    trigger: pinWrap,
+                    start: 'top top',
+                    end: () => `+=${getScrollDistance() + window.innerHeight * 0.5}`,
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    onUpdate: (self) => {
+                        if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
+                    }
+                }
+            });
+
+            // Scale & fade each card as it nears the viewport center
+            cards.forEach((card) => {
+                gsap.fromTo(card,
+                    { scale: 0.85, opacity: 0.5 },
+                    {
+                        scale: 1,
+                        opacity: 1,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: card,
+                            containerAnimation: galleryTween,
+                            start: 'left 78%',
+                            end: 'left 35%',
+                            scrub: true
+                        }
+                    }
+                );
+            });
+
+            ScrollTrigger.refresh();
+        }
  
         // --- 5. SCROLL-DRIVEN 3D CAMERA FLIGHT ---
         gsap.to(camera.position, {
