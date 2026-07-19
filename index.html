@@ -9,7 +9,7 @@
 <html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="keywords" content="Parasfolio, Paras Bishnoi,AI and Data Science Student, IIT Jodhpur, AI, Paras,Data Science, Machine Learning, Android, Kotlin, Portfolio">
     <meta name="author" content="Paras Bishnoi">
     <meta property="og:title" content="Parasfolio | Paras Bishnoi">
@@ -419,12 +419,88 @@
             background: linear-gradient(90deg, #00F2FE, #9D4EDD);
             box-shadow: 0 0 12px rgba(0,242,254,0.6);
         }
+        /* Update these in your existing <style> block */
+         #gallery-track {
+             display: flex;
+             align-items: center;
+             gap: 2rem; /* Reduced gap for smaller screens */
+             will-change: transform;
+             padding: 4rem 4vw;
+        }
 
+        @media (max-width: 768px) {
+           .gallery-card {
+                width: 85vw; /* Make cards take up most of the screen */
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+            .gallery-media { height: 40vh; } /* Taller media on mobile */
+            }
         @media (prefers-reduced-motion: reduce) {
             .gallery-card, .gallery-card-media img, .gallery-card-media video, .gallery-card-body {
                 transition: none !important;
             }
         }
+      /* ===========================
+   MOBILE OPTIMIZATION
+=========================== */
+
+      @media (max-width:768px){
+
+           body{
+               cursor:auto;
+              overflow-x:hidden;
+            }
+
+/* Disable custom cursor */
+          .cursor-dot,
+          .cursor-ring{
+            display:none!important;
+          } 
+
+/* Reduce blur */
+         .glass-3d{
+            backdrop-filter:blur(8px);
+            -webkit-backdrop-filter:blur(8px);
+          }
+
+/* Hero */
+          .hero-title{
+             font-size:clamp(3rem,10vw,5rem);
+           }
+
+/* Avatar */
+          #hero-avatar{
+             max-width:320px;
+          }
+
+/* Gallery */
+         .gallery-card{
+              width:95vw;
+              margin:0!important;
+          }
+
+          #gallery-track{
+              gap:1rem;
+              padding:2rem;
+           }
+
+/* Timeline */
+          #journey .group{
+             flex-direction:column!important;
+          }
+
+        }
+
+/* Disable hover on phones */
+      @media (hover:none){
+
+          .glass-3d:hover{
+            transform:none;
+            box-shadow:none;
+           }
+
+      }
     </style>
 </head>
 <body class="selection:bg-primary/20">
