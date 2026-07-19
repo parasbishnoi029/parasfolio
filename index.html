@@ -1,9 +1,6 @@
-
-
-Index · HTML
 <!-- 
-  PARASFOLIO - ELITE EDITION (1000+ Lines)
-  Immersive 3D SPA Portfolio for Applied AI & Data Science Architect.
+  PARASFOLIO 
+  Immersive 3D SPA Portfolio for Applied AI & Data Science .
   Features: Deep CSS 3D, WebGL Particle Flight, Holographic Avatar.
   Future-Proofed: Includes expansion templates and modular architecture.
   Assets integrated: Profile.jpg, base layout from index.html.
@@ -31,7 +28,7 @@ Index · HTML
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
- 
+
     <script type="application/ld+json">
           {
             "@context": "https://schema.org",
@@ -312,6 +309,11 @@ Index · HTML
             transition: width 0.3s ease;
         }
         .nav-link:hover::after { width: 100%; }
+        /* Universal responsive hero title — takes over from Tailwind's raw vw classes,
+           which could still render oversized/undersized on unusual phone widths. */
+        .hero-title {
+            font-size: clamp(2.75rem, 9vw, 7rem) !important;
+        }
  
         /* Hexagon Clip Path for unique images */
         .clip-hex {
@@ -320,7 +322,7 @@ Index · HTML
         
         /* Text Split Animation Classes */
         .char { display: inline-block; opacity: 0; transform: translateY(20px) rotateX(-90deg); }
- 
+
         /* ========================================== */
         /* GALLERY: PINNED HORIZONTAL SCROLL SYSTEM   */
         /* ========================================== */
@@ -347,7 +349,7 @@ Index · HTML
         }
         .gallery-card:nth-child(even) { margin-top: 4rem; }
         .gallery-card:nth-child(odd) { margin-bottom: 4rem; }
- 
+
         .gallery-card-inner {
             position: relative;
             border-radius: 28px;
@@ -373,7 +375,7 @@ Index · HTML
         }
         .gallery-card:hover .gallery-card-glow { opacity: 1; }
         .gallery-card:hover .gallery-card-inner { box-shadow: 0 40px 90px rgba(0,242,254,0.18); }
- 
+
         .gallery-card-media {
             position: relative;
             height: 320px;
@@ -397,7 +399,7 @@ Index · HTML
             inset: 0;
             background: linear-gradient(180deg, rgba(3,3,5,0) 40%, rgba(3,3,5,0.95) 100%);
         }
- 
+
         .gallery-card-body {
             padding: 1.75rem 2rem 2rem;
             transform: translateY(8px);
@@ -405,7 +407,7 @@ Index · HTML
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
         .gallery-card:hover .gallery-card-body { transform: translateY(0); opacity: 1; }
- 
+
         .gallery-progress-track {
             position: relative;
             max-width: 420px;
@@ -430,7 +432,7 @@ Index · HTML
              will-change: transform;
              padding: 4rem 4vw;
         }
- 
+
         @media (max-width: 768px) {
            .gallery-card {
                 width: 85vw; /* Make cards take up most of the screen */
@@ -447,62 +449,155 @@ Index · HTML
       /* ===========================
    MOBILE OPTIMIZATION
 =========================== */
- 
+
       @media (max-width:768px){
- 
+
            body{
                cursor:auto;
               overflow-x:hidden;
             }
- 
+
 /* Disable custom cursor */
           .cursor-dot,
           .cursor-ring{
             display:none!important;
           } 
- 
+
 /* Reduce blur */
          .glass-3d{
             backdrop-filter:blur(8px);
             -webkit-backdrop-filter:blur(8px);
           }
- 
-/* Hero */
-          .hero-title{
-             font-size:clamp(3rem,10vw,5rem);
-           }
- 
+
+/* Hero: font-size handled by universal .hero-title rule near top of stylesheet */
+
 /* Avatar */
           #hero-avatar{
              max-width:320px;
           }
- 
+
 /* Gallery */
          .gallery-card{
               width:95vw;
               margin:0!important;
           }
- 
+
           #gallery-track{
               gap:1rem;
               padding:2rem;
            }
- 
+
 /* Timeline */
           #journey .group{
              flex-direction:column!important;
           }
- 
+
         }
- 
+
+/* ===========================
+   MOBILE SLIDE-OUT MENU
+=========================== */
+
+.mobile-menu-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    z-index:55;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.35s ease;
+}
+
+.mobile-menu-backdrop.open{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.mobile-menu{
+    position:fixed;
+    top:0;
+    right:0;
+    height:100dvh;
+    width:min(80vw,360px);
+    background:rgba(8,8,12,0.98);
+    border-left:1px solid rgba(255,255,255,0.1);
+    z-index:65;
+    transform:translateX(100%);
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    overflow-y:auto;
+}
+
+.mobile-menu.open{
+    transform:translateX(0);
+}
+
+.mobile-menu-links{
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+    padding:2rem 2.5rem;
+}
+
+.mobile-nav-link{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.35rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    color:#fff;
+    padding:0.85rem 0;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    text-transform:uppercase;
+    opacity:0;
+    transform:translateX(24px);
+    transition:opacity 0.4s ease,transform 0.4s ease,color 0.2s ease;
+}
+
+.mobile-menu.open .mobile-nav-link{
+    opacity:1;
+    transform:translateX(0);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:active{
+    color:#00F2FE;
+}
+
+.mobile-nav-resume{
+    margin-top:1rem;
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:9999px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+body.menu-open{
+    overflow:hidden;
+}
+
+/* Stagger the link reveal */
+.mobile-menu-links .mobile-nav-link:nth-child(1){ transition-delay:0.05s; }
+.mobile-menu-links .mobile-nav-link:nth-child(2){ transition-delay:0.09s; }
+.mobile-menu-links .mobile-nav-link:nth-child(3){ transition-delay:0.13s; }
+.mobile-menu-links .mobile-nav-link:nth-child(4){ transition-delay:0.17s; }
+.mobile-menu-links .mobile-nav-link:nth-child(5){ transition-delay:0.21s; }
+.mobile-menu-links .mobile-nav-link:nth-child(6){ transition-delay:0.25s; }
+.mobile-menu-links .mobile-nav-link:nth-child(7){ transition-delay:0.29s; }
+.mobile-menu-links .mobile-nav-link:nth-child(8){ transition-delay:0.33s; }
+.mobile-menu-links .mobile-nav-link:nth-child(9){ transition-delay:0.37s; }
+
 /* Disable hover on phones */
       @media (hover:none){
- 
+
           .glass-3d:hover{
             transform:none;
             box-shadow:none;
            }
- 
+
       }
     </style>
 </head>
@@ -562,10 +657,30 @@ Index · HTML
         </div>
         
         <!-- Mobile Nav Toggle -->
-        <div class="lg:hidden text-white text-2xl hover-target cursor-pointer">
+        <button id="mobile-menu-toggle" class="lg:hidden text-white text-2xl hover-target cursor-pointer bg-transparent border-0 relative z-[70]" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
             <i class="fa-solid fa-bars-staggered"></i>
-        </div>
+        </button>
     </nav>
+
+    <!-- ========================================== -->
+    <!-- MOBILE SLIDE-OUT MENU (DRAWER)              -->
+    <!-- ========================================== -->
+    <div id="mobile-menu" class="mobile-menu lg:hidden" aria-hidden="true">
+        <div class="mobile-menu-links">
+            <a href="#manifesto" class="mobile-nav-link">About</a>
+            <a href="#education" class="mobile-nav-link">Education</a>
+            <a href="#journey" class="mobile-nav-link">Journey</a>
+            <a href="#stack" class="mobile-nav-link">Stack</a>
+            <a href="#systems" class="mobile-nav-link">Systems</a>
+            <a href="#gallery" class="mobile-nav-link">Gallery</a>
+            <a href="#research" class="mobile-nav-link">Research</a>
+            <a href="#achievements" class="mobile-nav-link">Awards</a>
+            <a href="resume.pdf" download class="mobile-nav-link mobile-nav-resume">
+                <i class="fa-solid fa-download mr-2"></i>Resume.pdf
+            </a>
+        </div>
+    </div>
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop"></div>
  
     <!-- ========================================== -->
     <!-- MAIN SCROLLABLE HTML CONTENT               -->
@@ -587,7 +702,7 @@ Index · HTML
                     </div>
                     
                     <!-- Dynamic Headline -->
-                    <h1 class="hero-title font-display text-[14vw] md:text-[8vw] font-bold tracking-tighter leading-[0.9] mb-4 text-white">
+                    <h1 class="hero-title font-display font-bold tracking-tighter leading-[0.9] mb-4 text-white">
                         Hello, I'm Paras
                     </h1>
                     <p class="hero-subtitle font-display text-xl md:text-3xl font-medium tracking-wide text-gradient mb-8">
@@ -1145,10 +1260,10 @@ Index · HTML
                     </p>
                 </div>
             </div>
- 
+
             <div id="gallery-pin" class="w-full">
                 <div id="gallery-track">
- 
+
                     <!-- Gallery Card 1 -->
                     <article class="gallery-card hover-target" data-index="0">
                         <div class="gallery-card-glow"></div>
@@ -1176,7 +1291,7 @@ Index · HTML
                             </div>
                         </div>
                     </article>
- 
+
                     <!-- Gallery Card 2: Video -->
                     <article class="gallery-card hover-target" data-index="1">
                         <div class="gallery-card-glow"></div>
@@ -1207,7 +1322,7 @@ Index · HTML
                             </div>
                         </div>
                     </article>
- 
+
                     <!-- Gallery Card 3: Curatly -->
                     <article class="gallery-card hover-target" data-index="2">
                         <div class="gallery-card-glow"></div>
@@ -1233,7 +1348,7 @@ Index · HTML
                             </div>
                         </div>
                     </article>
- 
+
                     <!-- Gallery Card 4: Data Analytics Engine -->
                     <article class="gallery-card hover-target" data-index="3">
                         <div class="gallery-card-glow"></div>
@@ -1259,7 +1374,7 @@ Index · HTML
                             </div>
                         </div>
                     </article>
- 
+
                     <!-- Gallery Card 5: Workspace -->
                     <article class="gallery-card hover-target" data-index="4">
                         <div class="gallery-card-glow"></div>
@@ -1284,10 +1399,10 @@ Index · HTML
                             </div>
                         </div>
                     </article>
- 
+
                 </div>
             </div>
- 
+
             <!-- Progress indicator -->
             <div class="max-w-7xl mx-auto w-full px-[5%] mt-10">
                 <div class="gallery-progress-track">
@@ -1571,6 +1686,46 @@ Index · HTML
          * Handles Custom Cursor, CSS 3D Tilt, GSAP ScrollTriggers, and Three.js 3D Environment.
          */
  
+        // --- 0. MOBILE SLIDE-OUT MENU ---
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuBackdrop = document.getElementById('mobile-menu-backdrop');
+        const menuIcon = menuToggle ? menuToggle.querySelector('i') : null;
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            menuBackdrop.classList.add('open');
+            document.body.classList.add('menu-open');
+            menuToggle.setAttribute('aria-expanded', 'true');
+            mobileMenu.setAttribute('aria-hidden', 'false');
+            if (menuIcon) { menuIcon.classList.remove('fa-bars-staggered'); menuIcon.classList.add('fa-xmark'); }
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            menuBackdrop.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            if (menuIcon) { menuIcon.classList.remove('fa-xmark'); menuIcon.classList.add('fa-bars-staggered'); }
+        }
+
+        if (menuToggle && mobileMenu && menuBackdrop) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+            });
+            menuBackdrop.addEventListener('click', closeMobileMenu);
+            mobileMenu.querySelectorAll('.mobile-nav-link').forEach((link) => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) closeMobileMenu();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileMenu();
+            });
+        }
+
         // --- 1. CUSTOM CURSOR INTEGRATION ---
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorRing = document.querySelector('.cursor-ring');
@@ -1617,7 +1772,7 @@ Index · HTML
                 el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
         });
- 
+
         // --- 2B. GALLERY CARD 3D TILT (separate from .interactive-3d so hover scale/opacity stack cleanly) ---
         document.querySelectorAll('.gallery-card-inner').forEach(el => {
             el.addEventListener('mousemove', (e) => {
@@ -1637,7 +1792,7 @@ Index · HTML
         // Disabled on mobile/small screens to save battery, CPU and avoid jank.
         const isMobileDevice = window.innerWidth < 768;
         let canvas, scene, camera, renderer, terrain, dust, avatar3DGroup, coreMesh, outerHaloMesh;
- 
+
         if (isMobileDevice) {
             const wc = document.getElementById('webgl-canvas');
             if (wc) wc.style.display = 'none';
@@ -1703,7 +1858,7 @@ Index · HTML
         });
         dust = new THREE.Points(pGeo, pMat);
         scene.add(dust);
- 
+
         // --- 3C. THE 3D HOLOGRAPHIC AVATAR BACKGROUND CORE ---
         avatar3DGroup = new THREE.Group();
         const coreGeo = new THREE.IcosahedronGeometry(4, 2);
@@ -1725,6 +1880,8 @@ Index · HTML
         if (isMobileDevice) {
             // Skip heavy scroll recalculations from Three.js resizes on mobile
             ScrollTrigger.config({ ignoreMobileResize: true });
+            // Shorter, snappier animations on mobile so scroll reveals don't feel laggy
+            gsap.defaults({ duration: 0.4 });
         }
         
         window.addEventListener('load', () => {
@@ -1762,12 +1919,12 @@ Index · HTML
                         });
                     }
                 });
- 
+
                 // --- GALLERY: PINNED HORIZONTAL SCROLL SETUP ---
                 initGalleryScroll();
             }});
         });
- 
+
         // --- GALLERY SCROLL LOGIC ---
         function initGalleryScroll() {
             const pinWrap = document.getElementById('gallery-pin');
@@ -1775,9 +1932,9 @@ Index · HTML
             const cards = gsap.utils.toArray('.gallery-card');
             const progressFill = document.getElementById('gallery-progress-fill');
             if (!pinWrap || !track || !cards.length) return;
- 
+
             const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
- 
+
             const galleryTween = gsap.to(track, {
                 x: () => -getScrollDistance(),
                 ease: 'none',
@@ -1795,7 +1952,7 @@ Index · HTML
                     }
                 }
             });
- 
+
             // Scale & fade each card as it nears the viewport center
             cards.forEach((card) => {
                 gsap.fromTo(card,
@@ -1814,7 +1971,7 @@ Index · HTML
                     }
                 );
             });
- 
+
             ScrollTrigger.refresh();
         }
  
@@ -1892,5 +2049,3 @@ Index · HTML
     </script>
 </body>
 </html>
- 
-
