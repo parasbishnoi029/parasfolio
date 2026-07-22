@@ -1,7 +1,7 @@
 <!-- 
-  PARASFOLIO - MULTI-UPGRADE ELITE EDITION (2026)
+  PARASFOLIO - SUPREME ULTIMATE EDITION (2026)
   Immersive 3D SPA Portfolio for Applied AI & Data Science Student @ IIT Jodhpur.
-  Upgrades Integrated: Cyber Terminal (Ctrl+K), Web Audio SFX, Project Filters, Toast Engine, Scroll Progress HUD.
+  Upgrades: Interactive AI Chatbot (ParasBot), Project Detail Modals, Matrix Rain HUD, Web Audio SFX.
 -->
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
@@ -25,7 +25,7 @@
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
 
-    <!-- JSON-LD SCHEMA -->
+    <!-- JSON-LD SCHEMA (Google Knowledge Graph & Profiles) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -97,7 +97,7 @@
         }
     </script>
  
-    <!-- THREE.JS & GSAP -->
+    <!-- EXTERNAL LIBRARIES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -118,57 +118,35 @@
 
         /* Top Scroll Progress Line */
         #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
+            position: fixed; top: 0; left: 0; height: 3px;
             background: linear-gradient(90deg, #00F2FE, #9D4EDD, #4ADE80);
-            z-index: 99999;
-            width: 0%;
-            box-shadow: 0 0 12px #00F2FE;
-            transition: width 0.1s ease-out;
+            z-index: 99999; width: 0%; box-shadow: 0 0 12px #00F2FE;
         }
+
+        /* Matrix Rain Canvas Layer */
+        #matrix-canvas {
+            position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        #matrix-canvas.active { opacity: 0.15; }
  
         .noise { 
-            position: fixed; 
-            inset: 0; 
-            z-index: 999; 
-            pointer-events: none; 
-            opacity: 0.04; 
+            position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0.04; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
         }
  
         #webgl-canvas { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
-            z-index: 0; 
-            pointer-events: none; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; 
         }
         
-        #scroll-container { 
-            position: relative; 
-            z-index: 10; 
-            perspective: 1200px; 
-        }
+        #scroll-container { position: relative; z-index: 10; perspective: 1200px; }
  
         .text-gradient { 
             background: linear-gradient(135deg, #00F2FE 0%, #9D4EDD 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
  
-        section { 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            position: relative; 
-            padding: 180px 5%; 
-        }
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; padding: 180px 5%; }
  
         .glass-3d {
             background: rgba(10, 12, 18, 0.4);
@@ -187,85 +165,39 @@
             box-shadow: 0 40px 80px rgba(0, 242, 254, 0.15); 
         }
         
-        .pop-out { 
-            transform: translateZ(40px); 
-            transition: transform 0.3s ease; 
-            transform-style: preserve-3d;
-        }
-        .pop-out-extreme { 
-            transform: translateZ(80px); 
-            transition: transform 0.3s ease; 
-            transform-style: preserve-3d;
-        }
-        .pop-out-subtle {
-            transform: translateZ(20px); 
-            transition: transform 0.3s ease; 
-        }
+        .pop-out { transform: translateZ(40px); transition: transform 0.3s ease; transform-style: preserve-3d; }
+        .pop-out-extreme { transform: translateZ(80px); transition: transform 0.3s ease; transform-style: preserve-3d; }
+        .pop-out-subtle { transform: translateZ(20px); transition: transform 0.3s ease; }
  
         .cursor-dot { 
-            position: fixed; 
-            width: 8px; 
-            height: 8px; 
-            background: #00F2FE; 
-            border-radius: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 9999; 
-            pointer-events: none; 
-            box-shadow: 0 0 10px #00F2FE;
+            position: fixed; width: 8px; height: 8px; background: #00F2FE; border-radius: 50%; 
+            transform: translate(-50%, -50%); z-index: 9999; pointer-events: none; box-shadow: 0 0 10px #00F2FE;
         }
         .cursor-ring { 
-            position: fixed; 
-            width: 45px; 
-            height: 45px; 
-            border: 1px solid rgba(0, 242, 254, 0.6); 
-            border-radius: 50%; 
-            transform: translate(-50%, -50%); 
-            z-index: 9998; 
-            pointer-events: none; 
+            position: fixed; width: 45px; height: 45px; border: 1px solid rgba(0, 242, 254, 0.6); 
+            border-radius: 50%; transform: translate(-50%, -50%); z-index: 9998; pointer-events: none; 
             transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; 
         }
  
         #loader { 
-            position: fixed; 
-            inset: 0; 
-            background: #030305; 
-            z-index: 10000; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
+            position: fixed; inset: 0; background: #030305; z-index: 10000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
         }
         
         .loader-glitch { position: relative; }
         .loader-glitch::before, .loader-glitch::after {
-            content: "PARASFOLIO";
-            position: absolute;
-            top: 0; left: 0; opacity: 0.8;
+            content: "PARASFOLIO"; position: absolute; top: 0; left: 0; opacity: 0.8;
         }
-        .loader-glitch::before {
-            color: #00F2FE; z-index: -1;
-            animation: glitch-anim-1 2s infinite linear alternate-reverse;
-        }
-        .loader-glitch::after {
-            color: #9D4EDD; z-index: -2;
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
+        .loader-glitch::before { color: #00F2FE; z-index: -1; animation: glitch-anim-1 2s infinite linear alternate-reverse; }
+        .loader-glitch::after { color: #9D4EDD; z-index: -2; animation: glitch-anim-2 3s infinite linear alternate-reverse; }
  
         @keyframes glitch-anim-1 {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
+            0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) } 40% { transform: translate(-2px, -2px) } 
+            60% { transform: translate(2px, 2px) } 80% { transform: translate(2px, -2px) } 100% { transform: translate(0) }
         }
         @keyframes glitch-anim-2 {
-            0% { transform: translate(0) }
-            20% { transform: translate(2px, -2px) }
-            40% { transform: translate(2px, 2px) }
-            60% { transform: translate(-2px, -2px) }
-            80% { transform: translate(-2px, 2px) }
-            100% { transform: translate(0) }
+            0% { transform: translate(0) } 20% { transform: translate(2px, -2px) } 40% { transform: translate(2px, 2px) } 
+            60% { transform: translate(-2px, -2px) } 80% { transform: translate(-2px, 2px) } 100% { transform: translate(0) }
         }
  
         ::-webkit-scrollbar { width: 8px; } 
@@ -275,77 +207,48 @@
  
         .nav-link { position: relative; }
         .nav-link::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -4px; left: 0; background-color: #00F2FE;
-            transition: width 0.3s ease;
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #00F2FE; transition: width 0.3s ease;
         }
         .nav-link:hover::after { width: 100%; }
         
         .hero-title { font-size: clamp(2.75rem, 9vw, 7rem) !important; }
 
-        /* GALLERY & CARDS */
+        /* GALLERY PINNED HORIZONTAL */
         #gallery-pin { overflow: hidden; }
-        #gallery-track {
-            display: flex; align-items: center; gap: 3rem;
-            will-change: transform; padding: 4rem 6vw;
-        }
+        #gallery-track { display: flex; align-items: center; gap: 3rem; will-change: transform; padding: 4rem 6vw; }
         .gallery-card {
-            position: relative; flex: 0 0 auto;
-            width: min(90vw, 460px); border-radius: 28px;
-            overflow: hidden; transform: translate3d(0,0,0) scale(0.85);
-            opacity: 0.5; transition: box-shadow 0.4s ease;
-            will-change: transform, opacity;
+            position: relative; flex: 0 0 auto; width: min(90vw, 460px); border-radius: 28px;
+            overflow: hidden; transform: translate3d(0,0,0) scale(0.85); opacity: 0.5; transition: box-shadow 0.4s ease;
         }
         .gallery-card:nth-child(even) { margin-top: 4rem; }
         .gallery-card:nth-child(odd) { margin-bottom: 4rem; }
 
         .gallery-card-inner {
-            position: relative; border-radius: 28px;
-            background: rgba(10, 12, 18, 0.55);
-            backdrop-filter: blur(20px) saturate(150%);
-            -webkit-backdrop-filter: blur(20px) saturate(150%);
-            border: 1px solid rgba(255,255,255,0.08);
-            transform-style: preserve-3d; overflow: hidden;
+            position: relative; border-radius: 28px; background: rgba(10, 12, 18, 0.55);
+            backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.08); transform-style: preserve-3d; overflow: hidden; cursor: pointer;
         }
         .gallery-card-glow {
             position: absolute; inset: -1px; border-radius: 28px; padding: 1px;
             background: linear-gradient(135deg, rgba(0,242,254,0.6), rgba(157,78,221,0.5), transparent 60%);
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
+            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
         }
         .gallery-card:hover .gallery-card-glow { opacity: 1; }
         .gallery-card:hover .gallery-card-inner { box-shadow: 0 40px 90px rgba(0,242,254,0.18); }
-
         .gallery-card-media { position: relative; height: 320px; overflow: hidden; }
         .gallery-card-media img, .gallery-card-media video {
-            width: 100%; height: 100%; object-fit: cover; transform: scale(1.08);
-            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+            width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
         }
-        .gallery-card:hover .gallery-card-media img, .gallery-card:hover .gallery-card-media video {
-            transform: scale(1.18);
-        }
+        .gallery-card:hover .gallery-card-media img, .gallery-card:hover .gallery-card-media video { transform: scale(1.18); }
 
-        /* Filter Switcher Active Styles */
-        .filter-btn.active {
-            background-color: #00F2FE;
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
-            border-color: #00F2FE;
-        }
+        /* Project Modal */
+        #project-modal { transition: opacity 0.3s ease, transform 0.3s ease; }
+        #project-modal.hidden-modal { opacity: 0; pointer-events: none; transform: scale(0.95); }
 
-        /* Cyberpunk Command Modal */
-        #cmd-modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        #cmd-modal.hidden-cmd {
-            opacity: 0; pointer-events: none; transform: scale(0.95);
-        }
-
-        /* Toast HUD System */
-        #toast-hud {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-        }
+        /* ParasBot Chatbot Widget */
+        #parasbot-window { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
+        #parasbot-window.closed { transform: translateY(20px) scale(0.9); opacity: 0; pointer-events: none; }
 
         @media (max-width:768px){
             body { cursor: auto; overflow-x: hidden; }
@@ -358,28 +261,24 @@
         }
 
         .mobile-menu-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
             z-index: 55; opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
         }
         .mobile-menu-backdrop.open { opacity: 1; pointer-events: auto; }
         .mobile-menu {
-            position: fixed; top: 0; right: 0; height: 100dvh;
-            width: min(80vw, 360px); background: rgba(8,8,12,0.98);
-            border-left: 1px solid rgba(255,255,255,0.1); z-index: 65;
+            position: fixed; top: 0; right: 0; height: 100dvh; width: min(80vw, 360px);
+            background: rgba(8,8,12,0.98); border-left: 1px solid rgba(255,255,255,0.1); z-index: 65;
             transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
             display: flex; flex-direction: column; justify-center; overflow-y: auto;
         }
         .mobile-menu.open { transform: translateX(0); }
         .mobile-menu-links { display: flex; flex-direction: column; gap: 0.5rem; padding: 2rem 2.5rem; }
         .mobile-nav-link {
-            font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 600;
-            letter-spacing: 0.02em; color: #fff; padding: 0.85rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08); text-transform: uppercase;
-            opacity: 0; transform: translateX(24px); transition: opacity 0.4s ease, transform 0.4s ease, color 0.2s ease;
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 600; color: #fff;
+            padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); text-transform: uppercase;
+            opacity: 0; transform: translateX(24px); transition: opacity 0.4s ease, transform 0.4s ease;
         }
         .mobile-menu.open .mobile-nav-link { opacity: 1; transform: translateX(0); }
-        .mobile-nav-link:hover, .mobile-nav-link:active { color: #00F2FE; }
         body.menu-open { overflow: hidden; }
     </style>
 </head>
@@ -388,51 +287,60 @@
     <!-- TOP SCROLL PROGRESS BAR -->
     <div id="scroll-progress"></div>
  
-    <!-- Decorative Noise Overlay -->
+    <!-- MATRIX RAIN BACKGROUND CANVAS -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- NOISE OVERLAY & CURSOR -->
     <div class="noise"></div>
-    
-    <!-- Custom Cursor -->
     <div class="cursor-dot hidden md:block"></div>
     <div class="cursor-ring hidden md:block"></div>
 
-    <!-- TOAST NOTIFICATION SYSTEM -->
+    <!-- TOAST NOTIFICATION HUD -->
     <div id="toast-hud" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100000] translate-y-20 opacity-0 pointer-events-none bg-darkBg/90 backdrop-blur-md border border-primary/50 text-white px-6 py-3 rounded-full flex items-center space-x-3 shadow-neon-primary text-xs font-mono">
         <i class="fa-solid fa-circle-check text-primary text-base"></i>
-        <span id="toast-msg">Command executed successfully</span>
+        <span id="toast-msg">Notification Message</span>
     </div>
 
-    <!-- FLOATING HUD BACK TO TOP & CMD BUTTONS -->
-    <div id="hud-controls" class="fixed bottom-8 right-8 z-[90] flex flex-col space-y-3 opacity-0 transition-opacity duration-300 pointer-events-none">
-        <button id="cmd-trigger-btn" class="w-12 h-12 rounded-full bg-darkBg/80 border border-primary/40 backdrop-blur-md text-primary hover:bg-primary hover:text-black transition-all flex items-center justify-center shadow-neon-primary hover-target pointer-events-auto" title="Open AI Command Terminal (Ctrl + K)">
-            <i class="fa-solid fa-terminal text-sm"></i>
+    <!-- CINEMATIC PROJECT DETAIL MODAL -->
+    <div id="project-modal" class="hidden-modal fixed inset-0 z-[100001] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-3d w-full max-w-3xl bg-darkBg/95 border border-primary/40 rounded-3xl p-8 relative overflow-hidden shadow-[0_0_80px_rgba(0,242,254,0.25)]">
+            <button id="modal-close-btn" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white flex items-center justify-center hover-target transition-all"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modal-content" class="space-y-6">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PARASBOT AI CHAT WIDGET (BOTTOM LEFT) -->
+    <div class="fixed bottom-6 left-6 z-[95]">
+        <button id="parasbot-toggle" class="w-14 h-14 rounded-full bg-primary text-darkBg shadow-[0_0_25px_rgba(0,242,254,0.6)] flex items-center justify-center hover:scale-110 transition-transform hover-target font-bold text-xl" title="Chat with ParasBot AI">
+            <i class="fa-solid fa-robot"></i>
         </button>
+        <div id="parasbot-window" class="closed absolute bottom-20 left-0 w-[320px] md:w-[360px] glass-3d bg-darkBg/95 border border-primary/40 rounded-2xl shadow-glass overflow-hidden flex flex-col h-[420px]">
+            <div class="bg-primary/10 border-b border-primary/20 px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2 text-xs font-mono text-primary font-bold">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    <span>ParasBot AI v2.6</span>
+                </div>
+                <button id="parasbot-close" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="parasbot-messages" class="flex-grow p-4 overflow-y-auto space-y-3 font-mono text-xs text-gray-300">
+                <div class="bg-white/5 border border-white/10 p-3 rounded-xl max-w-[85%]">
+                    Hello! I'm Paras's digital assistant. Ask me anything about his IIT Jodhpur CGPA, skills, or projects!
+                </div>
+            </div>
+            <div class="p-3 border-t border-white/10 flex items-center space-x-2 bg-black/40">
+                <input type="text" id="parasbot-input" placeholder="Ask about CGPA, AI projects..." class="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:border-primary">
+                <button id="parasbot-send" class="bg-primary text-darkBg font-bold px-4 py-2 rounded-lg text-xs hover-target"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING HUD BACK TO TOP -->
+    <div id="hud-controls" class="fixed bottom-6 right-6 z-[90] flex flex-col space-y-3 opacity-0 transition-opacity duration-300 pointer-events-none">
         <button id="back-to-top-btn" class="w-12 h-12 rounded-full bg-darkBg/80 border border-white/20 backdrop-blur-md text-white hover:border-primary hover:text-primary transition-all flex items-center justify-center shadow-glass hover-target pointer-events-auto" title="Back to Top">
             <i class="fa-solid fa-arrow-up text-sm"></i>
         </button>
-    </div>
-
-    <!-- CYBER COMMAND TERMINAL MODAL -->
-    <div id="cmd-modal" class="hidden-cmd fixed inset-0 z-[100001] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-3d w-full max-w-2xl bg-darkBg/90 border border-primary/40 rounded-2xl p-6 relative overflow-hidden shadow-[0_0_50px_rgba(0,242,254,0.2)]">
-            <div class="flex justify-between items-center pb-4 border-b border-white/10 mb-4">
-                <div class="flex items-center space-x-2 text-xs font-mono text-primary">
-                    <i class="fa-solid fa-terminal"></i>
-                    <span>PARASFOLIO_AI_ASSISTANT_v2.6</span>
-                </div>
-                <button id="cmd-close-btn" class="text-gray-400 hover:text-white text-lg transition-colors"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div id="cmd-output" class="h-64 overflow-y-auto font-mono text-xs space-y-2 mb-4 text-gray-300 pr-2">
-                <div class="text-gray-500">// Type <span class="text-primary">/help</span> to list available commands.</div>
-                <div class="text-gray-500">// Quick shortcuts: <span class="text-accent">/skills</span>, <span class="text-accent">/projects</span>, <span class="text-accent">/gpa</span>, <span class="text-accent">/contact</span></div>
-            </div>
-
-            <div class="relative flex items-center border border-primary/30 rounded-lg bg-black/50 px-3 py-2">
-                <span class="text-primary font-mono text-xs mr-2">&gt;</span>
-                <input type="text" id="cmd-input" placeholder="Type a command (e.g. /skills)..." class="w-full bg-transparent text-white font-mono text-xs focus:outline-none" autocomplete="off">
-                <button id="cmd-submit-btn" class="text-primary text-xs font-mono hover:text-white px-2">RUN</button>
-            </div>
-        </div>
     </div>
  
     <!-- PRELOADER -->
@@ -442,7 +350,7 @@
         </h1>
         <div class="text-[10px] font-mono tracking-[0.4em] text-gray-500 uppercase mb-8 flex items-center">
             <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3"></i>
-            <span id="loading-text">Initializing Systems</span>
+            <span id="loading-text">Synthesizing Neural Environment</span>
         </div>
         <div class="w-64 h-[1px] bg-white/10 relative overflow-hidden rounded-full">
             <div id="load-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary w-0 rounded-full shadow-[0_0_10px_#00F2FE]"></div>
@@ -461,7 +369,7 @@
         </a>
         
         <!-- Desktop Nav -->
-        <div class="hidden lg:flex items-center space-x-8 text-[11px] font-mono tracking-widest uppercase text-gray-400">
+        <div class="hidden lg:flex items-center space-x-6 text-[11px] font-mono tracking-widest uppercase text-gray-400">
             <a href="#manifesto" class="nav-link hover:text-primary transition-colors hover-target">About</a>
             <a href="#education" class="nav-link hover:text-primary transition-colors hover-target">Education</a>
             <a href="#journey" class="nav-link hover:text-primary transition-colors hover-target">Journey</a>
@@ -471,12 +379,17 @@
             <a href="#research" class="nav-link hover:text-primary transition-colors hover-target">Research</a>
             <a href="#achievements" class="nav-link hover:text-primary transition-colors hover-target">Awards</a>
             
-            <!-- Audio Toggle SFX Switcher -->
+            <!-- Matrix Rain Toggle -->
+            <button id="matrix-toggle-btn" class="px-3 py-1.5 rounded-full border border-white/20 text-gray-300 hover:text-primary hover:border-primary transition-all hover-target text-[10px]" title="Toggle Matrix Rain">
+                <i class="fa-solid fa-code mr-1"></i>MATRIX
+            </button>
+
+            <!-- Audio SFX Toggle -->
             <button id="sfx-toggle-btn" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-gray-300 hover:text-primary hover:border-primary transition-all hover-target" title="Toggle Sound FX">
                 <i class="fa-solid fa-volume-high text-xs"></i>
             </button>
 
-            <a href="resume.pdf" download class="px-6 py-2.5 border border-white/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-white flex items-center space-x-2 bg-white/5 backdrop-blur-md">
+            <a href="resume.pdf" download class="px-5 py-2 border border-white/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-white flex items-center space-x-2 bg-white/5 backdrop-blur-md">
                 <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
             </a>
         </div>
@@ -498,7 +411,7 @@
             <a href="#gallery" class="mobile-nav-link">Gallery</a>
             <a href="#research" class="mobile-nav-link">Research</a>
             <a href="#achievements" class="mobile-nav-link">Awards</a>
-            <a href="resume.pdf" download class="mobile-nav-link text-primary">
+            <a href="resume.pdf" download class="mobile-nav-link text-primary mt-4">
                 <i class="fa-solid fa-download mr-2"></i>Resume.pdf
             </a>
         </div>
@@ -686,7 +599,7 @@
             </div>
         </section>
  
-        <!-- SECTION 4: CAPABILITIES / TECH STACK -->
+        <!-- SECTION 4: STACK -->
         <section id="stack" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="mb-24 gs-reveal flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8">
@@ -729,36 +642,21 @@
             </div>
         </section>
  
-        <!-- SECTION 5: ENGINEERED SYSTEMS / PROJECTS WITH UPGRADED FILTER SWITCHER -->
+        <!-- SECTION 5: ENGINEERED SYSTEMS (WITH MODAL POPUP TRIGGERS) -->
         <section id="systems" class="items-start pt-20 pb-40">
             <div class="max-w-7xl mx-auto w-full">
-                <div class="mb-12 gs-reveal">
+                <div class="mb-16 gs-reveal">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="h-[1px] w-12 bg-accent"></div>
                         <span class="text-[10px] font-mono tracking-widest text-accent uppercase block">04. Architecture in Action</span>
                     </div>
                     <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">Engineered Systems.</h2>
-                </div>
-
-                <!-- CATEGORY FILTER SWITCHER -->
-                <div class="flex flex-wrap gap-3 mb-16 gs-reveal" id="project-filters">
-                    <button class="filter-btn active border border-white/20 bg-white/5 text-xs font-mono px-5 py-2.5 rounded-full hover:border-primary transition-all duration-300 hover-target" data-filter="all">
-                        [ ALL SYSTEMS ]
-                    </button>
-                    <button class="filter-btn border border-white/20 bg-white/5 text-xs font-mono px-5 py-2.5 rounded-full hover:border-primary transition-all duration-300 hover-target text-gray-400" data-filter="ai">
-                        AI / ML
-                    </button>
-                    <button class="filter-btn border border-white/20 bg-white/5 text-xs font-mono px-5 py-2.5 rounded-full hover:border-primary transition-all duration-300 hover-target text-gray-400" data-filter="android">
-                        ANDROID
-                    </button>
-                    <button class="filter-btn border border-white/20 bg-white/5 text-xs font-mono px-5 py-2.5 rounded-full hover:border-primary transition-all duration-300 hover-target text-gray-400" data-filter="data">
-                        DATA SCIENCE
-                    </button>
+                    <p class="text-gray-400 mt-4 text-sm font-mono">// Click any project card below to inspect full architectural specifications in the inspection modal.</p>
                 </div>
                 
-                <div class="space-y-16" id="projects-container">
-                    <!-- Project 1 (AI) -->
-                    <div class="project-item grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group" data-category="ai">
+                <div class="space-y-16">
+                    <!-- Project 1 -->
+                    <div class="project-trigger cursor-pointer grid grid-cols-1 lg:grid-cols-12 gap-16 items-center gs-reveal hover-target group" data-project="resume-analyzer">
                         <div class="lg:col-span-7 order-2 lg:order-1 glass-3d p-10 md:p-14 interactive-3d border-l-4 border-primary">
                             <div class="pop-out">
                                 <div class="flex justify-between items-center mb-6">
@@ -766,18 +664,14 @@
                                     <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-file-invoice"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
-                                    An intelligent application evaluating resumes against job descriptions. Utilizes natural language processing to extract key candidate metrics, identify missing skills, and provide a quantitative match score.
+                                    An intelligent application evaluating resumes against job descriptions using natural language processing and semantic similarity scoring.
                                 </p>
-                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-white mb-10">
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-white mb-6">
                                     <span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1.5 rounded-md">Python</span>
                                     <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Google AI Studio</span>
                                     <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Streamlit</span>
                                 </div>
-                                <div class="flex flex-wrap items-center gap-6">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-primary transition-colors hover-target">
-                                        <i class="devicon-github-original text-xl"></i><span>Source Code</span>
-                                    </a>
-                                </div>
+                                <span class="text-xs font-mono text-primary underline">Inspect Architecture Details &rarr;</span>
                             </div>
                         </div>
                         <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full flex justify-center items-center">
@@ -789,30 +683,30 @@
  
                     <!-- Minor Projects Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 gs-reveal">
-                        <!-- Project 2 (Android) -->
-                        <div class="project-item glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-secondary" data-category="android">
+                        <!-- Project 2 -->
+                        <div class="project-trigger cursor-pointer glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-secondary" data-project="curatly">
                             <div class="pop-out h-full flex flex-col">
                                 <div class="flex justify-between items-start mb-8">
                                     <i class="fa-solid fa-folder-tree text-4xl text-secondary group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <span class="text-xs font-mono text-secondary underline">Inspect &rarr;</span>
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-white mb-4">Curatly</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
-                                    A robust content curation Android application designed to intelligently structure web data fields neatly into custom cloud database systems.
+                                    A robust content curation Android application designed to intelligently structure web data fields neatly into custom cloud databases.
                                 </p>
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
                                     <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-secondary">Java</span>
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Android Studio</span>
+                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Firebase</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Project 3 (Data) -->
-                        <div class="project-item glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-emerald-400" data-category="data">
+                        <!-- Project 3 -->
+                        <div class="project-trigger cursor-pointer glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-emerald-400" data-project="analytics-engine">
                             <div class="pop-out h-full flex flex-col">
                                 <div class="flex justify-between items-start mb-8">
                                     <i class="fa-solid fa-chart-pie text-4xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <span class="text-xs font-mono text-emerald-400 underline">Inspect &rarr;</span>
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-white mb-4">Data Analytics Engine</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
@@ -915,7 +809,7 @@
             </div>
         </section>
  
-        <!-- FOOTER -->
+        <!-- FOOTER (ALL 5 SOCIAL ACCOUNTS UNCHANGED) -->
         <footer class="py-12 text-center relative z-10 border-t border-white/10 bg-darkBg">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="font-display font-bold text-xl tracking-tighter text-white">
@@ -938,9 +832,9 @@
         </footer>
     </main>
  
-    <!-- LOGIC & ENGINE UPGRADES -->
+    <!-- UPGRADED SCRIPT ENGINE -->
     <script>
-        // --- 0. AUDIO SYNTHESIZER (WEB AUDIO API FOR UI SFX) ---
+        // --- 0. AUDIO SYNTHESIZER ---
         let sfxEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -951,7 +845,7 @@
                 const gain = audioCtx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
@@ -965,17 +859,16 @@
             sfxBtn.addEventListener('click', () => {
                 sfxEnabled = !sfxEnabled;
                 sfxBtn.querySelector('i').className = sfxEnabled ? "fa-solid fa-volume-high text-xs" : "fa-solid fa-volume-xmark text-xs text-red-400";
-                showToast(sfxEnabled ? "UI Sound Effects: ENABLED" : "UI Sound Effects: MUTED");
+                showToast(sfxEnabled ? "UI Sound FX: ENABLED" : "UI Sound FX: MUTED");
             });
         }
 
-        // Add SFX triggers on interactive elements
         document.querySelectorAll('.hover-target, button, a').forEach(el => {
-            el.addEventListener('mouseenter', () => playSound(600, 'sine', 0.04));
-            el.addEventListener('click', () => playSound(800, 'triangle', 0.1));
+            el.addEventListener('mouseenter', () => playSound(600, 'sine', 0.03));
+            el.addEventListener('click', () => playSound(850, 'triangle', 0.08));
         });
 
-        // --- 1. TOAST NOTIFICATION SYSTEM ---
+        // --- 1. TOAST NOTIFICATION ---
         function showToast(msg) {
             const toast = document.getElementById('toast-hud');
             const toastMsg = document.getElementById('toast-msg');
@@ -989,7 +882,6 @@
             }, 3000);
         }
 
-        // Email Copy Functionality
         const copyEmailBtn = document.getElementById('copy-email-btn');
         if (copyEmailBtn) {
             copyEmailBtn.addEventListener('click', () => {
@@ -998,105 +890,161 @@
             });
         }
 
-        // --- 2. PROJECT FILTER SWITCHER LOGIC ---
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const projectItems = document.querySelectorAll('.project-item');
+        // --- 2. MATRIX RAIN EFFECT ---
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const matrixCtx = matrixCanvas.getContext('2d');
+        let matrixActive = false;
+        let matrixInterval;
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const cat = btn.getAttribute('data-filter');
+        function initMatrixRain() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-_';
+            const alphabet = katakana + latin;
+            const fontSize = 16;
+            const columns = matrixCanvas.width / fontSize;
+            const rainDrops = Array.from({ length: columns }).fill(1);
 
-                projectItems.forEach(item => {
-                    const itemCat = item.getAttribute('data-category');
-                    if (cat === 'all' || itemCat === cat) {
-                        item.style.display = 'grid';
-                        gsap.fromTo(item, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 });
-                    } else {
-                        item.style.display = 'none';
+            function renderMatrix() {
+                matrixCtx.fillStyle = 'rgba(3, 3, 5, 0.08)';
+                matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+                matrixCtx.fillStyle = '#00F2FE';
+                matrixCtx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    matrixCtx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
                     }
-                });
-            });
-        });
-
-        // --- 3. CYBER COMMAND MODAL ENGINE ---
-        const cmdModal = document.getElementById('cmd-modal');
-        const cmdTrigger = document.getElementById('cmd-trigger-btn');
-        const cmdClose = document.getElementById('cmd-close-btn');
-        const cmdInput = document.getElementById('cmd-input');
-        const cmdOutput = document.getElementById('cmd-output');
-        const cmdSubmit = document.getElementById('cmd-submit-btn');
-
-        function toggleCmdModal(open) {
-            if (open) {
-                cmdModal.classList.remove('hidden-cmd');
-                cmdInput.focus();
-            } else {
-                cmdModal.classList.add('hidden-cmd');
+                    rainDrops[i]++;
+                }
             }
+            matrixInterval = setInterval(renderMatrix, 30);
         }
 
-        if (cmdTrigger && cmdClose) {
-            cmdTrigger.addEventListener('click', () => toggleCmdModal(true));
-            cmdClose.addEventListener('click', () => toggleCmdModal(false));
-            
-            // Shortcut key Ctrl + K to open
-            window.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    toggleCmdModal(cmdModal.classList.contains('hidden-cmd'));
+        const matrixToggle = document.getElementById('matrix-toggle-btn');
+        if (matrixToggle) {
+            matrixToggle.addEventListener('click', () => {
+                matrixActive = !matrixActive;
+                matrixCanvas.classList.toggle('active', matrixActive);
+                if (matrixActive) {
+                    initMatrixRain();
+                    showToast("Cyber Matrix Rain: ACTIVATED");
+                } else {
+                    clearInterval(matrixInterval);
+                    matrixCtx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+                    showToast("Cyber Matrix Rain: DEACTIVATED");
                 }
             });
         }
 
-        function handleCmd() {
-            const val = cmdInput.value.trim().toLowerCase();
-            if (!val) return;
+        // --- 3. PROJECT DETAIL MODAL ENGINE ---
+        const projectModal = document.getElementById('project-modal');
+        const modalClose = document.getElementById('modal-close-btn');
+        const modalContent = document.getElementById('modal-content');
 
-            const userEntry = document.createElement('div');
-            userEntry.className = "text-primary font-mono";
-            userEntry.innerText = "> " + val;
-            cmdOutput.appendChild(userEntry);
-
-            const botReply = document.createElement('div');
-            botReply.className = "text-gray-300 font-mono pl-3 border-l border-primary/40 mb-2";
-
-            switch (val) {
-                case '/help':
-                    botReply.innerHTML = "Available Commands:<br>- <span class='text-primary'>/skills</span>: Technical stack overview<br>- <span class='text-primary'>/projects</span>: List key systems<br>- <span class='text-primary'>/gpa</span>: Academic score<br>- <span class='text-primary'>/contact</span>: Email & Social handles<br>- <span class='text-primary'>/clear</span>: Clear terminal screen";
-                    break;
-                case '/skills':
-                    botReply.innerHTML = "Core: Python, Kotlin, Java<br>AI/ML: PyTorch, TensorFlow, Scikit-learn, LangChain<br>Web/Cloud: Next.js, Supabase, Firebase, Tailwind CSS";
-                    break;
-                case '/projects':
-                    botReply.innerHTML = "1. AI Resume Analyzer (Streamlit, LLMs)<br>2. Curatly (Android Content Curation)<br>3. Data Analytics Engine (Python Telemetry)";
-                    break;
-                case '/gpa':
-                    botReply.innerHTML = "Current Academic Performance: <span class='text-accent font-bold'>8.75 CGPA</span> @ IIT Jodhpur.";
-                    break;
-                case '/contact':
-                    botReply.innerHTML = "Email: paras.iitj@gmail.com<br>LinkedIn: linkedin.com/in/paras029<br>GitHub: github.com/parasbishnoi029";
-                    break;
-                case '/clear':
-                    cmdOutput.innerHTML = "";
-                    cmdInput.value = "";
-                    return;
-                default:
-                    botReply.innerHTML = `<span class='text-red-400'>Unknown command: '${val}'. Type /help for options.</span>`;
+        const projectData = {
+            'resume-analyzer': {
+                title: "AI Resume Analyzer",
+                tag: "Applied AI / NLP / Streamlit",
+                desc: "An intelligent multi-modal platform evaluating candidate resumes against live job descriptions. Built using Google AI Studio APIs and natural language processing pipelines to parse PDFs, normalize tokens, calculate cosine semantic similarity, and generate automated gap reports.",
+                stack: ["Python", "Google AI Studio", "Streamlit", "Supabase", "Pandas"]
+            },
+            'curatly': {
+                title: "Curatly",
+                tag: "Android Development / Java / Firebase",
+                desc: "A high-performance Android content curation suite designed to dynamically extract web metadata and instantly sync structured JSON payloads into cloud database tables with sub-second latency.",
+                stack: ["Java", "Android Studio", "Firebase Realtime DB", "Material UI"]
+            },
+            'analytics-engine': {
+                title: "Data Analytics Engine",
+                tag: "Data Science / Python Telemetry",
+                desc: "An automated data processing pipeline that ingests raw multi-gigabyte datasets, performs high-dimensional statistical regressions, and exports diagnostic visualization matrices.",
+                stack: ["Python", "Pandas", "NumPy", "Matplotlib", "Scikit-learn"]
             }
+        };
 
-            cmdOutput.appendChild(botReply);
-            cmdOutput.scrollTop = cmdOutput.scrollHeight;
-            cmdInput.value = "";
+        document.querySelectorAll('.project-trigger').forEach(card => {
+            card.addEventListener('click', () => {
+                const key = card.getAttribute('data-project');
+                const data = projectData[key];
+                if (!data) return;
+
+                modalContent.innerHTML = `
+                    <div class="text-xs font-mono text-primary uppercase tracking-widest mb-1">${data.tag}</div>
+                    <h3 class="font-display text-3xl font-bold text-white mb-4">${data.title}</h3>
+                    <p class="text-gray-300 font-light leading-relaxed text-sm md:text-base mb-6">${data.desc}</p>
+                    <div class="text-xs font-mono text-gray-500 mb-2">// INTEGRATED STACK</div>
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        ${data.stack.map(s => `<span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1 rounded text-xs font-mono">${s}</span>`).join('')}
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="https://github.com/parasbishnoi029" target="_blank" class="px-6 py-3 bg-primary text-darkBg font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white transition-colors">View Repository &rarr;</a>
+                    </div>
+                `;
+                projectModal.classList.remove('hidden-modal');
+            });
+        });
+
+        if (modalClose) {
+            modalClose.addEventListener('click', () => projectModal.classList.add('hidden-modal'));
+            projectModal.addEventListener('click', (e) => { if (e.target === projectModal) projectModal.classList.add('hidden-modal'); });
         }
 
-        if (cmdSubmit && cmdInput) {
-            cmdSubmit.addEventListener('click', handleCmd);
-            cmdInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleCmd(); });
+        // --- 4. PARASBOT AI CHATBOT HUD ---
+        const botToggle = document.getElementById('parasbot-toggle');
+        const botWindow = document.getElementById('parasbot-window');
+        const botClose = document.getElementById('parasbot-close');
+        const botInput = document.getElementById('parasbot-input');
+        const botSend = document.getElementById('parasbot-send');
+        const botMessages = document.getElementById('parasbot-messages');
+
+        if (botToggle && botWindow) {
+            botToggle.addEventListener('click', () => botWindow.classList.toggle('closed'));
+            botClose.addEventListener('click', () => botWindow.classList.add('closed'));
         }
 
-        // --- 4. TOP SCROLL PROGRESS & HUD BACK-TO-TOP BUTTON ---
+        function handleParasBotChat() {
+            const query = botInput.value.trim().toLowerCase();
+            if (!query) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = "bg-primary/20 text-white p-3 rounded-xl ml-auto max-w-[85%] text-right";
+            userMsg.innerText = query;
+            botMessages.appendChild(userMsg);
+            botInput.value = "";
+            botMessages.scrollTop = botMessages.scrollHeight;
+
+            setTimeout(() => {
+                const aiReply = document.createElement('div');
+                aiReply.className = "bg-white/5 border border-white/10 p-3 rounded-xl max-w-[85%]";
+                
+                if (query.includes('gpa') || query.includes('cgpa') || query.includes('academic')) {
+                    aiReply.innerText = "Paras maintains an 8.75 CGPA in Applied AI & Data Science at IIT Jodhpur.";
+                } else if (query.includes('college') || query.includes('iit') || query.includes('jodhpur')) {
+                    aiReply.innerText = "Paras is an Applied AI & Data Science BS student at IIT Jodhpur (Class of 2029).";
+                } else if (query.includes('project') || query.includes('resume') || query.includes('work')) {
+                    aiReply.innerText = "His flagship projects include the AI Resume Analyzer, Curatly Android App, and Python Data Analytics Engine.";
+                } else if (query.includes('contact') || query.includes('email') || query.includes('hire')) {
+                    aiReply.innerText = "You can reach him directly at paras.iitj@gmail.com or via LinkedIn!";
+                } else {
+                    aiReply.innerText = "That's a great question! Feel free to explore his projects above or connect with him on LinkedIn for professional inquiries.";
+                }
+
+                botMessages.appendChild(aiReply);
+                botMessages.scrollTop = botMessages.scrollHeight;
+                playSound(700, 'sine', 0.05);
+            }, 600);
+        }
+
+        if (botSend && botInput) {
+            botSend.addEventListener('click', handleParasBotChat);
+            botInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleParasBotChat(); });
+        }
+
+        // --- 5. SCROLL PROGRESS & BACK TO TOP ---
         const scrollProg = document.getElementById('scroll-progress');
         const hudControls = document.getElementById('hud-controls');
         const backToTopBtn = document.getElementById('back-to-top-btn');
@@ -1119,9 +1067,7 @@
         });
 
         if (backToTopBtn) {
-            backToTopBtn.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+            backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         }
 
         // --- MOBILE MENU ---
@@ -1134,7 +1080,6 @@
             mobileMenu.classList.add('open');
             menuBackdrop.classList.add('open');
             document.body.classList.add('menu-open');
-            menuToggle.setAttribute('aria-expanded', 'true');
             if (menuIcon) { menuIcon.classList.remove('fa-bars-staggered'); menuIcon.classList.add('fa-xmark'); }
         }
 
@@ -1142,18 +1087,13 @@
             mobileMenu.classList.remove('open');
             menuBackdrop.classList.remove('open');
             document.body.classList.remove('menu-open');
-            menuToggle.setAttribute('aria-expanded', 'false');
             if (menuIcon) { menuIcon.classList.remove('fa-xmark'); menuIcon.classList.add('fa-bars-staggered'); }
         }
 
         if (menuToggle && mobileMenu && menuBackdrop) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
-            });
+            menuToggle.addEventListener('click', () => mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu());
             menuBackdrop.addEventListener('click', closeMobileMenu);
-            mobileMenu.querySelectorAll('.mobile-nav-link').forEach((link) => {
-                link.addEventListener('click', closeMobileMenu);
-            });
+            mobileMenu.querySelectorAll('.mobile-nav-link').forEach(link => link.addEventListener('click', closeMobileMenu));
         }
 
         // --- CUSTOM CURSOR ---
@@ -1162,16 +1102,12 @@
         
         window.addEventListener('mousemove', (e) => {
             if (cursorDot && cursorRing) {
-                cursorDot.style.left = `${e.clientX}px`; 
-                cursorDot.style.top = `${e.clientY}px`;
-                cursorRing.animate({ 
-                    left: `${e.clientX}px`, 
-                    top: `${e.clientY}px` 
-                }, { duration: 100, fill: "forwards" });
+                cursorDot.style.left = `${e.clientX}px`; cursorDot.style.top = `${e.clientY}px`;
+                cursorRing.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 100, fill: "forwards" });
             }
         });
 
-        // --- THREE.JS WEBGL ARCHITECTURE ---
+        // --- THREE.JS WEBGL RENDERER ---
         const isMobileDevice = window.innerWidth < 768;
         let canvas, scene, camera, renderer, terrain, dust, avatar3DGroup, coreMesh, outerHaloMesh;
 
@@ -1190,54 +1126,32 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
      
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
-            scene.add(ambientLight);
-            
-            const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); 
-            pointLight1.position.set(10, 10, 10); 
-            scene.add(pointLight1);
-            
-            const pointLight2 = new THREE.PointLight(0x9D4EDD, 6, 100); 
-            pointLight2.position.set(-10, -10, 10); 
-            scene.add(pointLight2);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); pointLight1.position.set(10, 10, 10); scene.add(pointLight1);
+            const pointLight2 = new THREE.PointLight(0x9D4EDD, 6, 100); pointLight2.position.set(-10, -10, 10); scene.add(pointLight2);
      
             const terrainGeo = new THREE.PlaneGeometry(200, 300, 50, 75);
             const pos = terrainGeo.attributes.position;
             for (let i = 0; i < pos.count; i++) {
-                const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
-                pos.setZ(i, z);
+                pos.setZ(i, Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4);
             }
             terrainGeo.computeVertexNormals();
-            const terrainMat = new THREE.MeshStandardMaterial({ 
-                color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.08 
-            });
-            terrain = new THREE.Mesh(terrainGeo, terrainMat);
-            terrain.rotation.x = -Math.PI / 2;
-            terrain.position.y = -20; terrain.position.z = -50;
+            terrain = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.08 }));
+            terrain.rotation.x = -Math.PI / 2; terrain.position.y = -20; terrain.position.z = -50;
             scene.add(terrain);
      
             const pGeo = new THREE.BufferGeometry();
-            const pCount = 4000;
-            const pPos = new Float32Array(pCount * 3);
-            for(let i = 0; i < pCount * 3; i+=3) {
-                pPos[i] = (Math.random() - 0.5) * 200;       
-                pPos[i+1] = (Math.random() - 0.5) * 200;     
-                pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
+            const pPos = new Float32Array(4000 * 3);
+            for(let i = 0; i < 12000; i+=3) {
+                pPos[i] = (Math.random() - 0.5) * 200; pPos[i+1] = (Math.random() - 0.5) * 200; pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
             }
             pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-            const pMat = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, transparent: true, opacity: 0.3 });
-            dust = new THREE.Points(pGeo, pMat);
+            dust = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, transparent: true, opacity: 0.3 }));
             scene.add(dust);
 
             avatar3DGroup = new THREE.Group();
-            const coreGeo = new THREE.IcosahedronGeometry(4, 2);
-            const coreMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 });
-            coreMesh = new THREE.Mesh(coreGeo, coreMat);
-            
-            const outerHaloGeo = new THREE.IcosahedronGeometry(5.5, 3);
-            const outerHaloMat = new THREE.PointsMaterial({ size: 0.08, color: 0x9D4EDD, transparent: true, opacity: 0.4 });
-            outerHaloMesh = new THREE.Points(outerHaloGeo, outerHaloMat);
-            
+            coreMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(4, 2), new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 }));
+            outerHaloMesh = new THREE.Points(new THREE.IcosahedronGeometry(5.5, 3), new THREE.PointsMaterial({ size: 0.08, color: 0x9D4EDD, transparent: true, opacity: 0.4 }));
             avatar3DGroup.add(coreMesh); avatar3DGroup.add(outerHaloMesh);
             avatar3DGroup.position.set(12, 0, -10);
             scene.add(avatar3DGroup);
@@ -1245,20 +1159,15 @@
  
         // GSAP ENTRANCES
         gsap.registerPlugin(ScrollTrigger);
-        
         window.addEventListener('load', () => {
             gsap.to('#load-bar', { width: '100%', duration: 1.5, ease: 'power2.inOut', onUpdate: function() {
                 document.getElementById('loading-percentage').innerText = Math.round(this.progress() * 100) + '%';
             }, onComplete: () => {
                 gsap.to('#loader', { opacity: 0, duration: 0.8, onComplete: () => {
                     document.getElementById('loader').style.display = 'none';
-                    
                     const avatarCard = document.getElementById('hero-avatar');
                     if(avatarCard) {
-                        gsap.fromTo(avatarCard, 
-                            { z: 500, rotationY: 45, rotationX: -15, opacity: 0, scale: 0.5 }, 
-                            { z: 0, rotationY: 0, rotationX: 0, opacity: 1, scale: 1, duration: 2.5, ease: 'power4.out' }
-                        );
+                        gsap.fromTo(avatarCard, { z: 500, rotationY: 45, opacity: 0, scale: 0.5 }, { z: 0, rotationY: 0, opacity: 1, scale: 1, duration: 2.5, ease: 'power4.out' });
                     }
                     gsap.from('.hero-title', { y: 100, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.2 });
                     gsap.from('.hero-subtitle', { y: 50, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.4 });
@@ -1266,10 +1175,7 @@
  
                 gsap.utils.toArray('.gs-reveal').forEach((elem) => {
                     if(!elem.closest('#home')) {
-                        gsap.from(elem, { 
-                            y: 80, opacity: 0, duration: 1.2, ease: 'power3.out', 
-                            scrollTrigger: { trigger: elem, start: 'top 85%' }
-                        });
+                        gsap.from(elem, { y: 80, opacity: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: elem, start: 'top 85%' } });
                     }
                 });
 
@@ -1284,57 +1190,34 @@
             if (!pinWrap || !track || !cards.length) return;
 
             const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
-
-            const galleryTween = gsap.to(track, {
-                x: () => -getScrollDistance(),
-                ease: 'none',
+            gsap.to(track, {
+                x: () => -getScrollDistance(), ease: 'none',
                 scrollTrigger: {
                     trigger: pinWrap, start: 'top top',
                     end: () => `+=${getScrollDistance() + window.innerHeight * 0.5}`,
                     scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true
                 }
             });
-
-            cards.forEach((card) => {
-                gsap.fromTo(card,
-                    { scale: 0.85, opacity: 0.5 },
-                    {
-                        scale: 1, opacity: 1, ease: 'none',
-                        scrollTrigger: { trigger: card, containerAnimation: galleryTween, start: 'left 78%', end: 'left 35%', scrub: true }
-                    }
-                );
-            });
         }
 
-        // RENDER LOOP
         if (!isMobileDevice) {
             let mouseX = 0, mouseY = 0;
             const clock = new THREE.Clock();
-            
-            document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX - window.innerWidth / 2);
-                mouseY = (event.clientY - window.innerHeight / 2);
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2); mouseY = (e.clientY - window.innerHeight / 2);
             });
-
             function animate() {
                 requestAnimationFrame(animate);
                 const t = clock.getElapsedTime();
-     
                 terrain.position.z = (t * 5) % 20 - 50;
                 dust.rotation.y = t * 0.02;
-                
-                coreMesh.rotation.x = t * 0.4;
-                coreMesh.rotation.y = t * 0.5;
-                outerHaloMesh.rotation.z = -t * 0.15;
-     
+                coreMesh.rotation.x = t * 0.4; coreMesh.rotation.y = t * 0.5; outerHaloMesh.rotation.z = -t * 0.15;
                 camera.position.x += (mouseX * 0.005 - camera.position.x) * 0.05;
                 camera.position.y += (-mouseY * 0.005 - camera.position.y) * 0.05;
                 camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
-     
                 renderer.render(scene, camera);
             }
-     
-            animate(); 
+            animate();
         }
     </script>
 </body>
