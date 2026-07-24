@@ -2,28 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Root Portfolio URL -->
   <url>
-    <loc>https://parasbishnoi029.github.io/parasfolio/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <loc>https://parasfolio.qd.je/</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <!-- Main Sections for deeper indexing -->
   <url>
-    <loc>https://parasbishnoi029.github.io/parasfolio/#manifesto</loc>
-    <lastmod>2026-07-19</lastmod>
+    <loc>https://parasfolio.qd.je/#about</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://parasbishnoi029.github.io/parasfolio/#systems</loc>
-    <lastmod>2026-07-19</lastmod>
+    <loc>https://parasfolio.qd.je/#education</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://parasbishnoi029.github.io/parasfolio/#research</loc>
-    <lastmod>2026-07-19</lastmod>
+    <loc>https://parasfolio.qd.je/#journey</loc>
+    <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://parasfolio.qd.je/#stack</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://parasfolio.qd.je/#systems</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://parasfolio.qd.je/#gallery</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://parasfolio.qd.je/#research</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://parasfolio.qd.je/#awards</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
