@@ -689,10 +689,23 @@ body.menu-open{
       =========================== */
       #status-badge {
           cursor: pointer;
-          transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+          isolation: isolate;
+          z-index: 20;
+          white-space: nowrap;
+          transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease, color 0.25s ease;
       }
       #status-badge .status-dot {
           transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      #status-badge:hover {
+          border-color: rgba(0, 242, 254, 0.9);
+          background-color: rgba(0, 242, 254, 0.1);
+          box-shadow: 0 0 24px rgba(0, 242, 254, 0.35);
+          transform: scale(1.06);
+      }
+      #status-badge:active {
+          transform: scale(0.94);
       }
       #status-badge.is-away {
           border-color: rgba(255, 255, 255, 0.2);
@@ -704,9 +717,69 @@ body.menu-open{
           box-shadow: none;
           animation: none;
       }
-      #status-badge:hover {
-          border-color: rgba(0, 242, 254, 0.9);
-          background-color: rgba(0, 242, 254, 0.08);
+      #status-badge.is-copied {
+          border-color: rgba(74, 222, 128, 0.85);
+          background-color: rgba(74, 222, 128, 0.12);
+          color: #4ADE80;
+          box-shadow: 0 0 24px rgba(74, 222, 128, 0.35);
+      }
+      #status-badge.is-copied .status-dot {
+          background-color: #4ADE80;
+          box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+          animation: none;
+      }
+
+      /* ===========================
+         GALLERY NAVIGATION CONTROLS
+      =========================== */
+      #gallery-pin { position: relative; }
+      .gallery-nav-btn {
+          position: absolute;
+          top: 45%;
+          transform: translateY(-50%);
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(10, 12, 18, 0.6);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(0, 242, 254, 0.35);
+          color: #00F2FE;
+          z-index: 20;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: border-color 0.25s ease, background 0.25s ease, transform 0.2s ease, opacity 0.25s ease;
+      }
+      .gallery-nav-btn:hover {
+          border-color: #00F2FE;
+          background: rgba(0, 242, 254, 0.14);
+          transform: translateY(-50%) scale(1.08);
+      }
+      .gallery-nav-btn:active { transform: translateY(-50%) scale(0.92); }
+      .gallery-nav-btn:disabled {
+          opacity: 0.25;
+          cursor: default;
+          pointer-events: none;
+      }
+      .gallery-nav-prev { left: 14px; }
+      .gallery-nav-next { right: 14px; }
+      @media (max-width: 900px) {
+          .gallery-nav-btn { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+          #gallery-pin {
+              overflow-x: auto;
+              -webkit-overflow-scrolling: touch;
+              scroll-snap-type: x mandatory;
+          }
+          .gallery-card {
+              scroll-snap-align: center;
+              opacity: 1 !important;
+              transform: scale(1) !important;
+          }
       }
     </style>
 </head>
@@ -1379,6 +1452,12 @@ body.menu-open{
             </div>
 
             <div id="gallery-pin" class="w-full">
+                <button type="button" id="gallery-prev" class="gallery-nav-btn gallery-nav-prev hover-target" aria-label="Previous project">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" id="gallery-next" class="gallery-nav-btn gallery-nav-next hover-target" aria-label="Next project">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
                 <div id="gallery-track">
 
                     <!-- Gallery Card 1 -->
@@ -1526,7 +1605,7 @@ body.menu-open{
                     <div id="gallery-progress-fill" class="gallery-progress-fill"></div>
                 </div>
                 <div class="flex justify-between text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-3 max-w-[420px] mx-auto">
-                    <span>Scroll</span>
+                    <span id="gallery-counter">01 / 05</span>
                     <span class="flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i>Fly through projects</span>
                 </div>
             </div>
@@ -1739,12 +1818,14 @@ body.menu-open{
                 <div class="orbital-ring w-[120%] h-[120%] absolute border border-secondary/20 animate-spin-reverse rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
                 <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-darkBg pointer-events-none z-0"></div>
  
-                <div class="pop-out relative z-10">
-                    <button type="button" id="status-badge" class="inline-flex items-center space-x-2 bg-darkBg border border-primary/50 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 shadow-neon-primary hover-target" aria-live="polite" title="Click to jump to contact options">
+                <div class="pop-out-subtle relative z-20 flex justify-center mb-10">
+                    <button type="button" id="status-badge" class="inline-flex items-center space-x-2 bg-darkBg border border-primary/50 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase shadow-neon-primary hover-target whitespace-nowrap" aria-live="polite" title="Click to copy my email">
                         <span class="status-dot w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                         <span id="status-badge-text">Connection Port Open</span>
                     </button>
- 
+                </div>
+
+                <div class="pop-out relative z-10">
                     <h2 class="font-display text-6xl md:text-8xl font-bold text-white mb-8 tracking-tighter">Initialize Link.</h2>
                     <p class="text-xl font-light text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
                         Currently available for <strong class="text-white">machine learning internships</strong>, open-source collaborations, and data science research assignments. Let's architect the future together.
@@ -1853,13 +1934,16 @@ body.menu-open{
         }
 
         // --- 0B. LIVE "CONNECTION PORT" STATUS BADGE ---
-        // Previously this was static text with a CSS pulse only — no real state, and
-        // not clickable, which is why it looked "broken". It now reflects an actual
-        // IST-based availability window and scrolls to the contact links on click.
+        // Reflects an actual IST-based availability window, and clicking it now
+        // copies the contact email with a visible confirmation state — a scroll-to
+        // action gave no feedback since the email link was usually already on screen.
         (function initStatusBadge() {
             const badge = document.getElementById('status-badge');
             const label = document.getElementById('status-badge-text');
             if (!badge || !label) return;
+
+            const EMAIL = 'paras.iitj@gmail.com';
+            let confirming = false;
 
             function isAvailableNowIST() {
                 const now = new Date();
@@ -1871,15 +1955,32 @@ body.menu-open{
             }
 
             function render() {
+                if (confirming) return;
                 const open = isAvailableNowIST();
                 badge.classList.toggle('is-away', !open);
                 label.textContent = open ? 'Connection Port Open' : 'Connection Port — Away';
             }
 
-            badge.addEventListener('click', () => {
-                const emailLink = document.querySelector('a[href^="mailto:"]');
-                if (emailLink) emailLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
+            async function handleClick() {
+                confirming = true;
+                badge.classList.remove('is-away');
+                badge.classList.add('is-copied');
+                try {
+                    await navigator.clipboard.writeText(EMAIL);
+                    label.textContent = 'Email Copied!';
+                } catch (err) {
+                    label.textContent = 'Scroll to Email ↓';
+                    const emailLink = document.querySelector('a[href^="mailto:"]');
+                    if (emailLink) emailLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                setTimeout(() => {
+                    badge.classList.remove('is-copied');
+                    confirming = false;
+                    render();
+                }, 1800);
+            }
+
+            badge.addEventListener('click', handleClick);
 
             render();
             setInterval(render, 60000);
@@ -2124,9 +2225,43 @@ body.menu-open{
             const track = document.getElementById('gallery-track');
             const cards = gsap.utils.toArray('.gallery-card');
             const progressFill = document.getElementById('gallery-progress-fill');
+            const counterEl = document.getElementById('gallery-counter');
+            const prevBtn = document.getElementById('gallery-prev');
+            const nextBtn = document.getElementById('gallery-next');
             if (!pinWrap || !track || !cards.length) return;
 
+            const pad = (n) => String(n).padStart(2, '0');
+            const setCounter = (i) => {
+                if (counterEl) counterEl.textContent = `${pad(i + 1)} / ${pad(cards.length)}`;
+            };
+            setCounter(0);
+
+            // Respect reduced-motion: skip page scroll-jacking entirely and fall back
+            // to a native, swipe/scroll-friendly horizontal strip with snap points.
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                const updateNative = () => {
+                    const cardBox = cards[0].getBoundingClientRect();
+                    const step = cardBox.width + 32; // approx gap
+                    const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step)));
+                    setCounter(idx);
+                    if (progressFill) progressFill.style.width = `${(idx / (cards.length - 1)) * 100}%`;
+                };
+                pinWrap.addEventListener('scroll', updateNative, { passive: true });
+                updateNative();
+                return;
+            }
+
             const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
+            let currentIndex = 0;
+
+            const updateNavState = () => {
+                if (prevBtn) prevBtn.disabled = currentIndex === 0;
+                if (nextBtn) nextBtn.disabled = currentIndex === cards.length - 1;
+            };
+            updateNavState();
 
             const galleryTween = gsap.to(track, {
                 x: () => -getScrollDistance(),
@@ -2142,6 +2277,12 @@ body.menu-open{
                     invalidateOnRefresh: true,
                     onUpdate: (self) => {
                         if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
+                        const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
+                        if (idx !== currentIndex) {
+                            currentIndex = idx;
+                            updateNavState();
+                        }
+                        setCounter(currentIndex);
                     }
                 }
             });
@@ -2163,6 +2304,29 @@ body.menu-open{
                         }
                     }
                 );
+            });
+
+            function goToIndex(i) {
+                const clamped = Math.min(Math.max(i, 0), cards.length - 1);
+                const st = galleryTween.scrollTrigger;
+                const targetProgress = clamped / (cards.length - 1);
+                const targetScroll = st.start + targetProgress * (st.end - st.start);
+                window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            }
+
+            if (prevBtn) prevBtn.addEventListener('click', () => goToIndex(currentIndex - 1));
+            if (nextBtn) nextBtn.addEventListener('click', () => goToIndex(currentIndex + 1));
+
+            // Arrow-key navigation while the gallery is roughly centered in view
+            document.addEventListener('keydown', (e) => {
+                const tag = e.target && e.target.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                const rect = pinWrap.getBoundingClientRect();
+                const inView = rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.4;
+                if (!inView) return;
+                e.preventDefault();
+                goToIndex(currentIndex + (e.key === 'ArrowRight' ? 1 : -1));
             });
 
             ScrollTrigger.refresh();
