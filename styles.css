@@ -1,4 +1,4 @@
-        /* Base Reset & Defaults */
+/* Base Reset & Defaults */
         *, *::before, *::after { box-sizing: border-box; }
         body { 
             background-color: #030305; 
@@ -901,3 +901,18 @@ body.menu-open{
           color: #00F2FE;
           transform: scale(1.1);
       }
+
+/* ===========================
+   ASSET AVAILABILITY STATES
+   Applied via JS after checking whether download files
+   (resume.pdf, demo .apk) actually exist, so a broken link
+   never sits there waiting to embarrass someone in an interview.
+=========================== */
+[data-asset-check].is-unavailable {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+}
+[data-asset-check].is-unavailable:hover {
+    transform: none !important;
+}
