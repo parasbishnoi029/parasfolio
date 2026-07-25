@@ -1,8 +1,38 @@
-        /**
+/**
          * PARASFOLIO CORE LOGIC
          * Handles Custom Cursor, CSS 3D Tilt, GSAP ScrollTriggers, and Three.js 3D Environment.
          */
  
+        // --- 00. DOWNLOAD LINK AVAILABILITY CHECK ---
+        // A "Download Resume" button that 404s looks unprofessional. This checks
+        // each unique file referenced by [data-asset-check] exactly once via a
+        // lightweight HEAD request, then applies the result to every link that
+        // points at it (nav, mobile menu, contact section, project cards, etc).
+        (function initAssetAvailabilityCheck() {
+            const links = document.querySelectorAll('[data-asset-check]');
+            if (!links.length) return;
+
+            const uniqueAssets = [...new Set([...links].map((el) => el.dataset.assetCheck))];
+
+            uniqueAssets.forEach((path) => {
+                fetch(path, { method: 'HEAD', cache: 'no-store' })
+                    .then((res) => {
+                        if (res.ok) return; // file exists, leave the link as-is
+                        markUnavailable(path);
+                    })
+                    .catch(() => markUnavailable(path)); // network error, offline, or CORS block on a missing file
+            });
+
+            function markUnavailable(path) {
+                document.querySelectorAll(`[data-asset-check="${path}"]`).forEach((el) => {
+                    el.classList.add('is-unavailable');
+                    el.setAttribute('aria-disabled', 'true');
+                    el.title = 'Not uploaded yet — check back soon';
+                    el.addEventListener('click', (e) => e.preventDefault());
+                });
+            }
+        })();
+
         // --- 0A. DECORATIVE ACTIVITY GRID (replaces a legacy document.write call) ---
         (function initHeatmapGrid() {
             const host = document.getElementById('gh-heatmap-grid');
