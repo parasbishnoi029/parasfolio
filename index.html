@@ -40,6 +40,12 @@
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
 
+    <!-- Privacy-friendly analytics: no cookies, no personal data collected.
+         Adjust data-domain if this site is later served from a custom domain
+         instead of GitHub Pages. Script fails silently if the domain isn't
+         registered with Plausible, so it's safe to ship as-is. -->
+    <script defer data-domain="parasbishnoi029.github.io" src="https://plausible.io/js/script.js"></script>
+
     <script type="application/ld+json">
           {
             "@context": "https://schema.org",
@@ -754,6 +760,32 @@ body.menu-open{
       .gallery-cta-card:hover {
           border-color: rgba(0, 242, 254, 0.7);
           background: rgba(0, 242, 254, 0.06);
+      }
+
+      /* ===========================
+         LIVE DEMO EMBED PANEL
+      =========================== */
+      .demo-panel {
+          border-radius: 16px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(0, 0, 0, 0.4);
+      }
+      .demo-panel iframe {
+          width: 100%;
+          height: 560px;
+          border: 0;
+          display: block;
+          background: #0a0a0f;
+      }
+      .demo-panel-placeholder {
+          padding: 2.5rem 2rem;
+          text-align: center;
+      }
+      .demo-panel-placeholder i {
+          font-size: 2rem;
+          color: rgba(74, 222, 128, 0.7);
+          margin-bottom: 1rem;
       }
       .gallery-nav-btn {
           position: absolute;
@@ -1606,6 +1638,14 @@ body.menu-open{
                                         <i class="fa-solid fa-android text-xl"></i><span>Download APK</span>
                                     </a>
                                 </div>
+
+                                <!-- Interactive Live Demo (embeds a hosted model preview once connected) -->
+                                <div class="mt-8 pt-8 border-t border-white/10">
+                                    <button type="button" id="demo-toggle-resume" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-accent/10 border border-accent/40 rounded-full text-xs font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-black transition-colors" aria-expanded="false" aria-controls="demo-panel-resume" data-demo-url="">
+                                        <i class="fa-solid fa-play"></i> Launch Live Demo
+                                    </button>
+                                    <div id="demo-panel-resume" class="demo-panel mt-6" hidden></div>
+                                </div>
                             </div>
                         </div>
                         
@@ -1900,7 +1940,7 @@ body.menu-open{
                         <div class="mb-10 border border-white/10 rounded-xl p-4 bg-black/50">
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-xs font-mono text-gray-500">parasbishnoi029 / contributions</span>
-                                <span class="text-xs font-mono text-green-400">1,240 commits this year</span>
+                                <span id="gh-live-stat" class="text-xs font-mono text-green-400">Fetching live stats…</span>
                             </div>
                             <div class="flex gap-1 overflow-x-hidden">
                                 <script>
@@ -1915,12 +1955,13 @@ body.menu-open{
                                     }).join(''));
                                 </script>
                             </div>
+                            <div class="text-[10px] font-mono text-gray-600 mt-3">Grid is a decorative pattern — stat above is live from the GitHub API.</div>
                         </div>
  
                         <!-- Pinned Projects -->
                         <div class="mt-2">
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned Projects</h4>
-                            <div class="flex flex-wrap gap-3">
+                            <div id="gh-pinned-projects" class="flex flex-wrap gap-3">
                                 <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-code-branch text-[10px]"></i> AI Resume Analyzer
                                 </a>
@@ -2300,6 +2341,122 @@ body.menu-open{
             }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
 
             sections.forEach(section => observer.observe(section));
+        })();
+
+        // --- 0E. LIVE GITHUB STATS (real data via the public REST API) ---
+        // Replaces the previously hardcoded, fabricated "1,240 commits" figure
+        // and static pinned-project chips with real numbers pulled live from
+        // GitHub. No auth token needed for public read-only endpoints; this
+        // fails silently and keeps the existing static fallback content if
+        // the API is unreachable or rate-limited.
+        (function initGithubStats() {
+            const GH_USER = 'parasbishnoi029';
+            const statEl = document.getElementById('gh-live-stat');
+            const pinnedEl = document.getElementById('gh-pinned-projects');
+            if (!statEl && !pinnedEl) return;
+
+            function timeAgo(dateStr) {
+                const diffMs = Date.now() - new Date(dateStr).getTime();
+                const days = Math.floor(diffMs / 86400000);
+                if (days < 1) return 'today';
+                if (days === 1) return '1 day ago';
+                if (days < 30) return `${days} days ago`;
+                const months = Math.floor(days / 30);
+                if (months < 12) return `${months} mo ago`;
+                return `${Math.floor(months / 12)} yr ago`;
+            }
+
+            fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed`, {
+                headers: { Accept: 'application/vnd.github+json' }
+            })
+                .then((res) => {
+                    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+                    return res.json();
+                })
+                .then((repos) => {
+                    if (!Array.isArray(repos) || !repos.length) throw new Error('No public repos returned');
+
+                    const nonForks = repos.filter((r) => !r.fork);
+                    const pool = nonForks.length ? nonForks : repos;
+
+                    const totalStars = pool.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
+                    const langCounts = {};
+                    pool.forEach((r) => {
+                        if (r.language) langCounts[r.language] = (langCounts[r.language] || 0) + 1;
+                    });
+                    const topLanguage = Object.entries(langCounts).sort((a, b) => b[1] - a[1])[0];
+
+                    if (statEl) {
+                        const parts = [`${pool.length} public repos`, `${totalStars} ★ total`];
+                        if (topLanguage) parts.push(`mostly ${topLanguage[0]}`);
+                        statEl.textContent = parts.join(' • ');
+                        statEl.title = `Live from api.github.com/users/${GH_USER}/repos`;
+                    }
+
+                    if (pinnedEl) {
+                        const colorCycle = ['primary', 'secondary', 'accent'];
+                        const top = [...pool].sort((a, b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at))).slice(0, 3);
+                        if (top.length) {
+                            pinnedEl.innerHTML = top.map((repo, i) => {
+                                const color = colorCycle[i % colorCycle.length];
+                                const stars = repo.stargazers_count ? ` <span class="text-gray-500">· ${repo.stargazers_count}★</span>` : '';
+                                return `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-${color}/50 hover:text-${color} px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors" title="Updated ${timeAgo(repo.pushed_at)}">
+                                    <i class="fa-solid fa-code-branch text-[10px]"></i> ${repo.name}${stars}
+                                </a>`;
+                            }).join('') + `<a href="https://github.com/${GH_USER}?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-white px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">View All <i class="fa-solid fa-arrow-right ml-1"></i></a>`;
+                        }
+                    }
+                })
+                .catch(() => {
+                    // Network error or API rate limit hit — leave the static
+                    // fallback markup already in the page untouched.
+                    if (statEl) statEl.textContent = 'Live stats unavailable — see GitHub';
+                });
+        })();
+
+        // --- 0F. INTERACTIVE LIVE DEMO PANEL ---
+        // Toggles an embedded preview of a hosted model (Hugging Face Space,
+        // Streamlit app, etc). To go live: set data-demo-url="https://your-space-url"
+        // on the trigger button — everything else activates automatically.
+        (function initDemoPanels() {
+            document.querySelectorAll('[id^="demo-toggle-"]').forEach((btn) => {
+                const panelId = btn.getAttribute('aria-controls');
+                const panel = panelId ? document.getElementById(panelId) : null;
+                if (!panel) return;
+                let loaded = false;
+
+                btn.addEventListener('click', () => {
+                    const opening = panel.hasAttribute('hidden');
+                    if (opening) {
+                        panel.removeAttribute('hidden');
+                        btn.setAttribute('aria-expanded', 'true');
+                        btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Close Live Demo';
+
+                        if (!loaded) {
+                            const demoUrl = btn.dataset.demoUrl;
+                            if (demoUrl) {
+                                panel.innerHTML = `<iframe src="${demoUrl}" loading="lazy" title="Live interactive demo" allow="clipboard-write"></iframe>`;
+                            } else {
+                                panel.innerHTML = `
+                                    <div class="demo-panel-placeholder">
+                                        <i class="fa-solid fa-plug-circle-bolt"></i>
+                                        <h4 class="font-display text-lg font-bold text-white mb-2">No live preview connected yet</h4>
+                                        <p class="text-sm text-gray-400 font-light max-w-md mx-auto leading-relaxed">
+                                            This slot is wired up to embed a hosted model — a Hugging Face Space or Streamlit app —
+                                            the moment one is deployed. Until then, check out the source or the APK demo above.
+                                        </p>
+                                    </div>`;
+                            }
+                            loaded = true;
+                        }
+                        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        panel.setAttribute('hidden', '');
+                        btn.setAttribute('aria-expanded', 'false');
+                        btn.innerHTML = '<i class="fa-solid fa-play"></i> Launch Live Demo';
+                    }
+                });
+            });
         })();
 
         // --- 1. CUSTOM CURSOR INTEGRATION ---
