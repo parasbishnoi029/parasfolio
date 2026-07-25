@@ -12,27 +12,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="keywords" content="Parasfolio, Paras Bishnoi,AI and Data Science Student, IIT Jodhpur, AI, Paras,Data Science, Machine Learning, Android, Kotlin, Portfolio">
     <meta name="author" content="Paras Bishnoi">
-    
-    <!-- Open Graph / Social Media Embeds -->
     <meta property="og:title" content="Parasfolio | Paras Bishnoi">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://parasfolio.qd.je/">
+    <meta property="og:url" content="https://parasbishnoi029.github.io/parasfolio/">
     <meta property="og:description" content="Applied AI & Data Science student at IIT Jodhpur. Explore projects in ML, NLP, Android, and full-stack development.">
-    <meta property="og:image" content="https://parasfolio.qd.je/Profile.jpg">
-    
-    <!-- Twitter -->
+    <meta property="og:image" content="https://parasbishnoi029.github.io/parasfolio/Profile.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Parasfolio | Paras Bishnoi">
     <meta name="twitter:description" content="Applied AI & Data Science student at IIT Jodhpur. Explore projects in ML, NLP, Android, and full-stack development.">
-    <meta name="twitter:image" content="https://parasfolio.qd.je/Profile.jpg">
-    
+    <meta name="twitter:image" content="https://parasbishnoi029.github.io/parasfolio/Profile.jpg">
     <meta name="theme-color" content="#030305">
     <meta name="robots" content="index, follow">
     <meta name="description" content="Paras - Applied AI & Data Science . Immersive 3D Portfolio.">
     <title>PARASFOLIO | Applied AI & Data Science </title>
-    
     <noscript>
-        <style>#loader{display:none!important;}</style>
+        <style>#loader{display:none!important;} .gallery-card-media img,.gallery-card-media video{opacity:1!important;}</style>
     </noscript>
     
     <!-- ========================================== -->
@@ -43,28 +37,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
-    <link rel="icon" type="image/png" href="https://parasfolio.qd.je/favicon.png">
-    <!-- Canonical & Sitemap -->
-    <link rel="canonical" href="https://parasfolio.qd.je/">  
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasfolio.qd.je/sitemap.xml">
+    <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
 
-    <!-- Structured Data -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Paras Bishnoi",
-        "url": "https://parasfolio.qd.je/",
-        "image": "https://parasfolio.qd.je/Profile.jpg",
-        "sameAs": [
-          "https://github.com/parasbishnoi029"
-        ],
-        "jobTitle": "AI & Data Science Student",
-        "worksFor": {
-          "@type": "EducationalOrganization",
-          "name": "IIT Jodhpur"
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Paras Bishnoi",
+            "alternateName": "Paras Paras",
+            "url": "https://parasbishnoi029.github.io/parasfolio/",
+            "image": "https://parasbishnoi029.github.io/parasfolio/Profile.jpg",
+            "jobTitle": "Applied AI & Data Science Student",
+            "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "IIT Jodhpur"
+            },
+            "sameAs": [
+            "https://github.com/parasbishnoi029",
+            "https://linkedin.com/in/paras029",
+            "https://www.instagram.com/parasbishnoi.03/",
+            "https://www.facebook.com/paras.bishnoi.29",
+            "https://x.com/parasbishnoi03"
+            ],
+            "description": "Applied AI & Data Science student at IIT Jodhpur specializing in deep learning, MLOps, and scalable data architectures."
         }
-      }
     </script>
     <!-- ========================================== -->
     <!-- TAILWIND CSS CONFIGURATION                 -->
@@ -474,7 +471,12 @@
             height: 100%;
             object-fit: cover;
             transform: scale(1.08);
-            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
+        }
+        .gallery-card-media img.is-loaded,
+        .gallery-card-media video.is-loaded {
+            opacity: 1;
         }
         .gallery-card:hover .gallery-card-media img,
         .gallery-card:hover .gallery-card-media video {
@@ -736,6 +738,23 @@ body.menu-open{
          GALLERY NAVIGATION CONTROLS
       =========================== */
       #gallery-pin { position: relative; }
+      #gallery-pin[role="region"] { outline: none; }
+      .gallery-cta-card {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 420px;
+          border: 1.5px dashed rgba(0, 242, 254, 0.35);
+          background: rgba(0, 242, 254, 0.03);
+      }
+      .gallery-cta-inner {
+          text-align: center;
+          padding: 2.5rem 2rem;
+      }
+      .gallery-cta-card:hover {
+          border-color: rgba(0, 242, 254, 0.7);
+          background: rgba(0, 242, 254, 0.06);
+      }
       .gallery-nav-btn {
           position: absolute;
           top: 45%;
@@ -772,6 +791,34 @@ body.menu-open{
       @media (max-width: 900px) {
           .gallery-nav-btn { display: none; }
       }
+
+      /* Pagination dots */
+      .gallery-dots {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-top: 1.25rem;
+      }
+      .gallery-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.15);
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          transition: background 0.25s ease, transform 0.25s ease, width 0.25s ease;
+      }
+      .gallery-dot:hover {
+          background: rgba(0, 242, 254, 0.5);
+          transform: scale(1.2);
+      }
+      .gallery-dot.is-active {
+          background: linear-gradient(90deg, #00F2FE, #9D4EDD);
+          width: 22px;
+          border-radius: 4px;
+      }
       @media (prefers-reduced-motion: reduce) {
           #gallery-pin {
               overflow-x: auto;
@@ -783,6 +830,186 @@ body.menu-open{
               opacity: 1 !important;
               transform: scale(1) !important;
           }
+      }
+
+      /* ===========================
+         GALLERY: EXPAND AFFORDANCE + LIGHTBOX
+      =========================== */
+      .gallery-card-media { cursor: pointer; }
+      .gallery-expand-hint {
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(3, 3, 5, 0.55);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #fff;
+          font-size: 0.75rem;
+          opacity: 0;
+          transform: scale(0.85);
+          transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+          z-index: 5;
+          pointer-events: none;
+      }
+      .gallery-card:hover .gallery-expand-hint {
+          opacity: 1;
+          transform: scale(1);
+          border-color: rgba(0, 242, 254, 0.6);
+      }
+
+      .gallery-swipe-hint {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          color: #6b7280;
+          font-size: 10px;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          font-family: 'Fira Code', monospace;
+          margin-top: 0.75rem;
+      }
+      @media (max-width: 900px) {
+          .gallery-swipe-hint { display: flex; }
+      }
+
+      .gallery-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 5vh 5vw;
+          background: rgba(3, 3, 5, 0.92);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+      }
+      .gallery-lightbox.open {
+          opacity: 1;
+          pointer-events: auto;
+      }
+      .gallery-lightbox-inner {
+          max-width: 900px;
+          width: 100%;
+          max-height: 90vh;
+          display: flex;
+          flex-direction: column;
+          border-radius: 24px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(10, 12, 18, 0.6);
+          transform: scale(0.92) translateY(16px);
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .gallery-lightbox.open .gallery-lightbox-inner {
+          transform: scale(1) translateY(0);
+      }
+      #gallery-lightbox-media {
+          width: 100%;
+          max-height: 65vh;
+          background: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+      }
+      #gallery-lightbox-media img,
+      #gallery-lightbox-media video {
+          width: 100%;
+          max-height: 65vh;
+          object-fit: contain;
+      }
+      .gallery-lightbox-caption {
+          padding: 1.5rem 2rem 2rem;
+      }
+      .gallery-lightbox-close {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(10, 12, 18, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #fff;
+          cursor: pointer;
+          z-index: 201;
+          transition: border-color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+      }
+      .gallery-lightbox-close:hover {
+          border-color: rgba(0, 242, 254, 0.8);
+          background: rgba(0, 242, 254, 0.12);
+          transform: rotate(90deg);
+      }
+      .gallery-lightbox-nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(10, 12, 18, 0.6);
+          border: 1px solid rgba(0, 242, 254, 0.35);
+          color: #00F2FE;
+          cursor: pointer;
+          z-index: 201;
+          transition: border-color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+      }
+      .gallery-lightbox-nav:hover {
+          border-color: #00F2FE;
+          background: rgba(0, 242, 254, 0.14);
+          transform: translateY(-50%) scale(1.08);
+      }
+      .gallery-lightbox-prev { left: 16px; }
+      .gallery-lightbox-next { right: 16px; }
+      @media (max-width: 640px) {
+          .gallery-lightbox-nav { width: 42px; height: 42px; }
+          .gallery-lightbox-prev { left: 6px; }
+          .gallery-lightbox-next { right: 6px; }
+      }
+
+      /* Per-card video sound toggle */
+      .gallery-video-toggle {
+          position: absolute;
+          bottom: 14px;
+          right: 14px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(3, 3, 5, 0.6);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #fff;
+          font-size: 0.8rem;
+          cursor: pointer;
+          z-index: 11;
+          transition: border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+      }
+      .gallery-video-toggle:hover {
+          border-color: #00F2FE;
+          color: #00F2FE;
+          transform: scale(1.1);
       }
     </style>
 </head>
@@ -1454,7 +1681,7 @@ body.menu-open{
                 </div>
             </div>
 
-            <div id="gallery-pin" class="w-full">
+            <div id="gallery-pin" class="w-full" role="region" aria-label="Project gallery, use arrow keys or the buttons to browse" tabindex="-1">
                 <button type="button" id="gallery-prev" class="gallery-nav-btn gallery-nav-prev hover-target" aria-label="Previous project">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
@@ -1468,6 +1695,7 @@ body.menu-open{
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
+                                <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/resume.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'"
                                     loading="lazy" decoding="async" alt="AI Resume Analyzer preview">
@@ -1496,10 +1724,14 @@ body.menu-open{
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
+                                <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <video autoplay loop muted playsinline>
                                     <source src="assets/videos/demo.mp4" type="video/mp4">
                                     <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
                                 </video>
+                                <button type="button" class="gallery-video-toggle hover-target" data-video-toggle aria-label="Unmute preview">
+                                    <i class="fa-solid fa-volume-xmark"></i>
+                                </button>
                                 <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider z-10">
                                     <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                                     <span>stream_analyzer.log</span>
@@ -1527,6 +1759,7 @@ body.menu-open{
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
+                                <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/project2.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop'"
                                     loading="lazy" decoding="async" alt="Curatly preview">
@@ -1553,6 +1786,7 @@ body.menu-open{
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
+                                <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/project3.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'"
                                     loading="lazy" decoding="async" alt="Data Analytics Engine preview">
@@ -1579,6 +1813,7 @@ body.menu-open{
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
+                                <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/workspace.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'"
                                     loading="lazy" decoding="async" alt="Development workspace">
@@ -1599,6 +1834,22 @@ body.menu-open{
                         </div>
                     </article>
 
+                    <!-- Gallery Card 6: View All CTA -->
+                    <article class="gallery-card hover-target" data-index="5">
+                        <div class="gallery-card-inner gallery-cta-card">
+                            <div class="gallery-cta-inner">
+                                <i class="fa-solid fa-diagram-project text-4xl text-primary mb-6"></i>
+                                <h3 class="font-display text-2xl font-bold text-white mb-3">More on GitHub</h3>
+                                <p class="text-sm text-gray-400 font-light mb-8 leading-relaxed max-w-[220px] mx-auto">
+                                    That's the highlight reel — the full commit history and every repo lives here.
+                                </p>
+                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-primary/10 border border-primary/40 rounded-full text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-black transition-colors">
+                                    View All Projects <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
                 </div>
             </div>
 
@@ -1610,6 +1861,12 @@ body.menu-open{
                 <div class="flex justify-between text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-3 max-w-[420px] mx-auto">
                     <span id="gallery-counter">01 / 05</span>
                     <span class="flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i>Fly through projects</span>
+                </div>
+                <div id="gallery-dots" class="gallery-dots" role="tablist" aria-label="Jump to project"></div>
+                <div class="gallery-swipe-hint">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Swipe to browse</span>
+                    <i class="fa-solid fa-arrow-right"></i>
                 </div>
             </div>
         </section>
@@ -1886,6 +2143,28 @@ body.menu-open{
             </div>
         </footer>
     </main>
+
+    <!-- ========================================== -->
+    <!-- GALLERY LIGHTBOX (populated dynamically)   -->
+    <!-- ========================================== -->
+    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project preview">
+        <button type="button" id="gallery-lightbox-close" class="gallery-lightbox-close hover-target" aria-label="Close preview">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button type="button" id="gallery-lightbox-prev" class="gallery-lightbox-nav gallery-lightbox-prev hover-target" aria-label="Previous project">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button type="button" id="gallery-lightbox-next" class="gallery-lightbox-nav gallery-lightbox-next hover-target" aria-label="Next project">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="gallery-lightbox-inner">
+            <div id="gallery-lightbox-media"></div>
+            <div class="gallery-lightbox-caption">
+                <h3 id="gallery-lightbox-title" class="font-display text-2xl font-bold text-white mb-2"></h3>
+                <p id="gallery-lightbox-desc" class="text-sm text-gray-400 font-light leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
  
     <!-- ========================================== -->
     <!-- LOGIC: UI & MULTIPLE 3D ANIMATIONS         -->
@@ -2231,6 +2510,7 @@ body.menu-open{
             const counterEl = document.getElementById('gallery-counter');
             const prevBtn = document.getElementById('gallery-prev');
             const nextBtn = document.getElementById('gallery-next');
+            const dotsWrap = document.getElementById('gallery-dots');
             if (!pinWrap || !track || !cards.length) return;
 
             const pad = (n) => String(n).padStart(2, '0');
@@ -2239,20 +2519,41 @@ body.menu-open{
             };
             setCounter(0);
 
+            // Build pagination dots once, wired to whichever navigation path (GSAP or native) is active
+            let dots = [];
+            if (dotsWrap) {
+                dotsWrap.innerHTML = '';
+                dots = cards.map((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
+                    dot.setAttribute('aria-label', `Go to project ${i + 1}`);
+                    dot.setAttribute('role', 'tab');
+                    dotsWrap.appendChild(dot);
+                    return dot;
+                });
+            }
+            const setActiveDot = (i) => {
+                dots.forEach((d, di) => d.classList.toggle('is-active', di === i));
+            };
+
             // Respect reduced-motion: skip page scroll-jacking entirely and fall back
             // to a native, swipe/scroll-friendly horizontal strip with snap points.
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReducedMotion) {
                 if (prevBtn) prevBtn.style.display = 'none';
                 if (nextBtn) nextBtn.style.display = 'none';
+                const step = () => cards[0].getBoundingClientRect().width + 32; // approx gap
                 const updateNative = () => {
-                    const cardBox = cards[0].getBoundingClientRect();
-                    const step = cardBox.width + 32; // approx gap
-                    const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step)));
+                    const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step())));
                     setCounter(idx);
+                    setActiveDot(idx);
                     if (progressFill) progressFill.style.width = `${(idx / (cards.length - 1)) * 100}%`;
                 };
                 pinWrap.addEventListener('scroll', updateNative, { passive: true });
+                dots.forEach((dot, i) => dot.addEventListener('click', () => {
+                    pinWrap.scrollTo({ left: i * step(), behavior: 'smooth' });
+                }));
                 updateNative();
                 return;
             }
@@ -2263,6 +2564,7 @@ body.menu-open{
             const updateNavState = () => {
                 if (prevBtn) prevBtn.disabled = currentIndex === 0;
                 if (nextBtn) nextBtn.disabled = currentIndex === cards.length - 1;
+                setActiveDot(currentIndex);
             };
             updateNavState();
 
@@ -2319,6 +2621,7 @@ body.menu-open{
 
             if (prevBtn) prevBtn.addEventListener('click', () => goToIndex(currentIndex - 1));
             if (nextBtn) nextBtn.addEventListener('click', () => goToIndex(currentIndex + 1));
+            dots.forEach((dot, i) => dot.addEventListener('click', () => goToIndex(i)));
 
             // Arrow-key navigation while the gallery is roughly centered in view
             document.addEventListener('keydown', (e) => {
@@ -2332,8 +2635,160 @@ body.menu-open{
                 goToIndex(currentIndex + (e.key === 'ArrowRight' ? 1 : -1));
             });
 
+            // Touch swipe support (mobile/trackpad-less touch devices)
+            let touchStartX = 0;
+            let touchStartY = 0;
+            pinWrap.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            pinWrap.addEventListener('touchend', (e) => {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return; // ignore vertical scrolls
+                goToIndex(currentIndex + (dx < 0 ? 1 : -1));
+            }, { passive: true });
+
             ScrollTrigger.refresh();
         }
+
+        // --- GALLERY LIGHTBOX: click a card's media to view it larger ---
+        function initGalleryLightbox() {
+            const lightbox = document.getElementById('gallery-lightbox');
+            const mediaHost = document.getElementById('gallery-lightbox-media');
+            const titleEl = document.getElementById('gallery-lightbox-title');
+            const descEl = document.getElementById('gallery-lightbox-desc');
+            const closeBtn = document.getElementById('gallery-lightbox-close');
+            const prevBtn = document.getElementById('gallery-lightbox-prev');
+            const nextBtn = document.getElementById('gallery-lightbox-next');
+            const cards = Array.from(document.querySelectorAll('.gallery-card'));
+            if (!lightbox || !mediaHost || !closeBtn || !cards.length) return;
+
+            let currentIndex = 0;
+
+            function renderCard(index) {
+                currentIndex = (index + cards.length) % cards.length;
+                const card = cards[currentIndex];
+                const sourceMedia = card.querySelector('.gallery-card-media img, .gallery-card-media video');
+                const title = card.querySelector('.gallery-card-body h3');
+                const desc = card.querySelector('.gallery-card-body p');
+                if (!sourceMedia) return;
+
+                mediaHost.innerHTML = '';
+                if (sourceMedia.tagName === 'IMG') {
+                    const img = document.createElement('img');
+                    img.src = sourceMedia.currentSrc || sourceMedia.src;
+                    img.alt = sourceMedia.alt || '';
+                    mediaHost.appendChild(img);
+                } else {
+                    const video = document.createElement('video');
+                    video.src = sourceMedia.currentSrc || sourceMedia.querySelector('source')?.src || '';
+                    video.controls = true;
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    mediaHost.appendChild(video);
+                }
+                if (titleEl) titleEl.textContent = title ? title.textContent : '';
+                if (descEl) descEl.textContent = desc ? desc.textContent : '';
+                if (prevBtn) prevBtn.setAttribute('aria-label', `Previous project (${currentIndex} of ${cards.length})`);
+                if (nextBtn) nextBtn.setAttribute('aria-label', `Next project (${currentIndex + 2 > cards.length ? 1 : currentIndex + 2} of ${cards.length})`);
+            }
+
+            function open(index) {
+                renderCard(index);
+                lightbox.classList.add('open');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('menu-open'); // reuse existing overflow:hidden helper
+                closeBtn.focus();
+            }
+
+            function close() {
+                lightbox.classList.remove('open');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('menu-open');
+                mediaHost.innerHTML = ''; // stop any playing video
+            }
+
+            function nav(delta) {
+                renderCard(currentIndex + delta);
+            }
+
+            cards.forEach((card, i) => {
+                const media = card.querySelector('.gallery-card-media');
+                if (!media) return;
+                media.addEventListener('click', (e) => {
+                    if (e.target.closest('[data-video-toggle]')) return; // don't open when toggling sound
+                    open(i);
+                });
+            });
+            closeBtn.addEventListener('click', close);
+            prevBtn?.addEventListener('click', () => nav(-1));
+            nextBtn?.addEventListener('click', () => nav(1));
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) close();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('open')) return;
+                if (e.key === 'Escape') close();
+                if (e.key === 'ArrowRight') nav(1);
+                if (e.key === 'ArrowLeft') nav(-1);
+            });
+        }
+        initGalleryLightbox();
+
+        // --- GALLERY: per-card video sound toggle ---
+        (function initGalleryVideoToggle() {
+            document.querySelectorAll('[data-video-toggle]').forEach((btn) => {
+                const video = btn.closest('.gallery-card-media')?.querySelector('video');
+                if (!video) return;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    video.muted = !video.muted;
+                    btn.setAttribute('aria-label', video.muted ? 'Unmute preview' : 'Mute preview');
+                    btn.innerHTML = video.muted
+                        ? '<i class="fa-solid fa-volume-xmark"></i>'
+                        : '<i class="fa-solid fa-volume-high"></i>';
+                });
+            });
+        })();
+
+        // --- GALLERY: fade images/video in once actually loaded, instead of popping in ---
+        (function initGalleryMediaFadeIn() {
+            document.querySelectorAll('.gallery-card-media img').forEach((img) => {
+                if (img.complete && img.naturalWidth > 0) {
+                    img.classList.add('is-loaded');
+                } else {
+                    img.addEventListener('load', () => img.classList.add('is-loaded'));
+                    img.addEventListener('error', () => img.classList.add('is-loaded'));
+                }
+            });
+            document.querySelectorAll('.gallery-card-media video').forEach((video) => {
+                if (video.readyState >= 2) {
+                    video.classList.add('is-loaded');
+                } else {
+                    video.addEventListener('loadeddata', () => video.classList.add('is-loaded'));
+                }
+            });
+        })();
+
+        // --- GALLERY VIDEO: pause when off-screen to save battery/bandwidth ---
+        (function initGalleryVideoVisibility() {
+            const videos = document.querySelectorAll('.gallery-card-media video');
+            if (!videos.length || !('IntersectionObserver' in window)) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    const vid = entry.target;
+                    if (entry.isIntersecting) {
+                        vid.play().catch(() => {});
+                    } else {
+                        vid.pause();
+                    }
+                });
+            }, { threshold: 0.25 });
+            videos.forEach((v) => observer.observe(v));
+        })();
  
         // --- 5. SCROLL-DRIVEN 3D CAMERA FLIGHT ---
         if (!isMobileDevice) {
