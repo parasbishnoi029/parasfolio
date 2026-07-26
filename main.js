@@ -183,7 +183,8 @@ if (menuToggle && mobileMenu && menuBackdrop) {
             }
         })
         .catch(() => {
-            if (statEl) statEl.textContent = 'Live stats unavailable — see GitHub';
+            // Silently fail to retain the elegant HTML fallback
+            console.log('Using build-time fallback stats.');
         });
 })();
 
@@ -269,11 +270,10 @@ if (themeToggleBtn) {
                     </div>
                 </a>
             `).join('');
-        } else {
-             container.innerHTML = '<p class="text-gray-500 text-sm font-mono">// NO_ARTICLES_FOUND</p>';
         }
     } catch (e) {
-        container.innerHTML = '<p class="text-gray-500 text-sm font-mono">// FAILED_TO_FETCH_FEED</p>';
+        // Do nothing. Keep the elegantly designed static fallback in the HTML!
+        console.log('Using build-time static blog fallback.');
     }
 })();
 
