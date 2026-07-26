@@ -796,30 +796,22 @@
         </section>
  
         <!-- ========================================== -->
-        <!-- SECTION 5B: SYSTEM GALLERY (PINNED HORIZONTAL SCROLL) -->
+        <!-- SECTION 5B: SYSTEM GALLERY (STANDARD GRID) -->
         <!-- ========================================== -->
-        <section id="gallery" class="py-0">
-            <div class="max-w-7xl mx-auto w-full px-[5%] pt-40">
+        <section id="gallery" class="py-40">
+            <div class="max-w-7xl mx-auto w-full">
                 <div class="text-center mb-16 gs-reveal">
                     <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
                     <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
                     <p class="text-gray-400 max-w-2xl mx-auto mt-6 font-light text-lg">
-                        Projects, UI designs, application demos and development journey — scroll to fly through.
+                        Projects, UI designs, application demos and development journey.
                     </p>
                 </div>
-            </div>
 
-            <div id="gallery-pin" class="w-full" role="region" aria-label="Project gallery, use arrow keys or the buttons to browse" tabindex="-1">
-                <button type="button" id="gallery-prev" class="gallery-nav-btn gallery-nav-prev hover-target" aria-label="Previous project">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <button type="button" id="gallery-next" class="gallery-nav-btn gallery-nav-next hover-target" aria-label="Next project">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-                <div id="gallery-track">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gs-reveal">
 
                     <!-- Gallery Card 1 -->
-                    <article class="gallery-card hover-target" data-index="0">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
@@ -848,7 +840,7 @@
                     </article>
 
                     <!-- Gallery Card 2: Video -->
-                    <article class="gallery-card hover-target" data-index="1">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
@@ -883,7 +875,7 @@
                     </article>
 
                     <!-- Gallery Card 3: Curatly -->
-                    <article class="gallery-card hover-target" data-index="2">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
@@ -910,7 +902,7 @@
                     </article>
 
                     <!-- Gallery Card 4: Data Analytics Engine -->
-                    <article class="gallery-card hover-target" data-index="3">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
@@ -937,7 +929,7 @@
                     </article>
 
                     <!-- Gallery Card 5: Workspace -->
-                    <article class="gallery-card hover-target" data-index="4">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
                             <div class="gallery-card-media">
@@ -963,7 +955,7 @@
                     </article>
 
                     <!-- Gallery Card 6: View All CTA -->
-                    <article class="gallery-card hover-target" data-index="5">
+                    <article class="gallery-card hover-target">
                         <div class="gallery-card-inner gallery-cta-card">
                             <div class="gallery-cta-inner">
                                 <i class="fa-solid fa-diagram-project text-4xl text-primary mb-6"></i>
@@ -978,23 +970,6 @@
                         </div>
                     </article>
 
-                </div>
-            </div>
-
-            <!-- Progress indicator -->
-            <div class="max-w-7xl mx-auto w-full px-[5%] mt-10">
-                <div class="gallery-progress-track">
-                    <div id="gallery-progress-fill" class="gallery-progress-fill"></div>
-                </div>
-                <div class="flex justify-between text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-3 max-w-[420px] mx-auto">
-                    <span id="gallery-counter">01 / 05</span>
-                    <span class="flex items-center gap-2"><i class="fa-solid fa-arrow-right"></i>Fly through projects</span>
-                </div>
-                <div id="gallery-dots" class="gallery-dots" role="tablist" aria-label="Jump to project"></div>
-                <div class="gallery-swipe-hint">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Swipe to browse</span>
-                    <i class="fa-solid fa-arrow-right"></i>
                 </div>
             </div>
         </section>
@@ -1200,6 +1175,7 @@
                         <span class="status-dot w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                         <span id="status-badge-text">Connection Port Open</span>
                     </button>
+                    <div id="status-badge-toast" class="status-badge-toast" role="status" aria-live="polite"></div>
                 </div>
 
                 <div class="pop-out relative z-10">
