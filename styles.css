@@ -269,6 +269,15 @@ button:focus-visible {
 
 .char { display: inline-block; opacity: 0; transform: translateY(20px) rotateX(-90deg); }
 
+/* Hide scrollbars elegantly in specific elements */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 /* ========================================== */
 /* GALLERY: PINNED HORIZONTAL SCROLL SYSTEM   */
 /* ========================================== */
