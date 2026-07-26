@@ -815,3 +815,14 @@ body.menu-open{
 [data-asset-check].is-unavailable:hover {
     transform: none !important;
 }
+
+/* ===========================
+   BOTPRESS WEBCHAT HEIGHT FIX
+=========================== */
+#bp-web-widget-container,
+#bp-web-widget {
+    height: 65vh !important;
+    max-height: 600px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+}
