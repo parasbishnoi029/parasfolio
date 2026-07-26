@@ -1,7 +1,7 @@
 /**
  * PARASFOLIO CORE LOGIC
  * Handles Custom Cursor, CSS 3D Tilt, GSAP ScrollTriggers, Three.js 3D Environment,
- * Dynamic Blog Feeds, and Theme Toggling.
+ * and Dynamic Blog Feeds.
  */
 
 // --- 00. DOWNLOAD LINK AVAILABILITY CHECK ---
@@ -37,13 +37,13 @@
     const frag = document.createDocumentFragment();
     for (let i = 0; i < 120; i++) {
         const val = Math.random();
-        let cls = 'bg-white/5';
+        let cls = 'bg-gray-100/5';
         if (val > 0.90) cls = 'bg-[#39d353]';
         else if (val > 0.70) cls = 'bg-[#26a641]';
         else if (val > 0.50) cls = 'bg-[#006d32]';
         else if (val > 0.30) cls = 'bg-[#0e4429]';
         const cell = document.createElement('div');
-        cell.className = `w-3 h-3 md:w-4 md:h-4 rounded-sm shrink-0 ${cls} transition-colors duration-300 hover:bg-white`;
+        cell.className = `w-3 h-3 md:w-4 md:h-4 rounded-sm shrink-0 ${cls} transition-colors duration-300 hover:bg-gray-100`;
         frag.appendChild(cell);
     }
     host.appendChild(frag);
@@ -175,10 +175,10 @@ if (menuToggle && mobileMenu && menuBackdrop) {
                     pinnedEl.innerHTML = top.map((repo, i) => {
                         const color = colorCycle[i % colorCycle.length];
                         const stars = repo.stargazers_count ? ` <span class="text-gray-500">· ${repo.stargazers_count}★</span>` : '';
-                        return `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-${color}/50 hover:text-${color} px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors" title="Updated ${timeAgo(repo.pushed_at)}">
+                        return `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-${color}/50 hover:text-${color} px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors" title="Updated ${timeAgo(repo.pushed_at)}">
                             <i class="fa-solid fa-code-branch text-[10px]"></i> ${repo.name}${stars}
                         </a>`;
-                    }).join('') + `<a href="https://github.com/${GH_USER}?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-white px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">View All <i class="fa-solid fa-arrow-right ml-1"></i></a>`;
+                    }).join('') + `<a href="https://github.com/${GH_USER}?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">View All <i class="fa-solid fa-arrow-right ml-1"></i></a>`;
                 }
             }
         })
@@ -210,7 +210,7 @@ if (menuToggle && mobileMenu && menuBackdrop) {
                         panel.innerHTML = `
                             <div class="demo-panel-placeholder">
                                 <i class="fa-solid fa-plug-circle-bolt"></i>
-                                <h4 class="font-display text-lg font-bold text-white mb-2">No live preview connected yet</h4>
+                                <h4 class="font-display text-lg font-bold text-gray-50 mb-2">No live preview connected yet</h4>
                                 <p class="text-sm text-gray-400 font-light max-w-md mx-auto leading-relaxed">
                                     This slot is wired up to embed a hosted model — a Hugging Face Space or Streamlit app —
                                     the moment one is deployed. Until then, check out the source or the APK demo above.
@@ -229,23 +229,7 @@ if (menuToggle && mobileMenu && menuBackdrop) {
     });
 })();
 
-// --- 0G. THEME TOGGLE LOGIC ---
-const themeToggleBtn = document.getElementById('theme-toggle');
-const htmlEl = document.documentElement;
-
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        htmlEl.classList.toggle('dark');
-        const isDark = htmlEl.classList.contains('dark');
-        localStorage.setItem('parasfolio-theme', isDark ? 'dark' : 'light');
-    });
-
-    if (localStorage.getItem('parasfolio-theme') === 'light') {
-        htmlEl.classList.remove('dark');
-    }
-}
-
-// --- 0H. DYNAMIC BLOG FEED (Dev.to / Medium) ---
+// --- 0G. DYNAMIC BLOG FEED (Dev.to / Medium) ---
 (async function initBlogFeed() {
     const container = document.getElementById('blog-feed-container');
     if (!container) return;
@@ -258,9 +242,9 @@ if (themeToggleBtn) {
             container.innerHTML = articles.map(article => `
                 <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
                     <img src="${article.cover_image || 'assets/placeholder.jpg'}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
-                    <h3 class="font-display font-bold text-lg text-white mb-2">${article.title}</h3>
+                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">${article.title}</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">${article.description}</p>
-                    <div class="mt-4 pt-4 border-t border-white/10 text-[10px] font-mono text-secondary flex justify-between">
+                    <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
                         <span>${new Date(article.published_at).toLocaleDateString()}</span>
                         <span>Read <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
@@ -355,7 +339,7 @@ renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: tru
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
+const ambientLight = new THREE.AmbientLight(0xf9fafb, 0.4); 
 scene.add(ambientLight);
 
 const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); 
@@ -396,7 +380,7 @@ for(let i = 0; i < pCount * 3; i+=3) {
 pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
 const pMat = new THREE.PointsMaterial({ 
     size: 0.05, 
-    color: 0xffffff, 
+    color: 0xe2e8f0, 
     transparent: true, 
     opacity: 0.3 
 });
