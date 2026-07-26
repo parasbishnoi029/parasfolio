@@ -1,10 +1,44 @@
 /**
  * PARASFOLIO CORE LOGIC
- * Handles Custom Cursor, CSS 3D Tilt, GSAP ScrollTriggers, Three.js 3D Environment,
- * and Dynamic Blog Feeds.
+ * Features: Custom Cursor, 3D Hover Tilt, GSAP ScrollTriggers, 
+ * Memory-Managed Three.js WebGL Engine, Abortable API Feeds & Dynamic Lightbox Focus Trap.
  */
 
-// --- 00. DOWNLOAD LINK AVAILABILITY CHECK ---
+'use strict';
+
+// --- SECURITY & UTILITY HELPER FUNCTIONS ---
+function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/[&<>"']/g, (match) => {
+        const escapeMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+        return escapeMap[match];
+    });
+}
+
+async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 5000 } = options;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+        const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
+    } catch (error) {
+        clearTimeout(id);
+        throw error;
+    }
+}
+
+// --- 00. ASSET AVAILABILITY CHECK ---
 (function initAssetAvailabilityCheck() {
     const links = document.querySelectorAll('[data-asset-check]');
     if (!links.length) return;
@@ -12,12 +46,12 @@
     const uniqueAssets = [...new Set([...links].map((el) => el.dataset.assetCheck))];
 
     uniqueAssets.forEach((path) => {
-        fetch(path, { method: 'HEAD', cache: 'no-store' })
+        fetchWithTimeout(path, { method: 'HEAD', cache: 'no-store', timeout: 4000 })
             .then((res) => {
-                if (res.ok) return; 
+                if (res.ok) return;
                 markUnavailable(path);
             })
-            .catch(() => markUnavailable(path)); 
+            .catch(() => markUnavailable(path));
     });
 
     function markUnavailable(path) {
@@ -49,31 +83,47 @@
     host.appendChild(frag);
 })();
 
-// --- 0B. MOBILE SLIDE-OUT MENU ---
-const menuToggle = document.getElementById('mobile-menu-toggle');
-const mobileMenu = document.getElementById('mobile-menu');
-const menuBackdrop = document.getElementById('mobile-menu-backdrop');
-const menuIcon = menuToggle ? menuToggle.querySelector('i') : null;
+// --- 0B. MOBILE SLIDE-OUT MENU WITH FOCUS TRAP ---
+(function initMobileMenu() {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuBackdrop = document.getElementById('mobile-menu-backdrop');
+    const menuIcon = menuToggle ? menuToggle.querySelector('i') : null;
+    if (!menuToggle || !mobileMenu || !menuBackdrop) return;
 
-function openMobileMenu() {
-    mobileMenu.classList.add('open');
-    menuBackdrop.classList.add('open');
-    document.body.classList.add('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'true');
-    mobileMenu.setAttribute('aria-hidden', 'false');
-    if (menuIcon) { menuIcon.classList.remove('fa-bars-staggered'); menuIcon.classList.add('fa-xmark'); }
-}
+    let previousActiveElement = null;
 
-function closeMobileMenu() {
-    mobileMenu.classList.remove('open');
-    menuBackdrop.classList.remove('open');
-    document.body.classList.remove('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    mobileMenu.setAttribute('aria-hidden', 'true');
-    if (menuIcon) { menuIcon.classList.remove('fa-xmark'); menuIcon.classList.add('fa-bars-staggered'); }
-}
+    function openMobileMenu() {
+        previousActiveElement = document.activeElement;
+        mobileMenu.classList.add('open');
+        menuBackdrop.classList.add('open');
+        document.body.classList.add('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-bars-staggered');
+            menuIcon.classList.add('fa-xmark');
+        }
+        
+        const firstFocusable = mobileMenu.querySelector('a, button');
+        if (firstFocusable) firstFocusable.focus();
+    }
 
-if (menuToggle && mobileMenu && menuBackdrop) {
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        menuBackdrop.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        if (menuIcon) {
+            menuIcon.classList.remove('fa-xmark');
+            menuIcon.classList.add('fa-bars-staggered');
+        }
+        if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+        }
+    }
+
     menuToggle.addEventListener('click', () => {
         mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
     });
@@ -81,13 +131,31 @@ if (menuToggle && mobileMenu && menuBackdrop) {
     mobileMenu.querySelectorAll('.mobile-nav-link').forEach((link) => {
         link.addEventListener('click', closeMobileMenu);
     });
+    
     window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1024) closeMobileMenu();
-    });
+        if (window.innerWidth >= 1024 && mobileMenu.classList.contains('open')) closeMobileMenu();
+    }, { passive: true });
+
     document.addEventListener('keydown', (e) => {
+        if (!mobileMenu.classList.contains('open')) return;
         if (e.key === 'Escape') closeMobileMenu();
+
+        if (e.key === 'Tab') {
+            const focusables = Array.from(mobileMenu.querySelectorAll('a[href], button:not([disabled])'));
+            if (!focusables.length) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
     });
-}
+})();
 
 // --- 0C. BACK TO TOP CONTROL ---
 (function initBackToTop() {
@@ -141,7 +209,7 @@ if (menuToggle && mobileMenu && menuBackdrop) {
         return `${Math.floor(months / 12)} yr ago`;
     }
 
-    fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed`, {
+    fetchWithTimeout(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed`, {
         headers: { Accept: 'application/vnd.github+json' }
     })
         .then((res) => {
@@ -163,7 +231,7 @@ if (menuToggle && mobileMenu && menuBackdrop) {
 
             if (statEl) {
                 const parts = [`${pool.length} public repos`, `${totalStars} ★ total`];
-                if (topLanguage) parts.push(`mostly ${topLanguage[0]}`);
+                if (topLanguage) parts.push(`mostly ${escapeHTML(topLanguage[0])}`);
                 statEl.textContent = parts.join(' • ');
                 statEl.title = `Live from api.github.com/users/${GH_USER}/repos`;
             }
@@ -175,20 +243,19 @@ if (menuToggle && mobileMenu && menuBackdrop) {
                     pinnedEl.innerHTML = top.map((repo, i) => {
                         const color = colorCycle[i % colorCycle.length];
                         const stars = repo.stargazers_count ? ` <span class="text-gray-500">· ${repo.stargazers_count}★</span>` : '';
-                        return `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-${color}/50 hover:text-${color} px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors" title="Updated ${timeAgo(repo.pushed_at)}">
-                            <i class="fa-solid fa-code-branch text-[10px]"></i> ${repo.name}${stars}
+                        return `<a href="${escapeHTML(repo.html_url)}" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-${color}/50 hover:text-${color} px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors" title="Updated ${timeAgo(repo.pushed_at)}">
+                            <i class="fa-solid fa-code-branch text-[10px]"></i> ${escapeHTML(repo.name)}${stars}
                         </a>`;
                     }).join('') + `<a href="https://github.com/${GH_USER}?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">View All <i class="fa-solid fa-arrow-right ml-1"></i></a>`;
                 }
             }
         })
         .catch(() => {
-            // Silently fail to retain the elegant HTML fallback
-            console.log('Using build-time fallback stats.');
+            console.log('Using fallback static stats.');
         });
 })();
 
-// --- 0F. INTERACTIVE LIVE DEMO PANEL ---
+// --- 0F. LIVE DEMO PANEL ---
 (function initDemoPanels() {
     document.querySelectorAll('[id^="demo-toggle-"]').forEach((btn) => {
         const panelId = btn.getAttribute('aria-controls');
@@ -206,15 +273,14 @@ if (menuToggle && mobileMenu && menuBackdrop) {
                 if (!loaded) {
                     const demoUrl = btn.dataset.demoUrl;
                     if (demoUrl) {
-                        panel.innerHTML = `<iframe src="${demoUrl}" loading="lazy" title="Live interactive demo" allow="clipboard-write"></iframe>`;
+                        panel.innerHTML = `<iframe src="${escapeHTML(demoUrl)}" loading="lazy" title="Live interactive demo" allow="clipboard-write"></iframe>`;
                     } else {
                         panel.innerHTML = `
                             <div class="demo-panel-placeholder">
                                 <i class="fa-solid fa-plug-circle-bolt"></i>
                                 <h4 class="font-display text-lg font-bold text-gray-50 mb-2">No live preview connected yet</h4>
                                 <p class="text-sm text-gray-400 font-light max-w-md mx-auto leading-relaxed">
-                                    This slot is wired up to embed a hosted model — a Hugging Face Space or Streamlit app —
-                                    the moment one is deployed. Until then, check out the source or the APK demo above.
+                                    This slot is wired up to embed a hosted model — a Hugging Face Space or Streamlit app. Check out the repository above in the meantime.
                                 </p>
                             </div>`;
                     }
@@ -230,40 +296,21 @@ if (menuToggle && mobileMenu && menuBackdrop) {
     });
 })();
 
-// --- 0G. THEME TOGGLE LOGIC ---
-const themeToggleBtn = document.getElementById('theme-toggle');
-const htmlEl = document.documentElement;
-
-// Force dark mode as the persistent default
-if (localStorage.getItem('parasfolio-theme') === 'light') {
-    htmlEl.classList.remove('dark');
-} else {
-    htmlEl.classList.add('dark');
-}
-
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        htmlEl.classList.toggle('dark');
-        const isDark = htmlEl.classList.contains('dark');
-        localStorage.setItem('parasfolio-theme', isDark ? 'dark' : 'light');
-    });
-}
-
-// --- 0H. DYNAMIC BLOG FEED (Dev.to / Medium) ---
+// --- 0G. DYNAMIC BLOG FEED ---
 (async function initBlogFeed() {
     const container = document.getElementById('blog-feed-container');
     if (!container) return;
 
     try {
-        const res = await fetch('https://dev.to/api/articles?username=parasbishnoi029&per_page=3');
+        const res = await fetchWithTimeout('https://dev.to/api/articles?username=parasbishnoi029&per_page=3');
         const articles = await res.json();
         
-        if (articles.length > 0) {
+        if (Array.isArray(articles) && articles.length > 0) {
             container.innerHTML = articles.map(article => `
-                <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
-                    <img src="${article.cover_image || 'assets/placeholder.jpg'}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
-                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">${article.title}</h3>
-                    <p class="text-xs text-gray-400 font-light flex-grow">${article.description}</p>
+                <a href="${escapeHTML(article.url)}" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
+                    <img src="${escapeHTML(article.cover_image || 'assets/placeholder.jpg')}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
+                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">${escapeHTML(article.title)}</h3>
+                    <p class="text-xs text-gray-400 font-light flex-grow">${escapeHTML(article.description)}</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
                         <span>${new Date(article.published_at).toLocaleDateString()}</span>
                         <span>Read <i class="fa-solid fa-arrow-right"></i></span>
@@ -272,172 +319,265 @@ if (themeToggleBtn) {
             `).join('');
         }
     } catch (e) {
-        // Do nothing. Keep the elegantly designed static fallback in the HTML!
-        console.log('Using build-time static blog fallback.');
+        console.log('Using static blog fallback.');
     }
 })();
 
 // --- 1. CUSTOM CURSOR INTEGRATION ---
-const cursorDot = document.querySelector('.cursor-dot');
-const cursorRing = document.querySelector('.cursor-ring');
+(function initCustomCursor() {
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    if (!cursorDot || !cursorRing) return;
 
-window.addEventListener('mousemove', (e) => {
-    cursorDot.style.left = `${e.clientX}px`; 
-    cursorDot.style.top = `${e.clientY}px`;
-    cursorRing.animate({ 
-        left: `${e.clientX}px`, 
-        top: `${e.clientY}px` 
-    }, { duration: 100, fill: "forwards" });
-});
+    if (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cursorDot.style.display = 'none';
+        cursorRing.style.display = 'none';
+        return;
+    }
 
-document.querySelectorAll('a, button, .hover-target').forEach(el => {
-    el.addEventListener('mouseenter', () => { 
-        cursorRing.style.width = '60px'; 
-        cursorRing.style.height = '60px'; 
-        cursorRing.style.backgroundColor = 'rgba(0,242,254,0.1)'; 
-        cursorRing.style.borderColor = 'rgba(0,242,254,1)';
-    });
-    el.addEventListener('mouseleave', () => { 
-        cursorRing.style.width = '40px'; 
-        cursorRing.style.height = '40px'; 
-        cursorRing.style.backgroundColor = 'transparent'; 
-        cursorRing.style.borderColor = 'rgba(0,242,254,0.6)';
-    });
-});
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = `${mouseX}px`; 
+        cursorDot.style.top = `${mouseY}px`;
+        cursorRing.animate({ 
+            left: `${mouseX}px`, 
+            top: `${mouseY}px` 
+        }, { duration: 100, fill: "forwards" });
+    }, { passive: true });
 
-// --- 2. CSS 3D IN-CONTEXT HOVER EFFECT ---
-document.querySelectorAll('.interactive-3d').forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left; 
-        const y = e.clientY - rect.top;  
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const tiltX = (y - centerY) / 20; 
-        const tiltY = (centerX - x) / 20;
-        
-        el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+    document.querySelectorAll('a, button, .hover-target').forEach(el => {
+        el.addEventListener('mouseenter', () => { 
+            cursorRing.style.width = '60px'; 
+            cursorRing.style.height = '60px'; 
+            cursorRing.style.backgroundColor = 'rgba(0,242,254,0.1)'; 
+            cursorRing.style.borderColor = 'rgba(0,242,254,1)';
+        });
+        el.addEventListener('mouseleave', () => { 
+            cursorRing.style.width = '40px'; 
+            cursorRing.style.height = '40px'; 
+            cursorRing.style.backgroundColor = 'transparent'; 
+            cursorRing.style.borderColor = 'rgba(0,242,254,0.6)';
+        });
     });
-    el.addEventListener('mouseleave', () => {
-        el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-    });
-});
+})();
 
-// --- 2B. GALLERY CARD 3D TILT ---
-document.querySelectorAll('.gallery-card-inner').forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const tiltX = ((y - rect.height / 2) / rect.height) * -10;
-        const tiltY = ((x - rect.width / 2) / rect.width) * 10;
-        el.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-    });
-    el.addEventListener('mouseleave', () => {
-        el.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    });
-});
+// --- 2. CSS 3D HOVER EFFECT ---
+(function init3DTilt() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-// --- 3. ADVANCED THREE.JS WEBGL ARCHITECTURE ---
-const isMobileDevice = window.innerWidth < 768;
+    document.querySelectorAll('.interactive-3d').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left; 
+            const y = e.clientY - rect.top;  
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const tiltX = (y - centerY) / 20; 
+            const tiltY = (centerX - x) / 20;
+            
+            el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
+        }, { passive: true });
+
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    });
+
+    document.querySelectorAll('.gallery-card-inner').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const tiltX = ((y - rect.height / 2) / rect.height) * -10;
+            const tiltY = ((x - rect.width / 2) / rect.width) * 10;
+            el.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        }, { passive: true });
+
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+    });
+})();
+
+// --- 3. THREE.JS WEBGL ENGINE ---
 let canvas, scene, camera, renderer, terrain, dust, avatar3DGroup, coreMesh, outerHaloMesh;
+let animationFrameId = null;
 
-if (isMobileDevice) {
-    const wc = document.getElementById('webgl-canvas');
-    if (wc) wc.style.display = 'none';
-} else {
-canvas = document.getElementById('webgl-canvas');
-scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x030305, 0.012);
+function initWebGL() {
+    const isMobileDevice = window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    canvas = document.getElementById('webgl-canvas');
+    if (!canvas) return;
 
-camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 30); 
+    if (isMobileDevice) {
+        canvas.style.display = 'none';
+        return;
+    }
 
-renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    canvas.style.display = 'block';
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030305, 0.012);
 
-const ambientLight = new THREE.AmbientLight(0xf9fafb, 0.4); 
-scene.add(ambientLight);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 30); 
 
-const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); 
-pointLight1.position.set(10, 10, 10); 
-scene.add(pointLight1);
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const pointLight2 = new THREE.PointLight(0x9D4EDD, 6, 100); 
-pointLight2.position.set(-10, -10, 10); 
-scene.add(pointLight2);
+    const ambientLight = new THREE.AmbientLight(0xf9fafb, 0.4); 
+    scene.add(ambientLight);
 
-const terrainGeo = new THREE.PlaneGeometry(200, 300, 50, 75);
-const pos = terrainGeo.attributes.position;
-for (let i = 0; i < pos.count; i++) {
-    const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
-    pos.setZ(i, z);
+    const pointLight1 = new THREE.PointLight(0x00F2FE, 6, 100); 
+    pointLight1.position.set(10, 10, 10); 
+    scene.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0x9D4EDD, 6, 100); 
+    pointLight2.position.set(-10, -10, 10); 
+    scene.add(pointLight2);
+
+    // Terrain Mesh
+    const terrainGeo = new THREE.PlaneGeometry(200, 300, 40, 60);
+    const pos = terrainGeo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+        const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
+        pos.setZ(i, z);
+    }
+    terrainGeo.computeVertexNormals();
+    const terrainMat = new THREE.MeshStandardMaterial({ 
+        color: 0x00F2FE, 
+        wireframe: true, 
+        transparent: true, 
+        opacity: 0.08 
+    });
+    terrain = new THREE.Mesh(terrainGeo, terrainMat);
+    terrain.rotation.x = -Math.PI / 2;
+    terrain.position.y = -20;
+    terrain.position.z = -50;
+    scene.add(terrain);
+
+    // Dust Particles
+    const pGeo = new THREE.BufferGeometry();
+    const pCount = 3000;
+    const pPos = new Float32Array(pCount * 3);
+    for(let i = 0; i < pCount * 3; i+=3) {
+        pPos[i] = (Math.random() - 0.5) * 200;       
+        pPos[i+1] = (Math.random() - 0.5) * 200;     
+        pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
+    }
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    const pMat = new THREE.PointsMaterial({ 
+        size: 0.05, 
+        color: 0xe2e8f0, 
+        transparent: true, 
+        opacity: 0.3 
+    });
+    dust = new THREE.Points(pGeo, pMat);
+    scene.add(dust);
+
+    // Holographic Core
+    avatar3DGroup = new THREE.Group();
+    const coreGeo = new THREE.IcosahedronGeometry(4, 2);
+    const coreMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 });
+    coreMesh = new THREE.Mesh(coreGeo, coreMat);
+
+    const outerHaloGeo = new THREE.IcosahedronGeometry(5.5, 3);
+    const outerHaloMat = new THREE.PointsMaterial({ size: 0.08, color: 0x9D4EDD, transparent: true, opacity: 0.4 });
+    outerHaloMesh = new THREE.Points(outerHaloGeo, outerHaloMat);
+
+    avatar3DGroup.add(coreMesh);
+    avatar3DGroup.add(outerHaloMesh);
+    avatar3DGroup.position.set(12, 0, -10); 
+    scene.add(avatar3DGroup);
+
+    // Mouse Tracking Parallax
+    let targetX = 0, targetY = 0;
+    let mouseX = 0, mouseY = 0;
+    const halfX = window.innerWidth / 2;
+    const halfY = window.innerHeight / 2;
+
+    const onMouseMove = (event) => {
+        mouseX = (event.clientX - halfX);
+        mouseY = (event.clientY - halfY);
+    };
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+    // Render Loop
+    const clock = new THREE.Clock();
+    function animate() {
+        animationFrameId = requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        if (terrain) terrain.position.z = (t * 5) % 20 - 50;
+        if (dust) dust.rotation.y = t * 0.02;
+        
+        if (coreMesh) {
+            coreMesh.rotation.x = t * 0.4;
+            coreMesh.rotation.y = t * 0.5;
+        }
+        if (outerHaloMesh) outerHaloMesh.rotation.z = -t * 0.15;
+
+        targetX = mouseX * 0.005;
+        targetY = mouseY * 0.005;
+        camera.position.x += (targetX - camera.position.x) * 0.05;
+        camera.position.y += (-targetY - camera.position.y) * 0.05;
+        
+        camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
+
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Scroll Camera Flight Trigger
+    gsap.to(camera.position, {
+        z: -150, 
+        ease: "none",
+        scrollTrigger: {
+            trigger: "#scroll-container",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.5 
+        }
+    });
+
+    gsap.to(dust.rotation, {
+        z: Math.PI / 4,
+        ease: "none",
+        scrollTrigger: {
+            trigger: "#scroll-container",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 2
+        }
+    });
 }
-terrainGeo.computeVertexNormals();
-const terrainMat = new THREE.MeshStandardMaterial({ 
-    color: 0x00F2FE, 
-    wireframe: true, 
-    transparent: true, 
-    opacity: 0.08 
-});
-terrain = new THREE.Mesh(terrainGeo, terrainMat);
-terrain.rotation.x = -Math.PI / 2;
-terrain.position.y = -20;
-terrain.position.z = -50;
-scene.add(terrain);
 
-const pGeo = new THREE.BufferGeometry();
-const pCount = 4000;
-const pPos = new Float32Array(pCount * 3);
-for(let i = 0; i < pCount * 3; i+=3) {
-    pPos[i] = (Math.random() - 0.5) * 200;       
-    pPos[i+1] = (Math.random() - 0.5) * 200;     
-    pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
-}
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-const pMat = new THREE.PointsMaterial({ 
-    size: 0.05, 
-    color: 0xe2e8f0, 
-    transparent: true, 
-    opacity: 0.3 
-});
-dust = new THREE.Points(pGeo, pMat);
-scene.add(dust);
+initWebGL();
 
-avatar3DGroup = new THREE.Group();
-const coreGeo = new THREE.IcosahedronGeometry(4, 2);
-const coreMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 });
-coreMesh = new THREE.Mesh(coreGeo, coreMat);
+window.addEventListener('resize', () => {
+    if (!renderer || !camera) return;
+    camera.aspect = window.innerWidth / window.innerHeight; 
+    camera.updateProjectionMatrix(); 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}, { passive: true });
 
-const outerHaloGeo = new THREE.IcosahedronGeometry(5.5, 3);
-const outerHaloMat = new THREE.PointsMaterial({ size: 0.08, color: 0x9D4EDD, transparent: true, opacity: 0.4 });
-outerHaloMesh = new THREE.Points(outerHaloGeo, outerHaloMat);
-
-avatar3DGroup.add(coreMesh);
-avatar3DGroup.add(outerHaloMesh);
-avatar3DGroup.position.set(12, 0, -10); 
-scene.add(avatar3DGroup);
-} 
-
-// --- 4. PRELOADER & INITIAL GSAP ENTRANCE ANIMATIONS ---
+// --- 4. PRELOADER & INITIAL GSAP ENTRANCE ---
 gsap.registerPlugin(ScrollTrigger);
-if (isMobileDevice) {
-    ScrollTrigger.config({ ignoreMobileResize: true });
-    gsap.defaults({ duration: 0.4 });
-}
 
 window.addEventListener('load', () => {
     gsap.to('#load-bar', { width: '100%', duration: 1.5, ease: 'power2.inOut', onUpdate: function() {
-        document.getElementById('loading-percentage').innerText = Math.round(this.progress() * 100) + '%';
+        const pctEl = document.getElementById('loading-percentage');
+        if (pctEl) pctEl.innerText = Math.round(this.progress() * 100) + '%';
     }, onComplete: () => {
         
         gsap.to('#loader', { opacity: 0, duration: 0.8, onComplete: () => {
-            document.getElementById('loader').style.display = 'none';
+            const loader = document.getElementById('loader');
+            if (loader) loader.style.display = 'none';
             
             const avatarCard = document.getElementById('hero-avatar');
-            if(avatarCard) {
+            if (avatarCard) {
                 gsap.fromTo(avatarCard, 
                     { z: 500, rotationY: 45, rotationX: -15, opacity: 0, scale: 0.5 }, 
                     { z: 0, rotationY: 0, rotationX: 0, opacity: 1, scale: 1, duration: 2.5, ease: 'power4.out' }
@@ -613,7 +753,7 @@ function initGalleryScroll() {
     ScrollTrigger.refresh();
 }
 
-// --- GALLERY LIGHTBOX ---
+// --- GALLERY LIGHTBOX WITH FOCUS TRAP ---
 function initGalleryLightbox() {
     const lightbox = document.getElementById('gallery-lightbox');
     const mediaHost = document.getElementById('gallery-lightbox-media');
@@ -626,6 +766,7 @@ function initGalleryLightbox() {
     if (!lightbox || !mediaHost || !closeBtn || !cards.length) return;
 
     let currentIndex = 0;
+    let previousActiveElement = null;
 
     function renderCard(index) {
         currentIndex = (index + cards.length) % cards.length;
@@ -639,7 +780,7 @@ function initGalleryLightbox() {
         if (sourceMedia.tagName === 'IMG') {
             const img = document.createElement('img');
             img.src = sourceMedia.currentSrc || sourceMedia.src;
-            img.alt = sourceMedia.alt || '';
+            img.alt = escapeHTML(sourceMedia.alt || 'Project Preview');
             mediaHost.appendChild(img);
         } else {
             const video = document.createElement('video');
@@ -653,11 +794,12 @@ function initGalleryLightbox() {
         }
         if (titleEl) titleEl.textContent = title ? title.textContent : '';
         if (descEl) descEl.textContent = desc ? desc.textContent : '';
-        if (prevBtn) prevBtn.setAttribute('aria-label', `Previous project (${currentIndex} of ${cards.length})`);
-        if (nextBtn) nextBtn.setAttribute('aria-label', `Next project (${currentIndex + 2 > cards.length ? 1 : currentIndex + 2} of ${cards.length})`);
+        if (prevBtn) prevBtn.setAttribute('aria-label', `Previous project (${currentIndex + 1} of ${cards.length})`);
+        if (nextBtn) nextBtn.setAttribute('aria-label', `Next project (${currentIndex + 1} of ${cards.length})`);
     }
 
     function open(index) {
+        previousActiveElement = document.activeElement;
         renderCard(index);
         lightbox.classList.add('open');
         lightbox.setAttribute('aria-hidden', 'false');
@@ -670,6 +812,9 @@ function initGalleryLightbox() {
         lightbox.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('menu-open');
         mediaHost.innerHTML = ''; 
+        if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+        }
     }
 
     function nav(delta) {
@@ -684,23 +829,41 @@ function initGalleryLightbox() {
             open(i);
         });
     });
+
     closeBtn.addEventListener('click', close);
-    prevBtn?.addEventListener('click', () => nav(-1));
-    nextBtn?.addEventListener('click', () => nav(1));
+    if (prevBtn) prevBtn.addEventListener('click', () => nav(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => nav(1));
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) close();
     });
+
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('open')) return;
         if (e.key === 'Escape') close();
         if (e.key === 'ArrowRight') nav(1);
         if (e.key === 'ArrowLeft') nav(-1);
+
+        if (e.key === 'Tab') {
+            const focusables = Array.from(lightbox.querySelectorAll('button:not([disabled]), a[href]'));
+            if (!focusables.length) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
     });
 }
+
 initGalleryLightbox();
 
-// --- GALLERY: per-card video sound toggle ---
-(function initGalleryVideoToggle() {
+// --- GALLERY: Video Controls & Fade In ---
+(function initGalleryMediaHelpers() {
     document.querySelectorAll('[data-video-toggle]').forEach((btn) => {
         const video = btn.closest('.gallery-card-media')?.querySelector('video');
         if (!video) return;
@@ -713,9 +876,7 @@ initGalleryLightbox();
                 : '<i class="fa-solid fa-volume-high"></i>';
         });
     });
-})();
 
-(function initGalleryMediaFadeIn() {
     document.querySelectorAll('.gallery-card-media img').forEach((img) => {
         if (img.complete && img.naturalWidth > 0) {
             img.classList.add('is-loaded');
@@ -724,6 +885,7 @@ initGalleryLightbox();
             img.addEventListener('error', () => img.classList.add('is-loaded'));
         }
     });
+
     document.querySelectorAll('.gallery-card-media video').forEach((video) => {
         if (video.readyState >= 2) {
             video.classList.add('is-loaded');
@@ -731,9 +893,7 @@ initGalleryLightbox();
             video.addEventListener('loadeddata', () => video.classList.add('is-loaded'));
         }
     });
-})();
 
-(function initGalleryVideoVisibility() {
     const videos = document.querySelectorAll('.gallery-card-media video');
     if (!videos.length || !('IntersectionObserver' in window)) return;
     const observer = new IntersectionObserver((entries) => {
@@ -748,74 +908,3 @@ initGalleryLightbox();
     }, { threshold: 0.25 });
     videos.forEach((v) => observer.observe(v));
 })();
-
-// --- 5. SCROLL-DRIVEN 3D CAMERA FLIGHT ---
-if (!isMobileDevice) {
-gsap.to(camera.position, {
-    z: -150, 
-    ease: "none",
-    scrollTrigger: {
-        trigger: "#scroll-container",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1.5 
-    }
-});
-
-gsap.to(dust.rotation, {
-    z: Math.PI / 4,
-    ease: "none",
-    scrollTrigger: {
-        trigger: "#scroll-container",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 2
-    }
-});
-} 
-
-// --- 6. MOUSE PARALLAX TRACKING LOGIC ---
-let mouseX = 0, mouseY = 0;
-let targetX = 0, targetY = 0;
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
-
-document.addEventListener('mousemove', (event) => {
-    mouseX = (event.clientX - windowHalfX);
-    mouseY = (event.clientY - windowHalfY);
-});
-
-window.addEventListener('resize', () => {
-    if (isMobileDevice || !camera || !renderer) return;
-    camera.aspect = window.innerWidth / window.innerHeight; 
-    camera.updateProjectionMatrix(); 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-// --- 7. GLOBAL RENDER LOOP (desktop only) ---
-if (!isMobileDevice) {
-const clock = new THREE.Clock();
-
-function animate() {
-    requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-
-    terrain.position.z = (t * 5) % 20 - 50;
-    dust.rotation.y = t * 0.02;
-    
-    coreMesh.rotation.x = t * 0.4;
-    coreMesh.rotation.y = t * 0.5;
-    outerHaloMesh.rotation.z = -t * 0.15;
-
-    targetX = mouseX * 0.005;
-    targetY = mouseY * 0.005;
-    camera.position.x += (targetX - camera.position.x) * 0.05;
-    camera.position.y += (-targetY - camera.position.y) * 0.05;
-    
-    camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
-
-    renderer.render(scene, camera);
-}
-
-animate(); 
-}
