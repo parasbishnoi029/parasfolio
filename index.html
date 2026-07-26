@@ -6,7 +6,7 @@
   Assets integrated: Profile.jpg, base layout from index.html.
 -->
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +72,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { 
@@ -86,10 +85,10 @@
                         accent: '#4ADE80',
                         darkBg: '#030305',
                         glassBg: 'rgba(10, 12, 18, 0.4)',
-                        glassBorder: 'rgba(255, 255, 255, 0.05)'
+                        glassBorder: 'rgba(249, 250, 251, 0.05)'
                     },
                     boxShadow: {
-                        'glass': '0 30px 60px rgba(0, 0, 0, 0.5)',
+                        'glass': '0 30px 60px rgba(3, 3, 5, 0.5)',
                         'glass-hover': '0 40px 80px rgba(0, 242, 254, 0.15)',
                         'neon-primary': '0 0 20px rgba(0, 242, 254, 0.5)',
                         'neon-secondary': '0 0 20px rgba(157, 78, 221, 0.5)'
@@ -150,14 +149,14 @@
     <!-- 1. PRELOADER SEQUENCE                      -->
     <!-- ========================================== -->
     <div id="loader">
-        <h1 class="loader-glitch font-display text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">
+        <h1 class="loader-glitch font-display text-5xl md:text-7xl font-bold tracking-tighter text-gray-50 mb-4">
             PARAS<span class="text-primary">FOLIO</span>
         </h1>
         <div class="text-[10px] font-mono tracking-[0.4em] text-gray-500 uppercase mb-8 flex items-center">
             <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3"></i>
             <span id="loading-text">Dreamer & Doer</span>
         </div>
-        <div class="w-64 h-[1px] bg-white/10 relative overflow-hidden rounded-full">
+        <div class="w-64 h-[1px] bg-gray-100/10 relative overflow-hidden rounded-full">
             <div id="load-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-secondary w-0 rounded-full shadow-[0_0_10px_#00F2FE]"></div>
         </div>
         <div class="mt-4 text-[10px] font-mono text-gray-600" id="loading-percentage">0%</div>
@@ -172,7 +171,7 @@
     <!-- 3. NAVIGATION HEADER                       -->
     <!-- ========================================== -->
     <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference flex justify-between items-center pointer-events-auto">
-        <a href="#home" class="font-display font-bold text-2xl tracking-tighter text-white hover-target hover:scale-105 transition-transform flex items-center">
+        <a href="#home" class="font-display font-bold text-2xl tracking-tighter text-gray-50 hover-target hover:scale-105 transition-transform flex items-center">
             <i class="fa-solid fa-cube text-primary mr-2 text-xl animate-pulse-glow"></i>
             PARAS<span class="text-primary">FOLIO</span><span class="text-secondary">.</span>
         </a>
@@ -187,19 +186,13 @@
             <a href="#gallery" data-nav-section="gallery" class="nav-link hover:text-primary transition-colors hover-target">Gallery</a>
             <a href="#research" data-nav-section="research" class="nav-link hover:text-primary transition-colors hover-target">Research</a>
             <a href="#achievements" data-nav-section="achievements" class="nav-link hover:text-primary transition-colors hover-target">Awards</a>
-            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="px-6 py-2.5 border border-white/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-white flex items-center space-x-2 bg-white/5 backdrop-blur-md">
+            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="px-6 py-2.5 border border-gray-200/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-gray-50 flex items-center space-x-2 bg-gray-100/5 backdrop-blur-md">
                 <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
             </a>
-            
-            <!-- Dark Mode Toggle Button -->
-            <button id="theme-toggle" class="hover-target text-white/70 hover:text-primary transition-colors text-xl ml-4" aria-label="Toggle Theme">
-                <i class="fa-solid fa-moon dark:hidden"></i>
-                <i class="fa-solid fa-sun hidden dark:block"></i>
-            </button>
         </div>
         
         <!-- Mobile Nav Toggle -->
-        <button id="mobile-menu-toggle" class="lg:hidden text-white text-2xl hover-target cursor-pointer bg-transparent border-0 relative z-[70]" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <button id="mobile-menu-toggle" class="lg:hidden text-gray-50 text-2xl hover-target cursor-pointer bg-transparent border-0 relative z-[70]" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
             <i class="fa-solid fa-bars-staggered"></i>
         </button>
     </nav>
@@ -238,13 +231,13 @@
                 <!-- Left Text Content -->
                 <div class="lg:col-span-7">
                     <!-- Status Badge -->
-                    <div class="gs-reveal inline-flex items-center space-x-3 bg-white/5 border border-white/10 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 backdrop-blur-md shadow-glass">
+                    <div class="gs-reveal inline-flex items-center space-x-3 bg-gray-100/5 border border-gray-200/10 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 backdrop-blur-md shadow-glass">
                         <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-neon-primary"></span>
                         <span>Navodayan • IIT Jodhpur • learner</span>
                     </div>
                     
                     <!-- Dynamic Headline -->
-                    <h1 class="hero-title font-display font-bold tracking-tighter leading-[0.9] mb-4 text-white">
+                    <h1 class="hero-title font-display font-bold tracking-tighter leading-[0.9] mb-4 text-gray-50">
                         Hello, I'm Paras
                     </h1>
                     <p class="hero-subtitle font-display text-xl md:text-3xl font-medium tracking-wide text-gradient mb-8">
@@ -256,11 +249,11 @@
                     
                     <!-- CTA Buttons -->
                     <div class="flex flex-wrap gap-4 mt-8 gs-reveal">
-                        <a href="#systems" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-primary/10 border border-primary/50 rounded-full overflow-hidden hover:bg-primary hover:text-black shadow-neon-primary">
+                        <a href="#systems" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-gray-50 transition-all duration-300 bg-primary/10 border border-primary/50 rounded-full overflow-hidden hover:bg-primary hover:text-darkBg shadow-neon-primary">
                             <span class="tracking-widest text-xs uppercase font-mono relative z-10">Explore Systems</span>
                             <i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform relative z-10"></i>
                         </a>
-                        <a href="#contact" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-transparent border border-white/20 rounded-full overflow-hidden hover:border-white">
+                        <a href="#contact" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-gray-50 transition-all duration-300 bg-transparent border border-gray-200/20 rounded-full overflow-hidden hover:border-gray-200">
                             <span class="tracking-widest text-xs uppercase font-mono">Initialize Contact</span>
                         </a>
                     </div>
@@ -283,7 +276,7 @@
                                         <i class="fa-solid fa-fingerprint mr-2 animate-pulse"></i>Identity Verified
                                     </span>
                                 </div>
-                                <h2 class="font-display text-5xl font-bold text-white tracking-tighter drop-shadow-2xl mb-1">PARAS</h2>
+                                <h2 class="font-display text-5xl font-bold text-gray-50 tracking-tighter drop-shadow-2xl mb-1">PARAS</h2>
                                 <div class="text-[10px] font-mono text-gray-300 tracking-widest uppercase opacity-80">AI & Data Science Student</div>
                             </div>
                             
@@ -317,7 +310,7 @@
                     <span class="text-[10px] font-mono tracking-widest text-primary uppercase">01. Manifesto</span>
                 </div>
                 
-                <h2 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-16 tracking-tighter">
+                <h2 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-gray-50 mb-16 tracking-tighter">
                     I don't just use models.<br>
                     <span class="text-gray-600">I dissect their anatomy.</span>
                 </h2>
@@ -325,11 +318,11 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     <div class="space-y-8">
                         <p class="text-gray-300 font-light leading-relaxed text-xl relative">
-                            <i class="fa-solid fa-quote-left absolute -left-8 -top-4 text-3xl text-white/5"></i>
+                            <i class="fa-solid fa-quote-left absolute -left-8 -top-4 text-3xl text-gray-100/5"></i>
                             My foundation is built on absolute logical rigor. Forged in the strict residential environment of Jawahar Navodaya Vidyalaya and tested in the high-pressure arenas of Sikar, I approach data science from a mathematical first-principles perspective.
                         </p>
                         <p class="text-gray-400 font-light leading-relaxed text-lg">
-                            Currently at <strong class="text-white">IIT Jodhpur</strong> pursuing a BS in Applied AI & Data Science. I believe true engineering lies at the intersection of deep mathematics and pristine, deployment-ready software. A model is only as good as the infrastructure that serves it.
+                            Currently at <strong class="text-gray-50">IIT Jodhpur</strong> pursuing a BS in Applied AI & Data Science. I believe true engineering lies at the intersection of deep mathematics and pristine, deployment-ready software. A model is only as good as the infrastructure that serves it.
                         </p>
                         <p class="text-xl leading-relaxed text-gray-300 font-light">
                             I'm a BS student in Applied AI & Data Science at IIT Jodhpur who enjoys building practical AI-powered applications. My interests include Machine Learning, Android Development, Data Science, and Full-Stack Web Development. I learn by building real-world projects, experimenting with new technologies, and continuously improving my skills.
@@ -355,17 +348,17 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-fit">
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-primary">
                             <div class="text-[10px] font-mono tracking-widest text-primary uppercase mb-3 pop-out"><i class="fa-solid fa-graduation-cap mr-2"></i>Academic Standing</div>
-                            <div class="font-display font-bold text-4xl md:text-5xl text-white pop-out drop-shadow-md">8.375<span class="text-xl text-gray-500"> CGPA</span></div>
+                            <div class="font-display font-bold text-4xl md:text-5xl text-gray-50 pop-out drop-shadow-md">8.375<span class="text-xl text-gray-500"> CGPA</span></div>
                             <p class="text-xs text-gray-400 mt-4 pop-out font-light">Consistent high performance in rigorous technical curriculum.</p>
                         </div>
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-secondary">
                             <div class="text-[10px] font-mono tracking-widest text-secondary uppercase mb-3 pop-out"><i class="fa-solid fa-network-wired mr-2"></i>Specialization</div>
-                            <div class="font-display font-bold text-2xl md:text-3xl text-white pop-out drop-shadow-md">Deep Learning<br>& NLP</div>
+                            <div class="font-display font-bold text-2xl md:text-3xl text-gray-50 pop-out drop-shadow-md">Deep Learning<br>& NLP</div>
                             <p class="text-xs text-gray-400 mt-4 pop-out font-light">Transformer architectures and large language models.</p>
                         </div>
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center sm:col-span-2 border-t-2 border-t-accent">
                             <div class="text-[10px] font-mono tracking-widest text-accent uppercase mb-3 pop-out"><i class="fa-solid fa-server mr-2"></i>Engineering Mindset</div>
-                            <div class="font-display font-bold text-2xl text-white pop-out">Production First</div>
+                            <div class="font-display font-bold text-2xl text-gray-50 pop-out">Production First</div>
                             <p class="text-sm text-gray-400 mt-4 pop-out font-light">I don't just train models in Jupyter notebooks. I containerize, deploy, and monitor them using industry-standard MLOps practices.</p>
                         </div>
                     </div>
@@ -386,7 +379,7 @@
                             <span class="text-[10px] font-mono tracking-widest text-primary uppercase block">Education</span>
                         </div>
  
-                        <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter mt-5">
+                        <h2 class="font-display text-5xl md:text-6xl font-bold text-gray-50 tracking-tighter mt-5">
                             IIT Jodhpur
                         </h2>
  
@@ -398,13 +391,13 @@
                             <div class="glass-3d p-6 rounded-3xl interactive-3d hover-target border-t-2 border-t-primary">
                                 <div class="pop-out">
                                     <h3 class="text-primary text-[10px] font-mono uppercase tracking-widest">CGPA</h3>
-                                    <p class="text-4xl font-bold mt-3 text-white font-display">8.375</p>
+                                    <p class="text-4xl font-bold mt-3 text-gray-50 font-display">8.375</p>
                                 </div>
                             </div>
                             <div class="glass-3d p-6 rounded-3xl interactive-3d hover-target border-t-2 border-t-secondary">
                                 <div class="pop-out">
                                     <h3 class="text-secondary text-[10px] font-mono uppercase tracking-widest">Focus</h3>
-                                    <p class="mt-3 text-white font-medium">ML • AI • Android • Web</p>
+                                    <p class="mt-3 text-gray-50 font-medium">ML • AI • Android • Web</p>
                                 </div>
                             </div>
                         </div>
@@ -433,12 +426,12 @@
                         <div class="h-[1px] w-12 bg-secondary"></div>
                         <span class="text-[10px] font-mono tracking-widest text-secondary uppercase block">02. Chronology</span>
                     </div>
-                    <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">The Data Pipeline.</h2>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold text-gray-50 tracking-tighter">The Data Pipeline.</h2>
                     <p class="text-gray-400 mt-6 max-w-2xl font-light text-lg">A systematic progression through rigorous academic environments, building the mathematical and algorithmic foundation required for advanced AI research.</p>
                 </div>
                 
                 <!-- Timeline Container -->
-                <div class="relative space-y-16 before:absolute before:inset-0 before:ml-6 md:before:ml-1/2 before:-translate-x-px md:before:translate-x-[-50%] before:h-full before:w-[2px] before:bg-gradient-to-b before:from-transparent before:via-white/20 before:to-transparent">
+                <div class="relative space-y-16 before:absolute before:inset-0 before:ml-6 md:before:ml-1/2 before:-translate-x-px md:before:translate-x-[-50%] before:h-full before:w-[2px] before:bg-gradient-to-b before:from-transparent before:via-gray-200/20 before:to-transparent">
  
                     <!-- Entry 1: IIT Jodhpur -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
@@ -448,17 +441,17 @@
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-primary">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-primary/10 border border-primary/30 rounded-md text-[10px] font-mono text-primary uppercase tracking-widest mb-4">2025 — Present</div>
-                                <h3 class="font-display text-3xl md:text-4xl font-bold text-white mb-2">IIT Jodhpur</h3>
+                                <h3 class="font-display text-3xl md:text-4xl font-bold text-gray-50 mb-2">IIT Jodhpur</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">BS in Applied AI & Data Science</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
                                     Focusing entirely on deep learning architectures, scalable data pipelines, automated machine learning (MLOps), and advanced statistical algorithms. 
                                 </p>
-                                <div class="mt-6 pt-6 border-t border-white/10">
+                                <div class="mt-6 pt-6 border-t border-gray-200/10">
                                     <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-3">Core Modules</div>
                                     <div class="flex flex-wrap gap-2">
-                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">AI</span>
-                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">Data Structures</span>
-                                        <span class="px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/10">ML</span>
+                                        <span class="px-2 py-1 bg-gray-100/5 rounded text-[10px] text-gray-300 border border-gray-200/10">AI</span>
+                                        <span class="px-2 py-1 bg-gray-100/5 rounded text-[10px] text-gray-300 border border-gray-200/10">Data Structures</span>
+                                        <span class="px-2 py-1 bg-gray-100/5 rounded text-[10px] text-gray-300 border border-gray-200/10">ML</span>
                                     </div>
                                 </div>
                             </div>
@@ -473,7 +466,7 @@
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-secondary">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-secondary/10 border border-secondary/30 rounded-md text-[10px] font-mono text-secondary uppercase tracking-widest mb-4">2024 — 2025</div>
-                                <h3 class="font-display text-3xl font-bold text-white mb-2">ALLEN Sikar / S.G.R.</h3>
+                                <h3 class="font-display text-3xl font-bold text-gray-50 mb-2">ALLEN Sikar / S.G.R.</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">12th Grade — Sikar, Rajasthan</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
                                     JEE Preparation and 12th board diagnostics execution. Intensive quantitative problem solving.
@@ -490,7 +483,7 @@
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-accent">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-accent/10 border border-accent/30 rounded-md text-[10px] font-mono text-accent uppercase tracking-widest mb-4">2023 — 2024</div>
-                                <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Sandhuan</h3>
+                                <h3 class="font-display text-3xl font-bold text-gray-50 mb-2">JNV Sandhuan</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">11th Grade — Punjab</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
                                     11th standard systematic progression under residential system criteria.
@@ -507,7 +500,7 @@
                         <div class="w-[calc(100%-4rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-gray-600">
                             <div class="pop-out">
                                 <div class="inline-block px-3 py-1 bg-gray-500/10 border border-gray-500/30 rounded-md text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-4">2018 — 2023</div>
-                                <h3 class="font-display text-3xl font-bold text-white mb-2">JNV Kikarwala Roopa</h3>
+                                <h3 class="font-display text-3xl font-bold text-gray-50 mb-2">JNV Kikarwala Roopa</h3>
                                 <h4 class="text-xs font-bold text-gray-300 uppercase tracking-widest mb-6">6th to 10th Grade — Punjab</h4>
                                 <p class="text-gray-400 font-light leading-relaxed text-sm">
                                     6th - 10th standard foundational reasoning modules execution.
@@ -525,13 +518,13 @@
         <!-- ========================================== -->
         <section id="stack" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
-                <div class="mb-24 gs-reveal flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8">
+                <div class="mb-24 gs-reveal flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200/10 pb-8">
                     <div>
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="h-[1px] w-12 bg-primary"></div>
                             <span class="text-[10px] font-mono tracking-widest text-primary uppercase block">03. Capabilities</span>
                         </div>
-                        <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">Technology Stack.</h2>
+                        <h2 class="font-display text-5xl md:text-7xl font-bold text-gray-50 tracking-tighter">Technology Stack.</h2>
                     </div>
                     <p class="text-gray-500 font-mono text-xs max-w-sm mt-6 md:mt-0 text-right hidden md:block">
                         // CORE_LIBRARIES_LOADED<br>
@@ -547,7 +540,7 @@
                             <div class="h-24 flex items-center justify-center">
                                 <i class="fa-brands fa-python text-6xl text-primary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-primary"></i>
                             </div>
-                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">Core Languages</h3>
+                            <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">Core Languages</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Advanced algorithmic optimization, data structuring, and backend scripting.</p>
                             <div class="flex flex-wrap justify-center gap-2 mt-auto">
                                 <span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1 rounded text-xs font-mono">Python</span>
@@ -561,12 +554,12 @@
                             <div class="h-24 flex items-center justify-center">
                                 <i class="fa-solid fa-brain text-6xl text-secondary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-secondary"></i>
                             </div>
-                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">ML / Deep Learning</h3>
+                            <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">ML / Deep Learning</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Architecting CNNs, RNNs, and custom neural networks for predictive analysis.</p>
                             <div class="flex flex-wrap justify-center gap-2 mt-auto">
                                 <span class="bg-secondary/10 border border-secondary/30 text-secondary px-3 py-1 rounded text-xs font-mono">PyTorch</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">TensorFlow</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Scikit-learn</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">TensorFlow</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Scikit-learn</span>
                             </div>
                         </div>
                     </div>
@@ -577,28 +570,28 @@
                             <div class="h-24 flex items-center justify-center">
                                 <i class="fa-solid fa-chart-network text-6xl text-accent group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(74,222,128,0.5)]"></i>
                             </div>
-                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">Data Science</h3>
+                            <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">Data Science</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Data parsing, feature engineering, and high-dimensional statistical modeling.</p>
                             <div class="flex flex-wrap justify-center gap-2 mt-auto">
                                 <span class="bg-accent/10 border border-accent/30 text-accent px-3 py-1 rounded text-xs font-mono">Pandas</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">NumPy</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Matplotlib</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">NumPy</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Matplotlib</span>
                             </div>
                         </div>
                     </div>
  
                     <!-- NLP & Generative AI -->
-                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-white/50">
+                    <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-gray-200/50">
                         <div class="pop-out pointer-events-none flex flex-col h-full">
                             <div class="h-24 flex items-center justify-center">
-                                <i class="fa-solid fa-language text-6xl text-white group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"></i>
+                                <i class="fa-solid fa-language text-6xl text-gray-50 group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(249,250,251,0.5)]"></i>
                             </div>
-                            <h3 class="font-display text-2xl font-bold text-white mb-4 mt-6">NLP & Gen AI</h3>
+                            <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">NLP & Gen AI</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Integrating Large Language Models, semantic parsing, and RAG architectures.</p>
                             <div class="flex flex-wrap justify-center gap-2 mt-auto">
-                                <span class="bg-white/20 border border-white/40 text-white px-3 py-1 rounded text-xs font-mono">LangChain</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Gemini API</span>
-                                <span class="bg-white/5 border border-white/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">HuggingFace</span>
+                                <span class="bg-gray-100/20 border border-gray-200/40 text-gray-50 px-3 py-1 rounded text-xs font-mono">LangChain</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">Gemini API</span>
+                                <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-3 py-1 rounded text-xs font-mono">HuggingFace</span>
                             </div>
                         </div>
                     </div>
@@ -610,21 +603,21 @@
                         <h3 class="text-[10px] font-mono tracking-widest text-gray-500 uppercase mb-6">Additional Skills</h3>
                         <div class="flex flex-wrap gap-3">
                             <span class="bg-primary/10 border border-primary/30 text-primary px-4 py-2 rounded-full text-xs font-mono">Python</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Kotlin</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Kotlin</span>
                             <span class="bg-secondary/10 border border-secondary/30 text-secondary px-4 py-2 rounded-full text-xs font-mono">Machine Learning</span>
                             <span class="bg-secondary/10 border border-secondary/30 text-secondary px-4 py-2 rounded-full text-xs font-mono">Deep Learning</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">NLP</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Data Analytics</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">NLP</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Data Analytics</span>
                             <span class="bg-accent/10 border border-accent/30 text-accent px-4 py-2 rounded-full text-xs font-mono">Android Development</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Next.js</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Tailwind CSS</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Supabase</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Firebase</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Git</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">GitHub</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Next.js</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Tailwind CSS</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Supabase</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Firebase</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Git</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">GitHub</span>
                             <span class="bg-primary/10 border border-primary/30 text-primary px-4 py-2 rounded-full text-xs font-mono">Gemini API</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Power BI</span>
-                            <span class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Tableau</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Power BI</span>
+                            <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-4 py-2 rounded-full text-xs font-mono">Tableau</span>
                         </div>
                     </div>
                 </div>
@@ -678,7 +671,7 @@
                         <div class="h-[1px] w-12 bg-accent"></div>
                         <span class="text-[10px] font-mono tracking-widest text-accent uppercase block">04. Architecture in Action</span>
                     </div>
-                    <h2 class="font-display text-5xl md:text-7xl font-bold text-white tracking-tighter">Engineered Systems.</h2>
+                    <h2 class="font-display text-5xl md:text-7xl font-bold text-gray-50 tracking-tighter">Engineered Systems.</h2>
                     <p class="text-gray-400 mt-6 max-w-3xl font-light text-lg">A selection of end-to-end applications demonstrating my ability to build robust machine learning models and wrap them in production-grade software.</p>
                     <p class="text-lg text-gray-300 leading-8 max-w-3xl mt-6 font-light">
                         My projects combine Artificial Intelligence, Machine Learning, Android Development, and Modern Web Technologies. Each project focuses on solving real-world problems while strengthening my software engineering and AI development skills.
@@ -693,7 +686,7 @@
                         <div class="lg:col-span-7 order-2 lg:order-1 glass-3d p-10 md:p-14 interactive-3d border-l-4 border-primary">
                             <div class="pop-out">
                                 <div class="flex justify-between items-center mb-6">
-                                    <h3 class="font-display text-4xl md:text-5xl font-bold text-white">AI Resume Analyzer</h3>
+                                    <h3 class="font-display text-4xl md:text-5xl font-bold text-gray-50">AI Resume Analyzer</h3>
                                     <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-file-invoice"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
@@ -711,29 +704,29 @@
                                     </ul>
                                 </div>
  
-                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-white mb-10">
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-50 mb-10">
                                     <span class="bg-primary/10 border border-primary/30 text-primary px-3 py-1.5 rounded-md">Python</span>
-                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Google AI Studio</span>
-                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Supabase</span>
-                                    <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md">Streamlit</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">Google AI Studio</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">Supabase</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">Streamlit</span>
                                 </div>
  
                                 <!-- Action Links Flex Container -->
                                 <div class="flex flex-wrap items-center gap-6">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation and structured README.md" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-primary transition-colors hover-target">
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation and structured README.md" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-primary transition-colors hover-target">
                                         <i class="devicon-github-original text-xl"></i><span>Source & Docs</span>
                                     </a>
-                                    <a href="https://www.linkedin.com/posts/paras029_google-googleaistudio-geminiai-ugcPost-7464556938668843008-rR0_/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF60u9IBpVmvRsrkMAd5SUnLs9uxbs9DkL8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-[#0077b5] transition-colors hover-target">
+                                    <a href="https://www.linkedin.com/posts/paras029_google-googleaistudio-geminiai-ugcPost-7464556938668843008-rR0_/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF60u9IBpVmvRsrkMAd5SUnLs9uxbs9DkL8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-[#0077b5] transition-colors hover-target">
                                         <i class="fa-brands fa-linkedin text-xl"></i><span>Post Overview</span>
                                     </a>
-                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-white hover:text-[#4ADE80] transition-colors hover-target">
+                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-[#4ADE80] transition-colors hover-target">
                                         <i class="fa-solid fa-android text-xl"></i><span>Download APK</span>
                                     </a>
                                 </div>
 
                                 <!-- Interactive Live Demo -->
-                                <div class="mt-8 pt-8 border-t border-white/10">
-                                    <button type="button" id="demo-toggle-resume" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-accent/10 border border-accent/40 rounded-full text-xs font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-black transition-colors" aria-expanded="false" aria-controls="demo-panel-resume" data-demo-url="https://huggingface.co/spaces/parasbishnoi029/resume-analyzer-demo">
+                                <div class="mt-8 pt-8 border-t border-gray-200/10">
+                                    <button type="button" id="demo-toggle-resume" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-accent/10 border border-accent/40 rounded-full text-xs font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-darkBg transition-colors" aria-expanded="false" aria-controls="demo-panel-resume" data-demo-url="https://huggingface.co/spaces/parasbishnoi029/resume-analyzer-demo">
                                         <i class="fa-solid fa-play"></i> Launch Live Demo
                                     </button>
                                     <div id="demo-panel-resume" class="demo-panel mt-6" hidden></div>
@@ -743,11 +736,11 @@
                         
                         <!-- Image Side -->
                         <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full flex justify-center items-center">
-                            <div class="w-full max-w-[280px] md:max-w-[320px] aspect-[9/19.5] rounded-[2rem] overflow-hidden border border-white/10 shadow-glass relative pop-out-extreme">
+                            <div class="w-full max-w-[280px] md:max-w-[320px] aspect-[9/19.5] rounded-[2rem] overflow-hidden border border-gray-200/10 shadow-glass relative pop-out-extreme">
                                 <img src="AIResumeanalyser.png" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="App Interface">
                                 <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/10 to-transparent opacity-80 pointer-events-none"></div>
                                 <div class="absolute bottom-6 right-6">
-                                    <span class="bg-black/50 backdrop-blur border border-white/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-white uppercase flex items-center">
+                                    <span class="bg-darkBg/50 backdrop-blur border border-gray-200/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-gray-50 uppercase flex items-center">
                                         <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div> Live System
                                     </span>
                                 </div>
@@ -762,17 +755,17 @@
                             <div class="pop-out h-full flex flex-col">
                                 <div class="flex justify-between items-start mb-8">
                                     <i class="fa-solid fa-folder-tree text-4xl text-secondary group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
-                                <h4 class="font-display font-bold text-3xl text-white mb-4">Curatly</h4>
+                                <h4 class="font-display font-bold text-3xl text-gray-50 mb-4">Curatly</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
                                     <strong>Situation & Action:</strong> Web data curation was chaotic. Engineered a robust Android application to intelligently structure data fields into responsive custom cloud databases.
                                     <br><strong>Result:</strong> Increased structured data retrieval efficiency by 25% for end-users.
                                 </p>
-                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-secondary">Java</span>
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Android Studio</span>
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Firebase</span>
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-gray-200/10">
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md text-secondary">Java</span>
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Android Studio</span>
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Firebase</span>
                                 </div>
                             </div>
                         </div>
@@ -782,17 +775,17 @@
                             <div class="pop-out h-full flex flex-col z-10 relative">
                                 <div class="flex justify-between items-start mb-8">
                                     <i class="fa-solid fa-chart-pie text-4xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
-                                <h4 class="font-display font-bold text-3xl text-white mb-4">Data Analytics Engine</h4>
+                                <h4 class="font-display font-bold text-3xl text-gray-50 mb-4">Data Analytics Engine</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
                                     <strong>Action:</strong> Built a programmatic Python script and visualizer pipeline that ingests raw datasets and handles mathematical regressions.
                                     <br><strong>Result:</strong> Produced highly granular diagnostic telemetry, enhancing data observability by 30%.
                                 </p>
-                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-white/10">
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md text-emerald-400">Python</span>
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Pandas</span>
-                                    <span class="border border-white/20 bg-white/5 px-3 py-1.5 rounded-md">Tableau</span>
+                                <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-gray-200/10">
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md text-emerald-400">Python</span>
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Pandas</span>
+                                    <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Tableau</span>
                                 </div>
                             </div>
                             
@@ -800,9 +793,9 @@
                             <div class="absolute inset-0 bg-darkBg/95 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-6 backdrop-blur-md">
                                 <h5 class="text-primary font-mono text-xs uppercase tracking-widest mb-4">Live Dashboard Architecture</h5>
                                 <!-- Simulated Embedded iframe or diagram -->
-                                <div class="w-full h-full border border-white/20 rounded-xl overflow-hidden bg-white/5 flex items-center justify-center">
-                                    <i class="fa-solid fa-project-diagram text-4xl text-white/20"></i>
-                                    <span class="ml-3 font-mono text-xs text-white/50">Dashboard Embed / Flowchart View</span>
+                                <div class="w-full h-full border border-gray-200/20 rounded-xl overflow-hidden bg-gray-100/5 flex items-center justify-center">
+                                    <i class="fa-solid fa-project-diagram text-4xl text-gray-100/20"></i>
+                                    <span class="ml-3 font-mono text-xs text-gray-100/50">Dashboard Embed / Flowchart View</span>
                                 </div>
                             </div>
                         </div>
@@ -818,7 +811,7 @@
             <div class="max-w-7xl mx-auto w-full">
                 <div class="text-center mb-16 gs-reveal">
                     <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Portfolio</span>
-                    <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">System Gallery.</h2>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold text-gray-50 tracking-tighter">System Gallery.</h2>
                     <p class="text-gray-400 max-w-2xl mx-auto mt-6 font-light text-lg">
                         Projects, UI designs, application demos and development journey.
                     </p>
@@ -838,18 +831,18 @@
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h3 class="font-display text-2xl font-bold text-white">AI Resume Analyzer</h3>
+                                    <h3 class="font-display text-2xl font-bold text-gray-50">AI Resume Analyzer</h3>
                                     <i class="fa-solid fa-file-invoice text-primary"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">NLP-driven resume-to-job matching with automated skill gap reporting.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <span class="bg-primary/10 border border-primary/30 text-primary px-2.5 py-1 rounded text-[10px] font-mono">Python</span>
-                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Supabase</span>
-                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streamlit</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Supabase</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streamlit</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
-                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="text-xs font-bold uppercase tracking-widest text-white hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-play"></i>Live Demo</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-play"></i>Live Demo</a>
                                 </div>
                             </div>
                         </div>
@@ -868,23 +861,23 @@
                                 <button type="button" class="gallery-video-toggle hover-target" data-video-toggle aria-label="Unmute preview">
                                     <i class="fa-solid fa-volume-xmark"></i>
                                 </button>
-                                <div class="absolute top-4 left-4 flex items-center space-x-2 bg-black/60 backdrop-blur px-3 py-1 rounded-md border border-white/10 text-[10px] font-mono text-gray-400 tracking-wider z-10">
+                                <div class="absolute top-4 left-4 flex items-center space-x-2 bg-darkBg/60 backdrop-blur px-3 py-1 rounded-md border border-gray-200/10 text-[10px] font-mono text-gray-400 tracking-wider z-10">
                                     <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                                     <span>stream_analyzer.log</span>
                                 </div>
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h3 class="font-display text-2xl font-bold text-white">Live Analytics Preview</h3>
+                                    <h3 class="font-display text-2xl font-bold text-gray-50">Live Analytics Preview</h3>
                                     <i class="fa-solid fa-chart-line text-secondary"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">A behind-the-scenes look at the analyzer's real-time processing pipeline.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Real-time</span>
-                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streaming</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streaming</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -902,16 +895,16 @@
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h3 class="font-display text-2xl font-bold text-white">Curatly</h3>
+                                    <h3 class="font-display text-2xl font-bold text-gray-50">Curatly</h3>
                                     <i class="fa-solid fa-folder-tree text-accent"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Android content curation app structuring web data into cloud databases.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <span class="bg-accent/10 border border-accent/30 text-accent px-2.5 py-1 rounded text-[10px] font-mono">Java</span>
-                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Firebase</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Firebase</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -929,16 +922,16 @@
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h3 class="font-display text-2xl font-bold text-white">Data Analytics Engine</h3>
+                                    <h3 class="font-display text-2xl font-bold text-gray-50">Data Analytics Engine</h3>
                                     <i class="fa-solid fa-chart-pie text-primary"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Python pipeline ingesting raw datasets and producing diagnostic telemetry.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <span class="bg-primary/10 border border-primary/30 text-primary px-2.5 py-1 rounded text-[10px] font-mono">Pandas</span>
-                                    <span class="bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Matplotlib</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Matplotlib</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -956,7 +949,7 @@
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h3 class="font-display text-2xl font-bold text-white">Development Workspace</h3>
+                                    <h3 class="font-display text-2xl font-bold text-gray-50">Development Workspace</h3>
                                     <i class="fa-solid fa-laptop-code text-secondary"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Where the models get trained, the bugs get squashed, and the coffee runs out.</p>
@@ -964,7 +957,7 @@
                                     <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Daily Grind</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -975,11 +968,11 @@
                         <div class="gallery-card-inner gallery-cta-card">
                             <div class="gallery-cta-inner">
                                 <i class="fa-solid fa-diagram-project text-4xl text-primary mb-6"></i>
-                                <h3 class="font-display text-2xl font-bold text-white mb-3">More on GitHub</h3>
+                                <h3 class="font-display text-2xl font-bold text-gray-50 mb-3">More on GitHub</h3>
                                 <p class="text-sm text-gray-400 font-light mb-8 leading-relaxed max-w-[220px] mx-auto">
                                     That's the highlight reel — the full commit history and well-documented architecture diagrams live here.
                                 </p>
-                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-primary/10 border border-primary/40 rounded-full text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-black transition-colors">
+                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-primary/10 border border-primary/40 rounded-full text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-darkBg transition-colors">
                                     View All Projects <i class="fa-solid fa-arrow-right"></i>
                                 </a>
                             </div>
@@ -1008,7 +1001,7 @@
                             </div>
                         </div>
                         
-                        <h3 class="font-display text-4xl md:text-5xl font-bold text-white flex items-center mb-6">
+                        <h3 class="font-display text-4xl md:text-5xl font-bold text-gray-50 flex items-center mb-6">
                             <i class="devicon-github-original mr-4"></i> Open Source
                         </h3>
                         <p class="text-gray-400 font-light text-lg mb-10 leading-relaxed">
@@ -1016,7 +1009,7 @@
                         </p>
                         
                         <!-- Heatmap Simulation -->
-                        <div class="mb-10 border border-white/10 rounded-xl p-4 bg-black/50">
+                        <div class="mb-10 border border-gray-200/10 rounded-xl p-4 bg-darkBg/50">
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-xs font-mono text-gray-500">parasbishnoi029 / contributions</span>
                                 <span id="gh-live-stat" class="text-xs font-mono text-green-400">Fetching live stats…</span>
@@ -1029,23 +1022,23 @@
                         <div class="mt-2">
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned Projects</h4>
                             <div id="gh-pinned-projects" class="flex flex-wrap gap-3">
-                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-code-branch text-[10px]"></i> AI Resume Analyzer
                                 </a>
-                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-secondary/50 hover:text-secondary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-secondary/50 hover:text-secondary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-code-branch text-[10px]"></i> Curatly
                                 </a>
-                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-white/5 border border-white/10 hover:border-accent/50 hover:text-accent px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-accent/50 hover:text-accent px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-code-branch text-[10px]"></i> Portfolio
                                 </a>
-                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-white px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">
+                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">
                                     View All <i class="fa-solid fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
                         </div>
                         
                         <div class="flex flex-wrap gap-4 mt-6">
-                            <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary transition-colors inline-flex items-center">
+                            <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-gray-100 text-darkBg font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary transition-colors inline-flex items-center">
                                 <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Follow @parasbishnoi029
                             </a>
                         </div>
@@ -1055,20 +1048,20 @@
                 <!-- Academic Research & Activities -->
                 <div class="lg:col-span-5 flex flex-col justify-center">
                     <div class="flex items-center space-x-4 mb-4">
-                        <div class="h-[1px] w-12 bg-white/50"></div>
+                        <div class="h-[1px] w-12 bg-gray-100/50"></div>
                         <span class="text-[10px] font-mono tracking-widest text-gray-400 uppercase block">05. Activities</span>
                     </div>
-                    <h3 class="font-display text-4xl font-bold text-white mb-10">Beyond the Code</h3>
+                    <h3 class="font-display text-4xl font-bold text-gray-50 mb-10">Beyond the Code</h3>
                     
                     <div class="space-y-6">
                         <!-- Activity 1 -->
                         <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
                             <div class="pop-out flex items-start w-full">
-                                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-primary/20 group-hover:border-primary/50 transition-colors">
+                                <div class="w-12 h-12 rounded-xl bg-gray-100/5 border border-gray-200/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-primary/20 group-hover:border-primary/50 transition-colors">
                                     <i class="fa-solid fa-flask text-xl text-primary"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg text-white mb-1">Academic Research</h4>
+                                    <h4 class="font-bold text-lg text-gray-50 mb-1">Academic Research</h4>
                                     <p class="text-xs text-gray-400 font-light leading-relaxed">Engaging deeply with IIT Jodhpur curriculum data science projects, focusing on statistical modeling optimizations.</p>
                                 </div>
                             </div>
@@ -1077,11 +1070,11 @@
                         <!-- Activity 2 -->
                         <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
                             <div class="pop-out flex items-start w-full">
-                                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-secondary/20 group-hover:border-secondary/50 transition-colors">
+                                <div class="w-12 h-12 rounded-xl bg-gray-100/5 border border-gray-200/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-secondary/20 group-hover:border-secondary/50 transition-colors">
                                     <i class="fa-solid fa-pen-nib text-xl text-secondary"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-lg text-white mb-1">Technical Writing</h4>
+                                    <h4 class="font-bold text-lg text-gray-50 mb-1">Technical Writing</h4>
                                     <p class="text-xs text-gray-400 font-light leading-relaxed">Documenting machine learning roadblocks, architectural decisions, and MLOps strategies for future reference.</p>
                                 </div>
                             </div>
@@ -1098,7 +1091,7 @@
             <div class="max-w-7xl mx-auto w-full">
                 <div class="text-center mb-20 gs-reveal">
                     <span class="text-[10px] font-mono tracking-widest text-secondary uppercase block mb-4">Validation</span>
-                    <h2 class="font-display text-5xl md:text-6xl font-bold text-white tracking-tighter">Certifications & Awards.</h2>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold text-gray-50 tracking-tighter">Certifications & Awards.</h2>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 gs-reveal">
@@ -1108,9 +1101,9 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-primary flex items-center justify-center mb-6 mx-auto shadow-neon-primary">
                                 <i class="fa-solid fa-brain text-3xl text-primary"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-white mb-3">Machine Learning Foundation</h4>
+                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Machine Learning Foundation</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Comprehensive mastery of core supervised and unsupervised algorithms.</p>
-                            <span class="text-[10px] font-mono text-primary uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Verified Credential</span>
+                            <span class="text-[10px] font-mono text-primary uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Verified Credential</span>
                         </div>
                     </div>
                     
@@ -1120,9 +1113,9 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-secondary flex items-center justify-center mb-6 mx-auto shadow-neon-secondary">
                                 <i class="fa-solid fa-database text-3xl text-secondary"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-white mb-3">Data Science Core</h4>
+                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Data Science Core</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Advanced data analysis, cleaning methodologies, and structuring pipelines.</p>
-                            <span class="text-[10px] font-mono text-secondary uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Verified Credential</span>
+                            <span class="text-[10px] font-mono text-secondary uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Verified Credential</span>
                         </div>
                     </div>
  
@@ -1132,9 +1125,9 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(52,211,153,0.5)]">
                                 <i class="fa-solid fa-trophy text-3xl text-emerald-400"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-white mb-3">Hackathon Participant</h4>
+                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Hackathon Participant</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Proven ability to rapid-prototype, build, and deploy ML models under strict deadlines.</p>
-                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest border-t border-white/10 pt-4 block w-full">Competition Log</span>
+                            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Competition Log</span>
                         </div>
                     </div>
                 </div>
@@ -1161,11 +1154,11 @@
                     </div>
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center">
                         <div class="pop-out">
-                            <i class="fa-solid fa-building-columns text-2xl text-white mb-3"></i>
+                            <i class="fa-solid fa-building-columns text-2xl text-gray-50 mb-3"></i>
                             <p class="text-xs font-medium text-gray-300">IIT Jodhpur Coursework</p>
                         </div>
                     </div>
-                    <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center border border-dashed border-white/20">
+                    <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center border border-dashed border-gray-200/20">
                         <div class="pop-out">
                             <i class="fa-solid fa-hourglass-half text-2xl text-gray-500 mb-3"></i>
                             <p class="text-xs font-medium text-gray-500">Upcoming Certifications</p>
@@ -1183,7 +1176,7 @@
                 <div class="h-[1px] w-12 bg-secondary"></div>
                 <span class="text-[10px] font-mono tracking-widest text-secondary uppercase">06. Thought Leadership</span>
             </div>
-            <h2 class="font-display text-4xl md:text-6xl font-bold text-white mb-12 tracking-tighter gs-reveal">Technical Writing.</h2>
+            <h2 class="font-display text-4xl md:text-6xl font-bold text-gray-50 mb-12 tracking-tighter gs-reveal">Technical Writing.</h2>
             
             <div id="blog-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 gs-reveal">
                 <!-- Fetched articles inject here -->
@@ -1203,31 +1196,31 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-darkBg pointer-events-none z-0"></div>
  
                 <div class="pop-out-subtle relative z-20 flex justify-center mb-10">
-                    <div class="inline-flex items-center space-x-3 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase backdrop-blur-md shadow-glass whitespace-nowrap">
+                    <div class="inline-flex items-center space-x-3 bg-gray-100/5 border border-gray-200/10 px-5 py-2.5 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase backdrop-blur-md shadow-glass whitespace-nowrap">
                         <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                         <span>Open to Work</span>
                     </div>
                 </div>
 
                 <div class="pop-out relative z-10">
-                    <h2 class="font-display text-6xl md:text-8xl font-bold text-white mb-8 tracking-tighter">Initialize Link.</h2>
+                    <h2 class="font-display text-6xl md:text-8xl font-bold text-gray-50 mb-8 tracking-tighter">Initialize Link.</h2>
                     <p class="text-xl font-light text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
-                        Currently available for <strong class="text-white">machine learning internships</strong>, open-source collaborations, and data science research assignments. Let's architect the future together.
+                        Currently available for <strong class="text-gray-50">machine learning internships</strong>, open-source collaborations, and data science research assignments. Let's architect the future together.
                     </p>
                     <p class="text-base font-light text-gray-400 mb-16 max-w-xl mx-auto leading-relaxed">
                         Interested in collaborating on AI, Android, or Full-Stack projects? Let's build something meaningful together.
                     </p>
  
                     <div class="flex flex-wrap justify-center gap-6 mb-16">
-                        <a href="mailto:parasbishnoi012@gmail.com" class="px-10 py-5 bg-white/5 border border-white/20 hover:bg-primary hover:text-black hover:border-primary rounded-full text-sm font-bold text-white transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
+                        <a href="mailto:parasbishnoi012@gmail.com" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-primary hover:text-darkBg hover:border-primary rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
                             <i class="fa-solid fa-envelope mr-3 text-xl"></i>Email Me
                         </a>
-                        <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="px-10 py-5 bg-white/5 border border-white/20 hover:bg-[#0077b5] hover:border-[#0077b5] rounded-full text-sm font-bold text-white transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
+                        <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-[#0077b5] hover:border-[#0077b5] rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
                             <i class="devicon-linkedin-plain mr-3 text-xl"></i>LinkedIn
                         </a>
                     </div>
  
-                    <div class="pt-8 border-t border-white/10 w-full max-w-md mx-auto">
+                    <div class="pt-8 border-t border-gray-200/10 w-full max-w-md mx-auto">
                         <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="relative z-10 inline-flex items-center justify-center space-x-3 text-xs font-mono tracking-widest uppercase font-bold text-gray-400 hover:text-primary transition-colors group hover-target">
                             <span class="group-hover:tracking-[0.3em] transition-all duration-300">Download Resume.pdf</span>
                             <i class="fa-solid fa-download group-hover:translate-y-1 transition-transform"></i>
@@ -1240,9 +1233,9 @@
         <!-- ========================================== -->
         <!-- FOOTER                                     -->
         <!-- ========================================== -->
-        <footer class="py-12 text-center relative z-10 border-t border-white/10 bg-darkBg">
+        <footer class="py-12 text-center relative z-10 border-t border-gray-200/10 bg-darkBg">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="font-display font-bold text-xl tracking-tighter text-white">
+                <div class="font-display font-bold text-xl tracking-tighter text-gray-50">
                     PARAS<span class="text-primary">FOLIO</span><span class="text-secondary">.</span>
                 </div>
                 
@@ -1252,15 +1245,15 @@
                 </div>
                 
                 <div class="flex space-x-4">
-                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors hover-target" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary transition-colors hover-target" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="https://www.instagram.com/parasbishnoi.03/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-500 transition-colors hover-target" aria-label="Instagram">
+                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors hover-target" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary transition-colors hover-target" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/parasbishnoi.03/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-500 transition-colors hover-target" aria-label="Instagram">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
-                    <a href="https://www.facebook.com/paras.bishnoi.29" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-500 transition-colors hover-target" aria-label="Facebook">
+                    <a href="https://www.facebook.com/paras.bishnoi.29" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-500 transition-colors hover-target" aria-label="Facebook">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
-                    <a href="https://x.com/parasbishnoi03" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white transition-colors hover-target" aria-label="X (Twitter)">
+                    <a href="https://x.com/parasbishnoi03" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-gray-50 hover:border-gray-50 transition-colors hover-target" aria-label="X (Twitter)">
                         <i class="fa-brands fa-x-twitter"></i>
                     </a>
                 </div>
@@ -1284,7 +1277,7 @@
         <div class="gallery-lightbox-inner">
             <div id="gallery-lightbox-media"></div>
             <div class="gallery-lightbox-caption">
-                <h3 id="gallery-lightbox-title" class="font-display text-2xl font-bold text-white mb-2"></h3>
+                <h3 id="gallery-lightbox-title" class="font-display text-2xl font-bold text-gray-50 mb-2"></h3>
                 <p id="gallery-lightbox-desc" class="text-sm text-gray-400 font-light leading-relaxed"></p>
             </div>
         </div>
@@ -1301,16 +1294,24 @@
     <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
     <script>
       window.botpressWebChat.init({
-          "composerPlaceholder": "Ask about my resume or projects...",
-          "botConversationDescription": "AI Agent trained on Paras's Portfolio",
+          "composerPlaceholder": "Ask me about Paras's skills or projects...",
+          "botConversationDescription": "Virtual AI Assistant for Paras Bishnoi",
           "botId": "YOUR_BOTPRESS_BOT_ID", // TODO: Replace with your actual Bot ID
           "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
           "messagingUrl": "https://messaging.botpress.cloud",
           "clientId": "YOUR_CLIENT_ID", // TODO: Replace with your actual Client ID
+          "botName": "Paras Agent",
+          "avatarUrl": "https://parasbishnoi029.github.io/parasfolio/Profile.jpg",
           "themeName": "prism",
           "frontendVersion": "v1",
-          "theme": "dark",
-          "themeColor": "#00F2FE"
+          "theme": "prism",
+          "themeColor": "#00F2FE",
+          "hideWidget": false,
+          "disableAnimations": false,
+          "closeOnEscape": false,
+          "showPoweredBy": false,
+          "backgroundColor": "#030305",
+          "textColor": "#f9fafb"
       });
     </script>
 </body>
