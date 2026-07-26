@@ -229,7 +229,26 @@ if (menuToggle && mobileMenu && menuBackdrop) {
     });
 })();
 
-// --- 0G. DYNAMIC BLOG FEED (Dev.to / Medium) ---
+// --- 0G. THEME TOGGLE LOGIC ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const htmlEl = document.documentElement;
+
+// Force dark mode as the persistent default
+if (localStorage.getItem('parasfolio-theme') === 'light') {
+    htmlEl.classList.remove('dark');
+} else {
+    htmlEl.classList.add('dark');
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        const isDark = htmlEl.classList.contains('dark');
+        localStorage.setItem('parasfolio-theme', isDark ? 'dark' : 'light');
+    });
+}
+
+// --- 0H. DYNAMIC BLOG FEED (Dev.to / Medium) ---
 (async function initBlogFeed() {
     const container = document.getElementById('blog-feed-container');
     if (!container) return;
