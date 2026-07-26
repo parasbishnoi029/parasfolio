@@ -718,7 +718,6 @@
                         
                         <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full flex justify-center items-center">
                             <div class="w-full max-w-[280px] md:max-w-[350px] aspect-square rounded-[2rem] overflow-hidden border border-gray-200/10 shadow-glass relative pop-out-extreme flex items-center justify-center bg-darkBg">
-                                <!-- Abstract math/network visualization -->
                                 <i class="fa-solid fa-project-diagram text-9xl text-primary/20" aria-hidden="true"></i>
                                 <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/10 to-transparent opacity-80 pointer-events-none"></div>
                                 <div class="absolute bottom-6 right-6">
@@ -1114,46 +1113,89 @@
         </section>
  
         <!-- ========================================== -->
-        <!-- SECTION 8: CONTACT TERMINAL                -->
+        <!-- SECTION 8: CONTACT / HANDSHAKE PROTOCOL    -->
         <!-- ========================================== -->
-        <section id="contact" class="justify-center items-center py-40 min-h-[120vh]">
-            <div class="glass-3d p-12 md:p-24 text-center max-w-5xl w-full gs-reveal border-t border-primary interactive-3d hover-target shadow-[0_0_80px_rgba(0,242,254,0.15)] relative overflow-hidden">
+        <section id="contact" class="py-40 relative flex items-center min-h-screen border-t border-gray-200/5 overflow-hidden">
+            <!-- Background Ambient Glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none z-0" aria-hidden="true"></div>
+
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10 gs-reveal">
                 
-                <!-- Rotating Orbital Background Elements (Pure CSS) -->
-                <div class="orbital-ring w-[100%] h-[150%] absolute border border-primary/20 animate-spin-slow rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0" aria-hidden="true"></div>
-                <div class="orbital-ring w-[120%] h-[120%] absolute border border-secondary/20 animate-spin-reverse rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0" aria-hidden="true"></div>
-                <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-darkBg pointer-events-none z-0"></div>
- 
-                <div class="pop-out-subtle relative z-20 flex justify-center mb-10">
-                    <div class="inline-flex items-center space-x-3 bg-gray-100/5 border border-gray-200/10 px-5 py-2.5 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase backdrop-blur-md shadow-glass whitespace-nowrap">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true"></span>
-                        <span>Open to Work</span>
+                <!-- Left Column: Typography & CTAs -->
+                <div class="pr-0 lg:pr-8">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="h-[1px] w-12 bg-primary"></div>
+                        <span class="text-[10px] font-mono tracking-widest text-primary uppercase block">05. Handshake Protocol</span>
+                    </div>
+                    
+                    <h2 class="font-display text-5xl md:text-7xl font-bold text-gray-50 tracking-tighter mb-8">
+                        Initiate<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Connection.</span>
+                    </h2>
+                    
+                    <p class="text-lg font-light text-gray-300 mb-6 leading-relaxed max-w-lg">
+                        I am actively seeking <strong class="text-primary">machine learning internships</strong>, open-source collaborations, and rigorous data science roles.
+                    </p>
+                    
+                    <p class="text-sm font-light text-gray-500 mb-12 max-w-lg leading-relaxed">
+                        Whether you are building scalable AI architectures, need an Android integration, or just want to discuss transformer models—my inbox is always open. Let's engineer something impactful.
+                    </p>
+
+                    <!-- Primary Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                        <a href="mailto:parasbishnoi012@gmail.com" class="hover-target px-8 py-4 bg-primary text-darkBg rounded-full text-xs font-bold uppercase tracking-widest transition-transform hover:scale-105 flex items-center justify-center shadow-neon-primary">
+                            <i class="fa-solid fa-envelope mr-3 text-lg" aria-hidden="true"></i> Ping Email
+                        </a>
+                        <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="hover-target px-8 py-4 glass-3d border border-gray-200/20 hover:border-[#0077b5] hover:text-[#0077b5] rounded-full text-xs font-bold text-gray-50 uppercase tracking-widest transition-colors flex items-center justify-center">
+                            <i class="devicon-linkedin-plain mr-3 text-lg" aria-hidden="true"></i> LinkedIn
+                        </a>
                     </div>
                 </div>
 
-                <div class="pop-out relative z-10">
-                    <h2 class="font-display text-6xl md:text-8xl font-bold text-gray-50 mb-8 tracking-tighter">Initialize Link.</h2>
-                    <p class="text-xl font-light text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
-                        Currently available for <strong class="text-gray-50">machine learning internships</strong>, open-source collaborations, and data science research assignments. Let's architect the future together.
-                    </p>
-                    <p class="text-base font-light text-gray-400 mb-16 max-w-xl mx-auto leading-relaxed">
-                        Interested in collaborating on AI, Android, or Full-Stack projects? Let's build something meaningful together.
-                    </p>
- 
-                    <div class="flex flex-wrap justify-center gap-6 mb-16">
-                        <a href="mailto:parasbishnoi012@gmail.com" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-primary hover:text-darkBg hover:border-primary rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
-                            <i class="fa-solid fa-envelope mr-3 text-xl" aria-hidden="true"></i>Email Me
-                        </a>
-                        <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-[#0077b5] hover:border-[#0077b5] rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
-                            <i class="devicon-linkedin-plain mr-3 text-xl" aria-hidden="true"></i>LinkedIn
-                        </a>
+                <!-- Right Column: Python API Terminal -->
+                <div class="glass-3d rounded-[2rem] overflow-hidden interactive-3d hover-target border border-gray-200/10 shadow-glass">
+                    
+                    <!-- Terminal Header -->
+                    <div class="bg-gray-100/5 border-b border-gray-200/10 px-6 py-4 flex items-center justify-between">
+                        <div class="flex space-x-2" aria-hidden="true">
+                            <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                        </div>
+                        <div class="text-[10px] font-mono text-gray-400 tracking-widest">~/paras/contact_api.py</div>
+                        <div class="w-10 flex justify-end">
+                            <i class="fa-brands fa-python text-gray-500 text-lg" aria-hidden="true"></i>
+                        </div>
                     </div>
- 
-                    <div class="pt-8 border-t border-gray-200/10 w-full max-w-md mx-auto">
-                        <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="relative z-10 inline-flex items-center justify-center space-x-3 text-xs font-mono tracking-widest uppercase font-bold text-gray-400 hover:text-primary transition-colors group hover-target">
-                            <span class="group-hover:tracking-[0.3em] transition-all duration-300">Download Resume.pdf</span>
-                            <i class="fa-solid fa-download group-hover:translate-y-1 transition-transform" aria-hidden="true"></i>
-                        </a>
+                    
+                    <!-- Terminal Body (Syntax Highlighted) -->
+                    <div class="p-8 md:p-10 font-mono text-xs md:text-sm leading-[2.2] text-gray-300">
+                        <span class="text-secondary">import</span> <span class="text-gray-50">paras_portfolio</span> <span class="text-secondary">as</span> <span class="text-gray-50">ai</span><br><br>
+                        
+                        <span class="text-gray-500"># Initialize developer instance</span><br>
+                        <span class="text-gray-50">dev</span> <span class="text-secondary">=</span> <span class="text-gray-50">ai.Developer(</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-accent">name</span><span class="text-secondary">=</span><span class="text-[#f1fa8c]">"Paras Bishnoi"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-accent">role</span><span class="text-secondary">=</span><span class="text-[#f1fa8c]">"AI & Data Science Engineer"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-accent">location</span><span class="text-secondary">=</span><span class="text-[#f1fa8c]">"IIT Jodhpur, India"</span><br>
+                        <span class="text-gray-50">)</span><br><br>
+
+                        <span class="text-gray-500"># Request connection payload</span><br>
+                        <span class="text-primary">def</span> <span class="text-emerald-400">establish_connection</span><span class="text-gray-50">():</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-secondary">return</span> <span class="text-gray-50">{</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-[#f1fa8c]">"email"</span>: <span class="text-[#f1fa8c]">"parasbishnoi012@gmail.com"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-[#f1fa8c]">"github"</span>: <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">"github.com/parasbishnoi029"</a><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-50">}</span><br><br>
+                        
+                        <span class="text-gray-500"># Fetch Resume</span><br>
+                        <span class="text-gray-50">dev.</span><span class="text-primary">download_resume</span><span class="text-gray-50">()</span> <span class="w-2 h-4 inline-block align-middle bg-gray-400 animate-pulse ml-1" aria-hidden="true"></span>
+                        
+                        <!-- Inline Terminal Button -->
+                        <div class="mt-8 pt-8 border-t border-gray-200/10">
+                            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="inline-flex items-center space-x-3 text-[10px] font-bold tracking-widest uppercase text-primary transition-all group">
+                                <span class="bg-primary/10 border border-primary/30 px-5 py-2.5 rounded group-hover:bg-primary group-hover:text-darkBg transition-colors shadow-neon-primary">
+                                    <i class="fa-solid fa-download mr-2" aria-hidden="true"></i> Execute Download
+                                </span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
