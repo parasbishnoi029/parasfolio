@@ -316,6 +316,7 @@
             border: 1px solid rgba(255,255,255,0.08);
             transform-style: preserve-3d;
             overflow: hidden;
+            transition: box-shadow 0.4s ease;
         }
         .gallery-card-glow {
             position: absolute;
@@ -369,31 +370,6 @@
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
         .gallery-card:hover .gallery-card-body { transform: translateY(0); opacity: 1; }
-
-        .gallery-progress-track {
-            position: relative;
-            max-width: 420px;
-            margin: 0 auto;
-            height: 2px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .gallery-progress-fill {
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 0%;
-            background: linear-gradient(90deg, #00F2FE, #9D4EDD);
-            box-shadow: 0 0 12px rgba(0,242,254,0.6);
-        }
-        @media (max-width: 768px) {
-           .gallery-card {
-                width: 85vw; /* Make cards take up most of the screen */
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-            }
-            .gallery-media { height: 40vh; } /* Taller media on mobile */
-            }
         @media (prefers-reduced-motion: reduce) {
             .gallery-card, .gallery-card-media img, .gallery-card-media video, .gallery-card-body {
                 transition: none !important;
@@ -429,16 +405,14 @@
              max-width:320px;
           }
 
-/* Gallery */
+/* Gallery: full-bleed cards, no stagger, shorter media so nothing gets cropped oddly */
          .gallery-card{
-              width:95vw;
+              width:85vw;
               margin:0!important;
           }
-
-          #gallery-track{
-              gap:1rem;
-              padding:2rem;
-           }
+         .gallery-card-media{
+              height:38vh;
+          }
 
 /* Timeline */
           #journey .group{
@@ -596,6 +570,32 @@ body.menu-open{
           background-color: #4ADE80;
           box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
           animation: none;
+      }
+
+      /* Click-feedback toast: always shows, regardless of whether the
+         clipboard API is available (e.g. blocked permissions, file:// context) */
+      .status-badge-toast {
+          position: absolute;
+          bottom: calc(100% + 10px);
+          left: 50%;
+          transform: translateX(-50%) translateY(6px);
+          background: rgba(10, 12, 18, 0.95);
+          border: 1px solid rgba(74, 222, 128, 0.5);
+          color: #4ADE80;
+          font-family: 'Fira Code', monospace;
+          font-size: 11px;
+          white-space: nowrap;
+          padding: 0.5rem 1rem;
+          border-radius: 999px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s ease, transform 0.2s ease;
+          z-index: 30;
+      }
+      .status-badge-toast.is-visible {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
       }
 
       /* ===========================
