@@ -1,20 +1,14 @@
 /* Base Reset & Defaults */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* Allow Tailwind to control background depending on theme */
 body { 
     background-color: #030305; 
-    color: #ffffff; 
+    color: #f9fafb; 
     margin: 0; 
     overflow-x: hidden; 
     cursor: none; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-html:not(.dark) body {
-    background-color: #f8fafc;
-    color: #0f172a;
 }
 
 /* Cinematic Noise Overlay */
@@ -142,9 +136,9 @@ button:focus-visible {
     background: rgba(10, 12, 18, 0.4);
     backdrop-filter: blur(24px) saturate(150%);
     -webkit-backdrop-filter: blur(24px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(249, 250, 251, 0.05);
     border-radius: 24px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 30px 60px rgba(3, 3, 5, 0.5);
     transform-style: preserve-3d; 
     transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
     position: relative;
@@ -250,8 +244,8 @@ button:focus-visible {
 ::-webkit-scrollbar-thumb:hover { background: #00F2FE; }
 
 .terminal-header {
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(249, 250, 251, 0.03);
+    border-bottom: 1px solid rgba(249, 250, 251, 0.05);
     padding: 10px 20px;
     display: flex;
     align-items: center;
@@ -308,7 +302,7 @@ button:focus-visible {
     background: rgba(10, 12, 18, 0.55);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(249, 250, 251, 0.08);
     transform-style: preserve-3d;
     overflow: hidden;
     transition: box-shadow 0.4s ease;
@@ -319,7 +313,7 @@ button:focus-visible {
     border-radius: 28px;
     padding: 1px;
     background: linear-gradient(135deg, rgba(0,242,254,0.6), rgba(157,78,221,0.5), transparent 60%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#030305 0 0) content-box, linear-gradient(#030305 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0;
@@ -416,7 +410,7 @@ button:focus-visible {
 .mobile-menu-backdrop{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.6);
+    background:rgba(3,3,5,0.6);
     backdrop-filter:blur(4px);
     -webkit-backdrop-filter:blur(4px);
     z-index:55;
@@ -437,7 +431,7 @@ button:focus-visible {
     height:100dvh;
     width:min(80vw,360px);
     background:rgba(8,8,12,0.98);
-    border-left:1px solid rgba(255,255,255,0.1);
+    border-left:1px solid rgba(249,250,251,0.1);
     z-index:65;
     transform:translateX(100%);
     transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
@@ -463,9 +457,9 @@ button:focus-visible {
     font-size:1.35rem;
     font-weight:600;
     letter-spacing:0.02em;
-    color:#fff;
+    color:#f9fafb;
     padding:0.85rem 0;
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid rgba(249,250,251,0.08);
     text-transform:uppercase;
     opacity:0;
     transform:translateX(24px);
@@ -484,10 +478,10 @@ button:focus-visible {
 
 .mobile-nav-resume{
     margin-top:1rem;
-    border:1px solid rgba(255,255,255,0.2);
+    border:1px solid rgba(249,250,251,0.2);
     border-radius:9999px;
     text-align:center;
-    border-bottom:1px solid rgba(255,255,255,0.2);
+    border-bottom:1px solid rgba(249,250,251,0.2);
 }
 
 body.menu-open{
@@ -539,8 +533,8 @@ body.menu-open{
 .demo-panel {
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(249, 250, 251, 0.1);
+  background: rgba(3, 3, 5, 0.4);
 }
 .demo-panel iframe {
   width: 100%;
@@ -606,7 +600,7 @@ body.menu-open{
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(249, 250, 251, 0.15);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -651,8 +645,8 @@ body.menu-open{
   background: rgba(3, 3, 5, 0.55);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+  border: 1px solid rgba(249, 250, 251, 0.15);
+  color: #f9fafb;
   font-size: 0.75rem;
   opacity: 0;
   transform: scale(0.85);
@@ -709,7 +703,7 @@ body.menu-open{
   flex-direction: column;
   border-radius: 24px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(249, 250, 251, 0.1);
   background: rgba(10, 12, 18, 0.6);
   transform: scale(0.92) translateY(16px);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -720,7 +714,7 @@ body.menu-open{
 #gallery-lightbox-media {
   width: 100%;
   max-height: 65vh;
-  background: #000;
+  background: #030305;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -746,8 +740,8 @@ body.menu-open{
   align-items: center;
   justify-content: center;
   background: rgba(10, 12, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+  border: 1px solid rgba(249, 250, 251, 0.15);
+  color: #f9fafb;
   cursor: pointer;
   z-index: 201;
   transition: border-color 0.25s ease, background 0.25s ease, transform 0.2s ease;
@@ -800,8 +794,8 @@ body.menu-open{
   background: rgba(3, 3, 5, 0.6);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border: 1px solid rgba(249, 250, 251, 0.2);
+  color: #f9fafb;
   font-size: 0.8rem;
   cursor: pointer;
   z-index: 11;
