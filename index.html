@@ -6,7 +6,7 @@
   Assets integrated: Profile.jpg, base layout from index.html.
 -->
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,6 +72,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { 
@@ -189,6 +190,12 @@
             <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="px-6 py-2.5 border border-gray-200/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-gray-50 flex items-center space-x-2 bg-gray-100/5 backdrop-blur-md">
                 <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
             </a>
+            
+            <!-- Dark Mode Toggle Button -->
+            <button id="theme-toggle" class="hover-target text-gray-50/70 hover:text-primary transition-colors text-xl ml-4" aria-label="Toggle Theme">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
         </div>
         
         <!-- Mobile Nav Toggle -->
@@ -1289,30 +1296,18 @@
     <script src="main.js" defer></script>
 
     <!-- ========================================== -->
-    <!-- CUSTOM RAG AI CHATBOT AGENT                -->
+    <!-- CUSTOM RAG AI CHATBOT AGENT (Botpress v2)  -->
     <!-- ========================================== -->
-    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+    <!-- NOTE: You MUST update YOUR_BOT_WORKSPACE_ID and YOUR_BOT_ID with the exact values from your Botpress Cloud dashboard -->
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/YOUR_BOT_WORKSPACE_ID/webchat/v2.2/config.js"></script>
     <script>
-      window.botpressWebChat.init({
-          "composerPlaceholder": "Ask me about Paras's skills or projects...",
-          "botConversationDescription": "Virtual AI Assistant for Paras Bishnoi",
-          "botId": "YOUR_BOTPRESS_BOT_ID", // TODO: Replace with your actual Bot ID
-          "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
-          "messagingUrl": "https://messaging.botpress.cloud",
-          "clientId": "YOUR_CLIENT_ID", // TODO: Replace with your actual Client ID
-          "botName": "Paras Agent",
-          "avatarUrl": "https://parasbishnoi029.github.io/parasfolio/Profile.jpg",
-          "themeName": "prism",
-          "frontendVersion": "v1",
-          "theme": "prism",
-          "themeColor": "#00F2FE",
-          "hideWidget": false,
-          "disableAnimations": false,
-          "closeOnEscape": false,
-          "showPoweredBy": false,
-          "backgroundColor": "#030305",
-          "textColor": "#f9fafb"
-      });
+      // Extra UI overrides for the v2.2 widget
+      window.botpressWebChat.onEvent(function (event) {
+          if (event.type === 'LIFECYCLE.LOADED') {
+              window.botpressWebChat.sendEvent({ type: 'UI.SET_THEME', payload: 'dark' });
+          }
+      }, ['LIFECYCLE.LOADED']);
     </script>
 </body>
 </html>
