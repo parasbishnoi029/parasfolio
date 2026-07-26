@@ -33,6 +33,7 @@
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23030305'/%3E%3Cpath d='M30 70 L30 30 L50 30 Q65 30 65 45 Q65 60 50 60 L38 60' stroke='%2300F2FE' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <title>PARASFOLIO | Applied AI & Data Science</title>
+    
     <noscript>
         <style>#loader{display:none!important;} .gallery-card-media img,.gallery-card-media video{opacity:1!important;}</style>
     </noscript>
@@ -73,6 +74,7 @@
             "description": "Applied AI & Data Science student at IIT Jodhpur specializing in deep learning, MLOps, and scalable data architectures."
         }
     </script>
+    
     <!-- ========================================== -->
     <!-- TAILWIND CSS CONFIGURATION                 -->
     <!-- ========================================== -->
@@ -139,29 +141,29 @@
 <body class="selection:bg-primary/20">
  
     <!-- Decorative Noise Overlay -->
-    <div class="noise"></div>
+    <div class="noise" aria-hidden="true"></div>
 
-    <!-- Accessibility: skip straight to main content, bypassing nav -->
-    <a href="#home" class="skip-link">Skip to content</a>
+    <!-- Accessibility: skip straight to main content -->
+    <a href="#scroll-container" class="skip-link">Skip to content</a>
 
     <!-- Back to top control -->
     <button id="back-to-top" type="button" aria-label="Back to top" class="hover-target">
-        <i class="fa-solid fa-arrow-up"></i>
+        <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
     </button>
     
     <!-- Custom Cursor -->
-    <div class="cursor-dot hidden md:block"></div>
-    <div class="cursor-ring hidden md:block"></div>
+    <div class="cursor-dot hidden md:block" aria-hidden="true"></div>
+    <div class="cursor-ring hidden md:block" aria-hidden="true"></div>
  
     <!-- ========================================== -->
     <!-- 1. PRELOADER SEQUENCE                      -->
     <!-- ========================================== -->
-    <div id="loader">
+    <div id="loader" role="status" aria-label="Loading portfolio">
         <h1 class="loader-glitch font-display text-5xl md:text-7xl font-bold tracking-tighter text-gray-50 mb-4">
             PARAS<span class="text-primary">FOLIO</span>
         </h1>
         <div class="text-[10px] font-mono tracking-[0.4em] text-gray-500 uppercase mb-8 flex items-center">
-            <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3"></i>
+            <i class="fa-solid fa-circle-notch fa-spin text-primary mr-3" aria-hidden="true"></i>
             <span id="loading-text">Dreamer & Doer</span>
         </div>
         <div class="w-64 h-[1px] bg-gray-100/10 relative overflow-hidden rounded-full">
@@ -173,14 +175,14 @@
     <!-- ========================================== -->
     <!-- 2. GLOBAL 3D WEBGL CANVAS                  -->
     <!-- ========================================== -->
-    <canvas id="webgl-canvas"></canvas>
+    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
  
     <!-- ========================================== -->
     <!-- 3. NAVIGATION HEADER                       -->
     <!-- ========================================== -->
-    <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference flex justify-between items-center pointer-events-auto">
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference flex justify-between items-center pointer-events-auto" aria-label="Main Navigation">
         <a href="#home" class="font-display font-bold text-2xl tracking-tighter text-gray-50 hover-target hover:scale-105 transition-transform flex items-center">
-            <i class="fa-solid fa-cube text-primary mr-2 text-xl animate-pulse-glow"></i>
+            <i class="fa-solid fa-cube text-primary mr-2 text-xl animate-pulse-glow" aria-hidden="true"></i>
             PARAS<span class="text-primary">FOLIO</span><span class="text-secondary">.</span>
         </a>
         
@@ -195,24 +197,23 @@
             <a href="#research" data-nav-section="research" class="nav-link hover:text-primary transition-colors hover-target">Research</a>
             <a href="#achievements" data-nav-section="achievements" class="nav-link hover:text-primary transition-colors hover-target">Awards</a>
             <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="px-6 py-2.5 border border-gray-200/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-gray-50 flex items-center space-x-2 bg-gray-100/5 backdrop-blur-md">
-                <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
+                <i class="fa-solid fa-download" aria-hidden="true"></i><span>Resume.pdf</span>
             </a>
             
-            <!-- Dark Mode Toggle Button (Legacy toggle - currently hidden or disabled functionality inside main.js) -->
             <button id="theme-toggle" class="hover-target text-gray-50/70 hover:text-primary transition-colors text-xl ml-4 hidden" aria-label="Toggle Theme">
-                <i class="fa-solid fa-moon dark:hidden"></i>
-                <i class="fa-solid fa-sun hidden dark:block"></i>
+                <i class="fa-solid fa-moon dark:hidden" aria-hidden="true"></i>
+                <i class="fa-solid fa-sun hidden dark:block" aria-hidden="true"></i>
             </button>
         </div>
         
         <!-- Mobile Nav Toggle -->
         <button id="mobile-menu-toggle" class="lg:hidden text-gray-50 text-2xl hover-target cursor-pointer bg-transparent border-0 relative z-[70]" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-            <i class="fa-solid fa-bars-staggered"></i>
+            <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
         </button>
     </nav>
 
     <!-- ========================================== -->
-    <!-- MOBILE SLIDE-OUT MENU (DRAWER)              -->
+    <!-- MOBILE SLIDE-OUT MENU (DRAWER)             -->
     <!-- ========================================== -->
     <div id="mobile-menu" class="mobile-menu lg:hidden" aria-hidden="true">
         <div class="mobile-menu-links">
@@ -225,7 +226,7 @@
             <a href="#research" class="mobile-nav-link">Research</a>
             <a href="#achievements" class="mobile-nav-link">Awards</a>
             <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="mobile-nav-link mobile-nav-resume">
-                <i class="fa-solid fa-download mr-2"></i>Resume.pdf
+                <i class="fa-solid fa-download mr-2" aria-hidden="true"></i>Resume.pdf
             </a>
         </div>
     </div>
@@ -246,7 +247,7 @@
                 <div class="lg:col-span-7">
                     <!-- Status Badge -->
                     <div class="gs-reveal inline-flex items-center space-x-3 bg-gray-100/5 border border-gray-200/10 px-5 py-2 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase mb-8 backdrop-blur-md shadow-glass">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-neon-primary"></span>
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-neon-primary" aria-hidden="true"></span>
                         <span>Navodayan • IIT Jodhpur • learner</span>
                     </div>
                     
@@ -265,7 +266,7 @@
                     <div class="flex flex-wrap gap-4 mt-8 gs-reveal">
                         <a href="#systems" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-gray-50 transition-all duration-300 bg-primary/10 border border-primary/50 rounded-full overflow-hidden hover:bg-primary hover:text-darkBg shadow-neon-primary">
                             <span class="tracking-widest text-xs uppercase font-mono relative z-10">Explore Systems</span>
-                            <i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform relative z-10"></i>
+                            <i class="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform relative z-10" aria-hidden="true"></i>
                         </a>
                         <a href="#contact" class="hover-target group relative inline-flex items-center justify-center px-8 py-4 font-bold text-gray-50 transition-all duration-300 bg-transparent border border-gray-200/20 rounded-full overflow-hidden hover:border-gray-200">
                             <span class="tracking-widest text-xs uppercase font-mono">Initialize Contact</span>
@@ -278,7 +279,8 @@
                     <!-- The 3D Avatar Card using Profile.jpg -->
                     <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
                         <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
-                            <img src="Profile.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                            <!-- Fetch priority applied for hero image -->
+                            <img src="Profile.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" width="384" height="512" fetchpriority="high" decoding="async">
                             
                             <!-- Gradient Overlays for depth -->
                             <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
@@ -287,7 +289,7 @@
                             <div class="absolute bottom-8 left-8 right-8 pop-out-extreme">
                                 <div class="bg-primary/20 backdrop-blur-md border border-primary/50 px-4 py-1.5 rounded-md w-fit mb-4 shadow-neon-primary">
                                     <span class="text-primary text-[10px] font-mono tracking-widest uppercase flex items-center">
-                                        <i class="fa-solid fa-fingerprint mr-2 animate-pulse"></i>Identity Verified
+                                        <i class="fa-solid fa-fingerprint mr-2 animate-pulse" aria-hidden="true"></i>Identity Verified
                                     </span>
                                 </div>
                                 <h2 class="font-display text-5xl font-bold text-gray-50 tracking-tighter drop-shadow-2xl mb-1">PARAS</h2>
@@ -332,7 +334,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     <div class="space-y-8">
                         <p class="text-gray-300 font-light leading-relaxed text-xl relative">
-                            <i class="fa-solid fa-quote-left absolute -left-8 -top-4 text-3xl text-gray-100/5"></i>
+                            <i class="fa-solid fa-quote-left absolute -left-8 -top-4 text-3xl text-gray-100/5" aria-hidden="true"></i>
                             My foundation is built on absolute logical rigor. Forged in the strict residential environment of Jawahar Navodaya Vidyalaya and tested in the high-pressure arenas of Sikar, I approach data science from a mathematical first-principles perspective.
                         </p>
                         <p class="text-gray-400 font-light leading-relaxed text-lg">
@@ -345,7 +347,7 @@
                         <!-- Terminal aesthetic info box -->
                         <div class="terminal mt-10 pop-out-subtle interactive-3d hover-target">
                             <div class="terminal-header">
-                                <div class="terminal-dots"><span class="bg-red-500"></span><span class="bg-yellow-500"></span><span class="bg-green-500"></span></div>
+                                <div class="terminal-dots"><span class="bg-red-500 terminal-btn"></span><span class="bg-yellow-500 terminal-btn"></span><span class="bg-green-500 terminal-btn"></span></div>
                                 <span class="ml-4 text-[10px] font-mono text-gray-400">core_philosophy.sh</span>
                             </div>
                             <div class="p-6 font-mono text-xs text-gray-300 leading-loose">
@@ -361,17 +363,17 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-fit">
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-primary">
-                            <div class="text-[10px] font-mono tracking-widest text-primary uppercase mb-3 pop-out"><i class="fa-solid fa-graduation-cap mr-2"></i>Academic Standing</div>
+                            <div class="text-[10px] font-mono tracking-widest text-primary uppercase mb-3 pop-out"><i class="fa-solid fa-graduation-cap mr-2" aria-hidden="true"></i>Academic Standing</div>
                             <div class="font-display font-bold text-4xl md:text-5xl text-gray-50 pop-out drop-shadow-md">8.375<span class="text-xl text-gray-500"> CGPA</span></div>
                             <p class="text-xs text-gray-400 mt-4 pop-out font-light">Consistent high performance in rigorous technical curriculum.</p>
                         </div>
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-secondary">
-                            <div class="text-[10px] font-mono tracking-widest text-secondary uppercase mb-3 pop-out"><i class="fa-solid fa-network-wired mr-2"></i>Specialization</div>
+                            <div class="text-[10px] font-mono tracking-widest text-secondary uppercase mb-3 pop-out"><i class="fa-solid fa-network-wired mr-2" aria-hidden="true"></i>Specialization</div>
                             <div class="font-display font-bold text-2xl md:text-3xl text-gray-50 pop-out drop-shadow-md">Deep Learning<br>& NLP</div>
                             <p class="text-xs text-gray-400 mt-4 pop-out font-light">Transformer architectures and large language models.</p>
                         </div>
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center sm:col-span-2 border-t-2 border-t-accent">
-                            <div class="text-[10px] font-mono tracking-widest text-accent uppercase mb-3 pop-out"><i class="fa-solid fa-server mr-2"></i>Engineering Mindset</div>
+                            <div class="text-[10px] font-mono tracking-widest text-accent uppercase mb-3 pop-out"><i class="fa-solid fa-server mr-2" aria-hidden="true"></i>Engineering Mindset</div>
                             <div class="font-display font-bold text-2xl text-gray-50 pop-out">Production First</div>
                             <p class="text-sm text-gray-400 mt-4 pop-out font-light">I don't just train models in Jupyter notebooks. I containerize, deploy, and monitor them using industry-standard MLOps practices.</p>
                         </div>
@@ -423,7 +425,7 @@
                             onerror="this.src='https://iitj.ac.in/PageImages/Gallery/08-2025/Slider-638899029792478951.png'"
                             loading="lazy" decoding="async"
                             alt="IIT Jodhpur Campus"
-                            class="w-full h-[550px] object-cover">
+                            class="w-full h-[550px] object-cover" width="800" height="550">
                     </div>
  
                 </div>
@@ -450,7 +452,7 @@
                     <!-- Entry 1: IIT Jodhpur -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-primary text-primary shadow-neon-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-primary group-hover:text-darkBg">
-                            <i class="fa-solid fa-microchip"></i>
+                            <i class="fa-solid fa-microchip" aria-hidden="true"></i>
                         </div>
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-primary">
                             <div class="pop-out">
@@ -475,7 +477,7 @@
                     <!-- Entry 2: ALLEN Sikar -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-secondary text-secondary shadow-neon-secondary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-secondary group-hover:text-darkBg">
-                            <i class="fa-solid fa-code"></i>
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
                         </div>
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-secondary">
                             <div class="pop-out">
@@ -492,7 +494,7 @@
                     <!-- Entry 3: JNV 11th -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-accent text-accent shadow-[0_0_20px_rgba(74,222,128,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-accent group-hover:text-darkBg">
-                            <i class="fa-solid fa-square-root-variable"></i>
+                            <i class="fa-solid fa-square-root-variable" aria-hidden="true"></i>
                         </div>
                         <div class="w-[calc(100%-5rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-accent">
                             <div class="pop-out">
@@ -509,7 +511,7 @@
                     <!-- Entry 4: JNV 6-10 -->
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group gs-reveal">
                         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-darkBg border-2 border-gray-500 text-gray-500 shadow-glass shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125 group-hover:bg-gray-500 group-hover:text-darkBg">
-                            <i class="fa-solid fa-building-columns"></i>
+                            <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
                         </div>
                         <div class="w-[calc(100%-4rem)] md:w-[calc(50%-4rem)] glass-3d p-10 hover-target interactive-3d border-t-4 border-gray-600">
                             <div class="pop-out">
@@ -552,7 +554,7 @@
                     <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-primary">
                         <div class="pop-out pointer-events-none flex flex-col h-full">
                             <div class="h-24 flex items-center justify-center">
-                                <i class="fa-brands fa-python text-6xl text-primary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-primary"></i>
+                                <i class="fa-brands fa-python text-6xl text-primary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-primary" aria-hidden="true"></i>
                             </div>
                             <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">Core Languages</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Advanced algorithmic optimization, data structuring, and backend scripting.</p>
@@ -566,7 +568,7 @@
                     <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-secondary">
                         <div class="pop-out pointer-events-none flex flex-col h-full">
                             <div class="h-24 flex items-center justify-center">
-                                <i class="fa-solid fa-brain text-6xl text-secondary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-secondary"></i>
+                                <i class="fa-solid fa-brain text-6xl text-secondary group-hover:scale-125 transition-transform duration-500 drop-shadow-neon-secondary" aria-hidden="true"></i>
                             </div>
                             <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">ML / Deep Learning</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Architecting CNNs, RNNs, and custom neural networks for predictive analysis.</p>
@@ -582,7 +584,7 @@
                     <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-accent">
                         <div class="pop-out pointer-events-none flex flex-col h-full">
                             <div class="h-24 flex items-center justify-center">
-                                <i class="fa-solid fa-chart-network text-6xl text-accent group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(74,222,128,0.5)]"></i>
+                                <i class="fa-solid fa-chart-network text-6xl text-accent group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(74,222,128,0.5)]" aria-hidden="true"></i>
                             </div>
                             <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">Data Science</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Data parsing, feature engineering, and high-dimensional statistical modeling.</p>
@@ -598,7 +600,7 @@
                     <div class="glass-3d p-10 hover-target text-center interactive-3d group border-t-4 border-gray-200/50">
                         <div class="pop-out pointer-events-none flex flex-col h-full">
                             <div class="h-24 flex items-center justify-center">
-                                <i class="fa-solid fa-language text-6xl text-gray-50 group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(249,250,251,0.5)]"></i>
+                                <i class="fa-solid fa-language text-6xl text-gray-50 group-hover:scale-125 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(249,250,251,0.5)]" aria-hidden="true"></i>
                             </div>
                             <h3 class="font-display text-2xl font-bold text-gray-50 mb-4 mt-6">NLP & Gen AI</h3>
                             <p class="text-sm font-light text-gray-400 mb-8 flex-grow">Integrating Large Language Models, semantic parsing, and RAG architectures.</p>
@@ -701,7 +703,7 @@
                             <div class="pop-out">
                                 <div class="flex justify-between items-center mb-6">
                                     <h3 class="font-display text-4xl md:text-5xl font-bold text-gray-50">AI Resume Analyzer</h3>
-                                    <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-file-invoice"></i></span>
+                                    <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-file-invoice" aria-hidden="true"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
                                     <strong>Situation & Task:</strong> Manual resume screening is highly inefficient and prone to subjective bias. 
@@ -712,9 +714,9 @@
                                 <div class="mb-8">
                                     <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-3">Key Features</h4>
                                     <ul class="space-y-2 text-sm text-gray-300 font-light">
-                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> PDF parsing and text normalization</li>
-                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> Semantic similarity scoring using LLMs</li>
-                                        <li><i class="fa-solid fa-check text-primary mr-2"></i> Automated skill gap reporting</li>
+                                        <li><i class="fa-solid fa-check text-primary mr-2" aria-hidden="true"></i> PDF parsing and text normalization</li>
+                                        <li><i class="fa-solid fa-check text-primary mr-2" aria-hidden="true"></i> Semantic similarity scoring using LLMs</li>
+                                        <li><i class="fa-solid fa-check text-primary mr-2" aria-hidden="true"></i> Automated skill gap reporting</li>
                                     </ul>
                                 </div>
  
@@ -728,20 +730,20 @@
                                 <!-- Action Links Flex Container -->
                                 <div class="flex flex-wrap items-center gap-6">
                                     <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation and structured README.md" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-primary transition-colors hover-target">
-                                        <i class="devicon-github-original text-xl"></i><span>Source & Docs</span>
+                                        <i class="devicon-github-original text-xl" aria-hidden="true"></i><span>Source & Docs</span>
                                     </a>
                                     <a href="https://www.linkedin.com/posts/paras029_google-googleaistudio-geminiai-ugcPost-7464556938668843008-rR0_/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF60u9IBpVmvRsrkMAd5SUnLs9uxbs9DkL8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-[#0077b5] transition-colors hover-target">
-                                        <i class="fa-brands fa-linkedin text-xl"></i><span>Post Overview</span>
+                                        <i class="fa-brands fa-linkedin text-xl" aria-hidden="true"></i><span>Post Overview</span>
                                     </a>
                                     <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-[#4ADE80] transition-colors hover-target">
-                                        <i class="fa-solid fa-android text-xl"></i><span>Download APK</span>
+                                        <i class="fa-solid fa-android text-xl" aria-hidden="true"></i><span>Download APK</span>
                                     </a>
                                 </div>
 
                                 <!-- Interactive Live Demo -->
                                 <div class="mt-8 pt-8 border-t border-gray-200/10">
                                     <button type="button" id="demo-toggle-resume" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-accent/10 border border-accent/40 rounded-full text-xs font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-darkBg transition-colors" aria-expanded="false" aria-controls="demo-panel-resume" data-demo-url="https://huggingface.co/spaces/parasbishnoi029/resume-analyzer-demo">
-                                        <i class="fa-solid fa-play"></i> Launch Live Demo
+                                        <i class="fa-solid fa-play" aria-hidden="true"></i> Launch Live Demo
                                     </button>
                                     <div id="demo-panel-resume" class="demo-panel mt-6" hidden></div>
                                 </div>
@@ -751,11 +753,11 @@
                         <!-- Image Side -->
                         <div class="lg:col-span-5 order-1 lg:order-2 interactive-3d h-full flex justify-center items-center">
                             <div class="w-full max-w-[280px] md:max-w-[320px] aspect-[9/19.5] rounded-[2rem] overflow-hidden border border-gray-200/10 shadow-glass relative pop-out-extreme">
-                                <img src="AIResumeanalyser.png" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="App Interface">
+                                <img src="AIResumeanalyser.png" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="App Interface" width="320" height="693">
                                 <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/10 to-transparent opacity-80 pointer-events-none"></div>
                                 <div class="absolute bottom-6 right-6">
                                     <span class="bg-darkBg/50 backdrop-blur border border-gray-200/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest text-gray-50 uppercase flex items-center">
-                                        <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div> Live System
+                                        <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse" aria-hidden="true"></div> Live System
                                     </span>
                                 </div>
                             </div>
@@ -768,8 +770,8 @@
                         <div class="glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-secondary">
                             <div class="pop-out h-full flex flex-col">
                                 <div class="flex justify-between items-start mb-8">
-                                    <i class="fa-solid fa-folder-tree text-4xl text-secondary group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <i class="fa-solid fa-folder-tree text-4xl text-secondary group-hover:rotate-12 transition-transform duration-300" aria-hidden="true"></i>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span class="sr-only">View Documentation</span></a>
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-gray-50 mb-4">Curatly</h4>
                                 <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
@@ -784,12 +786,12 @@
                             </div>
                         </div>
                         
-                        <!-- Project 3 (With Observability Snippet added) -->
+                        <!-- Project 3 -->
                         <div class="glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-emerald-400 relative overflow-hidden">
                             <div class="pop-out h-full flex flex-col z-10 relative">
                                 <div class="flex justify-between items-start mb-8">
-                                    <i class="fa-solid fa-chart-pie text-4xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"></i>
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <i class="fa-solid fa-chart-pie text-4xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300" aria-hidden="true"></i>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span class="sr-only">View Documentation</span></a>
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-gray-50 mb-4">Data Analytics Engine</h4>
                                 <p class="text-base font-light text-gray-400 mb-4 leading-relaxed flex-grow">
@@ -842,7 +844,7 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
-                            <div class="gallery-card-media">
+                            <div class="gallery-card-media" tabindex="0" role="button" aria-label="Expand AI Resume Analyzer image">
                                 <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/resume.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=800&auto=format&fit=crop'"
@@ -851,7 +853,7 @@
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="font-display text-2xl font-bold text-gray-50">AI Resume Analyzer</h3>
-                                    <i class="fa-solid fa-file-invoice text-primary"></i>
+                                    <i class="fa-solid fa-file-invoice text-primary" aria-hidden="true"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">NLP-driven resume-to-job matching with automated skill gap reporting.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
@@ -860,8 +862,8 @@
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streamlit</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
-                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-play"></i>Live Demo</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</a>
+                                    <a href="resume-analyzer-demo.apk" download data-asset-check="resume-analyzer-demo.apk" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-play" aria-hidden="true"></i>Live Demo</a>
                                 </div>
                             </div>
                         </div>
@@ -871,24 +873,24 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
-                            <div class="gallery-card-media">
+                            <div class="gallery-card-media" tabindex="0" role="button" aria-label="Expand Live Analytics Preview video">
                                 <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <video autoplay loop muted playsinline>
                                     <source src="assets/videos/demo.mp4" type="video/mp4">
                                     <source src="https://assets.mixkit.co/videos/preview/mixkit-code-running-on-a-computer-screen-animated-pattern-35025-large.mp4" type="video/mp4">
                                 </video>
                                 <button type="button" class="gallery-video-toggle hover-target" data-video-toggle aria-label="Unmute preview">
-                                    <i class="fa-solid fa-volume-xmark"></i>
+                                    <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute top-4 left-4 flex items-center space-x-2 bg-darkBg/60 backdrop-blur px-3 py-1 rounded-md border border-gray-200/10 text-[10px] font-mono text-gray-400 tracking-wider z-10">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true"></span>
                                     <span>stream_analyzer.log</span>
                                 </div>
                             </div>
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="font-display text-2xl font-bold text-gray-50">Live Analytics Preview</h3>
-                                    <i class="fa-solid fa-chart-line text-secondary"></i>
+                                    <i class="fa-solid fa-chart-line text-secondary" aria-hidden="true"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">A behind-the-scenes look at the analyzer's real-time processing pipeline.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
@@ -896,7 +898,7 @@
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Streaming</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -906,7 +908,7 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
-                            <div class="gallery-card-media">
+                            <div class="gallery-card-media" tabindex="0" role="button" aria-label="Expand Curatly image">
                                 <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/project2.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop'"
@@ -915,7 +917,7 @@
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="font-display text-2xl font-bold text-gray-50">Curatly</h3>
-                                    <i class="fa-solid fa-folder-tree text-accent"></i>
+                                    <i class="fa-solid fa-folder-tree text-accent" aria-hidden="true"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Android content curation app structuring web data into cloud databases.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
@@ -923,7 +925,7 @@
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Firebase</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -933,7 +935,7 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
-                            <div class="gallery-card-media">
+                            <div class="gallery-card-media" tabindex="0" role="button" aria-label="Expand Data Analytics Engine image">
                                 <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/project3.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop'"
@@ -942,7 +944,7 @@
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="font-display text-2xl font-bold text-gray-50">Data Analytics Engine</h3>
-                                    <i class="fa-solid fa-chart-pie text-primary"></i>
+                                    <i class="fa-solid fa-chart-pie text-primary" aria-hidden="true"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Python pipeline ingesting raw datasets and producing diagnostic telemetry.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
@@ -950,7 +952,7 @@
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Matplotlib</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -960,7 +962,7 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner">
-                            <div class="gallery-card-media">
+                            <div class="gallery-card-media" tabindex="0" role="button" aria-label="Expand Development Workspace image">
                                 <span class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
                                 <img src="assets/gallery/workspace.webp"
                                     onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop'"
@@ -969,14 +971,14 @@
                             <div class="gallery-card-body">
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="font-display text-2xl font-bold text-gray-50">Development Workspace</h3>
-                                    <i class="fa-solid fa-laptop-code text-secondary"></i>
+                                    <i class="fa-solid fa-laptop-code text-secondary" aria-hidden="true"></i>
                                 </div>
                                 <p class="text-sm text-gray-400 font-light mb-5 leading-relaxed">Where the models get trained, the bugs get squashed, and the coffee runs out.</p>
                                 <div class="flex flex-wrap gap-2 mb-6">
                                     <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Daily Grind</span>
                                 </div>
                                 <div class="flex items-center gap-5">
-                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original"></i>GitHub</a>
+                                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i>GitHub</a>
                                 </div>
                             </div>
                         </div>
@@ -986,13 +988,13 @@
                     <article class="gallery-card hover-target">
                         <div class="gallery-card-inner gallery-cta-card">
                             <div class="gallery-cta-inner">
-                                <i class="fa-solid fa-diagram-project text-4xl text-primary mb-6"></i>
+                                <i class="fa-solid fa-diagram-project text-4xl text-primary mb-6" aria-hidden="true"></i>
                                 <h3 class="font-display text-2xl font-bold text-gray-50 mb-3">More on GitHub</h3>
                                 <p class="text-sm text-gray-400 font-light mb-8 leading-relaxed max-w-[220px] mx-auto">
                                     That's the highlight reel — the full commit history and well-documented architecture diagrams live here.
                                 </p>
                                 <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target inline-flex items-center gap-2 px-6 py-3 bg-primary/10 border border-primary/40 rounded-full text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-darkBg transition-colors">
-                                    View All Projects <i class="fa-solid fa-arrow-right"></i>
+                                    View All Projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
@@ -1013,7 +1015,7 @@
                     <div class="pop-out">
                         <div class="flex items-center justify-between mb-8">
                             <div class="text-[10px] font-mono tracking-widest text-primary uppercase bg-primary/10 px-3 py-1 rounded border border-primary/30">Deployment Matrix</div>
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2" aria-hidden="true">
                                 <div class="w-3 h-3 rounded-full bg-gray-600"></div>
                                 <div class="w-3 h-3 rounded-full bg-gray-600"></div>
                                 <div class="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
@@ -1021,7 +1023,7 @@
                         </div>
                         
                         <h3 class="font-display text-4xl md:text-5xl font-bold text-gray-50 flex items-center mb-6">
-                            <i class="devicon-github-original mr-4"></i> Open Source
+                            <i class="devicon-github-original mr-4" aria-hidden="true"></i> Open Source
                         </h3>
                         <p class="text-gray-400 font-light text-lg mb-10 leading-relaxed">
                             Active open-source contributions, research logs, and version control mastery. My GitHub is the public ledger of my daily coding, data engineering, and deployment habits.
@@ -1042,20 +1044,20 @@
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-400">CI/CD Pipeline Status</h4>
                                 <span class="flex items-center gap-1 text-[10px] font-mono text-green-400 bg-green-400/10 px-2 py-0.5 rounded border border-green-400/20">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Passing
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" aria-hidden="true"></span> Passing
                                 </span>
                             </div>
                             <div class="flex items-center justify-between gap-2 text-[10px] font-mono overflow-x-auto pb-2 scrollbar-hide">
-                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-code-commit text-gray-500"></i> Lint & Test</span>
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-code-commit text-gray-500" aria-hidden="true"></i> Lint & Test</span>
                                 <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
-                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-brands fa-docker text-blue-400"></i> Build Image</span>
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-brands fa-docker text-blue-400" aria-hidden="true"></i> Build Image</span>
                                 <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
-                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-box-archive text-purple-400"></i> Push Registry</span>
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-box-archive text-purple-400" aria-hidden="true"></i> Push Registry</span>
                                 <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
-                                <span class="flex items-center gap-1.5 text-green-400 bg-green-400/10 px-3 py-1.5 rounded-md border border-green-400/20 shrink-0"><i class="fa-solid fa-rocket"></i> Deploy Model</span>
+                                <span class="flex items-center gap-1.5 text-green-400 bg-green-400/10 px-3 py-1.5 rounded-md border border-green-400/20 shrink-0"><i class="fa-solid fa-rocket" aria-hidden="true"></i> Deploy Model</span>
                             </div>
                             <div class="mt-4 pt-3 border-t border-gray-200/10 flex items-center justify-between text-[10px] font-mono text-gray-500">
-                                <span><i class="fa-solid fa-clock mr-1"></i> main branch synced</span>
+                                <span><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i> main branch synced</span>
                                 <span class="bg-gray-100/10 px-2 py-0.5 rounded">v1.4.2-stable</span>
                             </div>
                         </div>
@@ -1065,23 +1067,23 @@
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned Projects</h4>
                             <div id="gh-pinned-projects" class="flex flex-wrap gap-3">
                                 <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
-                                    <i class="fa-solid fa-code-branch text-[10px]"></i> AI Resume Analyzer
+                                    <i class="fa-solid fa-code-branch text-[10px]" aria-hidden="true"></i> AI Resume Analyzer
                                 </a>
                                 <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-secondary/50 hover:text-secondary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
-                                    <i class="fa-solid fa-code-branch text-[10px]"></i> Curatly
+                                    <i class="fa-solid fa-code-branch text-[10px]" aria-hidden="true"></i> Curatly
                                 </a>
                                 <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-accent/50 hover:text-accent px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
-                                    <i class="fa-solid fa-code-branch text-[10px]"></i> Portfolio
+                                    <i class="fa-solid fa-code-branch text-[10px]" aria-hidden="true"></i> Portfolio
                                 </a>
                                 <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">
-                                    View All <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    View All <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
                         
                         <div class="flex flex-wrap gap-4 mt-6">
                             <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-gray-100 text-darkBg font-bold text-xs uppercase tracking-widest rounded-full hover:bg-primary transition-colors inline-flex items-center">
-                                <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Follow @parasbishnoi029
+                                <i class="fa-solid fa-arrow-up-right-from-square mr-2" aria-hidden="true"></i> Follow @parasbishnoi029
                             </a>
                         </div>
                     </div>
@@ -1100,7 +1102,7 @@
                         <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
                             <div class="pop-out flex items-start w-full">
                                 <div class="w-12 h-12 rounded-xl bg-gray-100/5 border border-gray-200/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-primary/20 group-hover:border-primary/50 transition-colors">
-                                    <i class="fa-solid fa-flask text-xl text-primary"></i>
+                                    <i class="fa-solid fa-flask text-xl text-primary" aria-hidden="true"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-lg text-gray-50 mb-1">Academic Research</h4>
@@ -1113,7 +1115,7 @@
                         <div class="glass-3d p-6 rounded-2xl flex items-start hover-target interactive-3d group">
                             <div class="pop-out flex items-start w-full">
                                 <div class="w-12 h-12 rounded-xl bg-gray-100/5 border border-gray-200/10 flex items-center justify-center mr-5 shrink-0 group-hover:bg-secondary/20 group-hover:border-secondary/50 transition-colors">
-                                    <i class="fa-solid fa-pen-nib text-xl text-secondary"></i>
+                                    <i class="fa-solid fa-pen-nib text-xl text-secondary" aria-hidden="true"></i>
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-lg text-gray-50 mb-1">Technical Writing</h4>
@@ -1141,7 +1143,7 @@
                     <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
                         <div class="pop-out">
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-primary flex items-center justify-center mb-6 mx-auto shadow-neon-primary">
-                                <i class="fa-solid fa-brain text-3xl text-primary"></i>
+                                <i class="fa-solid fa-brain text-3xl text-primary" aria-hidden="true"></i>
                             </div>
                             <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Machine Learning Foundation</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Comprehensive mastery of core supervised and unsupervised algorithms.</p>
@@ -1153,7 +1155,7 @@
                     <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
                         <div class="pop-out">
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-secondary flex items-center justify-center mb-6 mx-auto shadow-neon-secondary">
-                                <i class="fa-solid fa-database text-3xl text-secondary"></i>
+                                <i class="fa-solid fa-database text-3xl text-secondary" aria-hidden="true"></i>
                             </div>
                             <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Data Science Core</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Advanced data analysis, cleaning methodologies, and structuring pipelines.</p>
@@ -1165,7 +1167,7 @@
                     <div class="glass-3d p-8 rounded-3xl hover-target interactive-3d flex flex-col items-center text-center">
                         <div class="pop-out">
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(52,211,153,0.5)]">
-                                <i class="fa-solid fa-trophy text-3xl text-emerald-400"></i>
+                                <i class="fa-solid fa-trophy text-3xl text-emerald-400" aria-hidden="true"></i>
                             </div>
                             <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Hackathon Participant</h4>
                             <p class="text-sm text-gray-400 font-light mb-6">Proven ability to rapid-prototype, build, and deploy ML models under strict deadlines.</p>
@@ -1178,31 +1180,31 @@
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8 gs-reveal">
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center">
                         <div class="pop-out">
-                            <i class="fa-solid fa-robot text-2xl text-primary mb-3"></i>
+                            <i class="fa-solid fa-robot text-2xl text-primary mb-3" aria-hidden="true"></i>
                             <p class="text-xs font-medium text-gray-300">Google AI Studio</p>
                         </div>
                     </div>
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center">
                         <div class="pop-out">
-                            <i class="fa-brands fa-google text-2xl text-secondary mb-3"></i>
+                            <i class="fa-brands fa-google text-2xl text-secondary mb-3" aria-hidden="true"></i>
                             <p class="text-xs font-medium text-gray-300">Google Cloud Skills Boost</p>
                         </div>
                     </div>
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center">
                         <div class="pop-out">
-                            <i class="fa-solid fa-flask-vial text-2xl text-accent mb-3"></i>
+                            <i class="fa-solid fa-flask-vial text-2xl text-accent mb-3" aria-hidden="true"></i>
                             <p class="text-xs font-medium text-gray-300">Kaggle</p>
                         </div>
                     </div>
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center">
                         <div class="pop-out">
-                            <i class="fa-solid fa-building-columns text-2xl text-gray-50 mb-3"></i>
+                            <i class="fa-solid fa-building-columns text-2xl text-gray-50 mb-3" aria-hidden="true"></i>
                             <p class="text-xs font-medium text-gray-300">IIT Jodhpur Coursework</p>
                         </div>
                     </div>
                     <div class="glass-3d p-5 rounded-2xl hover-target interactive-3d text-center border border-dashed border-gray-200/20">
                         <div class="pop-out">
-                            <i class="fa-solid fa-hourglass-half text-2xl text-gray-500 mb-3"></i>
+                            <i class="fa-solid fa-hourglass-half text-2xl text-gray-500 mb-3" aria-hidden="true"></i>
                             <p class="text-xs font-medium text-gray-500">Upcoming Certifications</p>
                         </div>
                     </div>
@@ -1224,35 +1226,35 @@
                 <!-- Statically generated fallback cards - overwritten by JS if API is alive -->
                 <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
-                        <i class="fa-solid fa-diagram-project text-3xl text-gray-500"></i>
+                        <i class="fa-solid fa-diagram-project text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
                     <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Architecting Scalable Data Pipelines</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">A deep dive into building fault-tolerant data ingestion systems using modern Python and containerization.</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
                         <span>Recent</span>
-                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                        <span>Read <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
                     </div>
                 </a>
                 <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-primary/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
-                        <i class="fa-solid fa-brain text-3xl text-gray-500"></i>
+                        <i class="fa-solid fa-brain text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
                     <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Fine-Tuning Transformer Models</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">Lessons learned while optimizing LLMs for contextual semantic similarity scoring in the real world.</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-primary flex justify-between">
                         <span>Recent</span>
-                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                        <span>Read <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
                     </div>
                 </a>
                 <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-accent/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
-                        <i class="fa-brands fa-android text-3xl text-gray-500"></i>
+                        <i class="fa-brands fa-android text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
                     <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Android Data Curation at Scale</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">Connecting Java-based Android apps to unstructured web data flows efficiently without breaking Firebase logic.</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-accent flex justify-between">
                         <span>Recent</span>
-                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                        <span>Read <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
                     </div>
                 </a>
             </div>
@@ -1265,13 +1267,13 @@
             <div class="glass-3d p-12 md:p-24 text-center max-w-5xl w-full gs-reveal border-t border-primary interactive-3d hover-target shadow-[0_0_80px_rgba(0,242,254,0.15)] relative overflow-hidden">
                 
                 <!-- Rotating Orbital Background Elements (Pure CSS) -->
-                <div class="orbital-ring w-[100%] h-[150%] absolute border border-primary/20 animate-spin-slow rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
-                <div class="orbital-ring w-[120%] h-[120%] absolute border border-secondary/20 animate-spin-reverse rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
+                <div class="orbital-ring w-[100%] h-[150%] absolute border border-primary/20 animate-spin-slow rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0" aria-hidden="true"></div>
+                <div class="orbital-ring w-[120%] h-[120%] absolute border border-secondary/20 animate-spin-reverse rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0" aria-hidden="true"></div>
                 <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-darkBg pointer-events-none z-0"></div>
  
                 <div class="pop-out-subtle relative z-20 flex justify-center mb-10">
                     <div class="inline-flex items-center space-x-3 bg-gray-100/5 border border-gray-200/10 px-5 py-2.5 rounded-full text-[10px] font-mono tracking-widest text-primary uppercase backdrop-blur-md shadow-glass whitespace-nowrap">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse" aria-hidden="true"></span>
                         <span>Open to Work</span>
                     </div>
                 </div>
@@ -1287,17 +1289,17 @@
  
                     <div class="flex flex-wrap justify-center gap-6 mb-16">
                         <a href="mailto:parasbishnoi012@gmail.com" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-primary hover:text-darkBg hover:border-primary rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
-                            <i class="fa-solid fa-envelope mr-3 text-xl"></i>Email Me
+                            <i class="fa-solid fa-envelope mr-3 text-xl" aria-hidden="true"></i>Email Me
                         </a>
                         <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="px-10 py-5 bg-gray-100/5 border border-gray-200/20 hover:bg-[#0077b5] hover:border-[#0077b5] rounded-full text-sm font-bold text-gray-50 transition-all duration-300 flex items-center tracking-widest uppercase shadow-glass-hover hover-target">
-                            <i class="devicon-linkedin-plain mr-3 text-xl"></i>LinkedIn
+                            <i class="devicon-linkedin-plain mr-3 text-xl" aria-hidden="true"></i>LinkedIn
                         </a>
                     </div>
  
                     <div class="pt-8 border-t border-gray-200/10 w-full max-w-md mx-auto">
                         <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="relative z-10 inline-flex items-center justify-center space-x-3 text-xs font-mono tracking-widest uppercase font-bold text-gray-400 hover:text-primary transition-colors group hover-target">
                             <span class="group-hover:tracking-[0.3em] transition-all duration-300">Download Resume.pdf</span>
-                            <i class="fa-solid fa-download group-hover:translate-y-1 transition-transform"></i>
+                            <i class="fa-solid fa-download group-hover:translate-y-1 transition-transform" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
@@ -1319,16 +1321,16 @@
                 </div>
                 
                 <div class="flex space-x-4">
-                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors hover-target" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary transition-colors hover-target" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="https://www.instagram.com/parasbishnoi.03/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-500 transition-colors hover-target" aria-label="Instagram">
-                        <i class="fa-brands fa-instagram"></i>
+                    <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors hover-target" aria-label="GitHub Profile"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                    <a href="https://linkedin.com/in/paras029" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-secondary hover:border-secondary transition-colors hover-target" aria-label="LinkedIn Profile"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="https://www.instagram.com/parasbishnoi.03/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-500 transition-colors hover-target" aria-label="Instagram Profile">
+                        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
                     </a>
-                    <a href="https://www.facebook.com/paras.bishnoi.29" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-500 transition-colors hover-target" aria-label="Facebook">
-                        <i class="fa-brands fa-facebook-f"></i>
+                    <a href="https://www.facebook.com/paras.bishnoi.29" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-500 transition-colors hover-target" aria-label="Facebook Profile">
+                        <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
                     </a>
-                    <a href="https://x.com/parasbishnoi03" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-gray-50 hover:border-gray-50 transition-colors hover-target" aria-label="X (Twitter)">
-                        <i class="fa-brands fa-x-twitter"></i>
+                    <a href="https://x.com/parasbishnoi03" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-200/10 flex items-center justify-center text-gray-400 hover:text-gray-50 hover:border-gray-50 transition-colors hover-target" aria-label="X (Twitter) Profile">
+                        <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
@@ -1340,13 +1342,13 @@
     <!-- ========================================== -->
     <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project preview">
         <button type="button" id="gallery-lightbox-close" class="gallery-lightbox-close hover-target" aria-label="Close preview">
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
         <button type="button" id="gallery-lightbox-prev" class="gallery-lightbox-nav gallery-lightbox-prev hover-target" aria-label="Previous project">
-            <i class="fa-solid fa-chevron-left"></i>
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
         </button>
         <button type="button" id="gallery-lightbox-next" class="gallery-lightbox-nav gallery-lightbox-next hover-target" aria-label="Next project">
-            <i class="fa-solid fa-chevron-right"></i>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
         </button>
         <div class="gallery-lightbox-inner">
             <div id="gallery-lightbox-media"></div>
