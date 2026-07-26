@@ -99,10 +99,12 @@
         (function initStatusBadge() {
             const badge = document.getElementById('status-badge');
             const label = document.getElementById('status-badge-text');
+            const toast = document.getElementById('status-badge-toast');
             if (!badge || !label) return;
 
             const EMAIL = 'paras.iitj@gmail.com';
             let confirming = false;
+            let toastTimer = null;
 
             function isAvailableNowIST() {
                 const now = new Date();
@@ -120,18 +122,34 @@
                 label.textContent = open ? 'Connection Port Open' : 'Connection Port — Away';
             }
 
+            function showToast(message) {
+                if (!toast) return;
+                clearTimeout(toastTimer);
+                toast.textContent = message;
+                toast.classList.add('is-visible');
+                toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2200);
+            }
+
             async function handleClick() {
                 confirming = true;
                 badge.classList.remove('is-away');
                 badge.classList.add('is-copied');
+                label.textContent = 'Email Copied!';
+
+                // The toast is the guaranteed feedback — it always fires, whether
+                // or not the clipboard write below actually succeeds, so the click
+                // never feels like it did nothing.
+                let copied = false;
                 try {
-                    await navigator.clipboard.writeText(EMAIL);
-                    label.textContent = 'Email Copied!';
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(EMAIL);
+                        copied = true;
+                    }
                 } catch (err) {
-                    label.textContent = 'Scroll to Email ↓';
-                    const emailLink = document.querySelector('a[href^="mailto:"]');
-                    if (emailLink) emailLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    copied = false;
                 }
+                showToast(copied ? `Copied: ${EMAIL}` : EMAIL);
+
                 setTimeout(() => {
                     badge.classList.remove('is-copied');
                     confirming = false;
