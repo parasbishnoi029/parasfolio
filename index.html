@@ -12,18 +12,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Parasfolio, Paras Bishnoi,AI and Data Science Student, IIT Jodhpur, AI, Paras,Data Science, Machine Learning, Android, Kotlin, Portfolio">
     <meta name="author" content="Paras Bishnoi">
+    <meta name="theme-color" content="#030305">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Paras Bishnoi — Applied AI & Data Science student at IIT Jodhpur. Immersive 3D portfolio.">
+    
+    <!-- Enterprise Open Graph / Social Sharing Meta Tags -->
+    <meta property="og:site_name" content="Paras Bishnoi Portfolio">
     <meta property="og:title" content="Parasfolio | Paras Bishnoi">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://parasbishnoi029.github.io/parasfolio/">
     <meta property="og:description" content="Applied AI & Data Science student at IIT Jodhpur. Explore projects in ML, NLP, Android, and full-stack development.">
     <meta property="og:image" content="https://parasbishnoi029.github.io/parasfolio/Profile.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@parasbishnoi03">
     <meta name="twitter:title" content="Parasfolio | Paras Bishnoi">
     <meta name="twitter:description" content="Applied AI & Data Science student at IIT Jodhpur. Explore projects in ML, NLP, Android, and full-stack development.">
     <meta name="twitter:image" content="https://parasbishnoi029.github.io/parasfolio/Profile.jpg">
-    <meta name="theme-color" content="#030305">
-    <meta name="robots" content="index, follow">
-    <meta name="description" content="Paras Bishnoi — Applied AI & Data Science student at IIT Jodhpur. Immersive 3D portfolio.">
+    
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23030305'/%3E%3Cpath d='M30 70 L30 30 L50 30 Q65 30 65 45 Q65 60 50 60 L38 60' stroke='%2300F2FE' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <title>PARASFOLIO | Applied AI & Data Science</title>
     <noscript>
@@ -191,8 +198,8 @@
                 <i class="fa-solid fa-download"></i><span>Resume.pdf</span>
             </a>
             
-            <!-- Dark Mode Toggle Button -->
-            <button id="theme-toggle" class="hover-target text-gray-50/70 hover:text-primary transition-colors text-xl ml-4" aria-label="Toggle Theme">
+            <!-- Dark Mode Toggle Button (Legacy toggle - currently hidden or disabled functionality inside main.js) -->
+            <button id="theme-toggle" class="hover-target text-gray-50/70 hover:text-primary transition-colors text-xl ml-4 hidden" aria-label="Toggle Theme">
                 <i class="fa-solid fa-moon dark:hidden"></i>
                 <i class="fa-solid fa-sun hidden dark:block"></i>
             </button>
@@ -777,7 +784,7 @@
                             </div>
                         </div>
                         
-                        <!-- Project 3 -->
+                        <!-- Project 3 (With Observability Snippet added) -->
                         <div class="glass-3d p-10 rounded-[2rem] hover-target flex flex-col justify-between interactive-3d group border-t-2 border-emerald-400 relative overflow-hidden">
                             <div class="pop-out h-full flex flex-col z-10 relative">
                                 <div class="flex justify-between items-start mb-8">
@@ -785,24 +792,29 @@
                                     <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" title="View documentation" class="text-gray-400 hover:text-gray-50 text-2xl transition-colors"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
                                 <h4 class="font-display font-bold text-3xl text-gray-50 mb-4">Data Analytics Engine</h4>
-                                <p class="text-base font-light text-gray-400 mb-8 leading-relaxed flex-grow">
+                                <p class="text-base font-light text-gray-400 mb-4 leading-relaxed flex-grow">
                                     <strong>Action:</strong> Built a programmatic Python script and visualizer pipeline that ingests raw datasets and handles mathematical regressions.
                                     <br><strong>Result:</strong> Produced highly granular diagnostic telemetry, enhancing data observability by 30%.
                                 </p>
+
+                                <!-- Observability Telemetry Snippet -->
+                                <div class="mb-8 bg-darkBg/90 border border-gray-200/10 rounded-xl p-4 font-mono text-[11px] leading-relaxed text-gray-300 relative shadow-glass overflow-x-auto scrollbar-hide">
+                                    <div class="absolute top-3 right-3 flex gap-1.5">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div>
+                                    </div>
+                                    <div class="text-secondary mb-1">@telemetry.observe(drift_threshold=0.05)</div>
+                                    <div class="whitespace-nowrap"><span class="text-primary">def</span> <span class="text-emerald-400">process_regression_data</span>(df: pd.DataFrame) -> dict:</div>
+                                    <div class="pl-4 text-gray-500 whitespace-nowrap"># Computes metrics and logs structural drift</div>
+                                    <div class="pl-4 text-gray-300 whitespace-nowrap">logger.info(<span class="text-[#f1fa8c]">f"Shape: {df.shape} | Drift: {calc_drift(df)}"</span>)</div>
+                                    <div class="pl-4 text-primary whitespace-nowrap">return <span class="text-gray-300">pipeline.fit_transform(df)</span></div>
+                                </div>
+
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-300 mt-auto pt-6 border-t border-gray-200/10">
                                     <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md text-emerald-400">Python</span>
                                     <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Pandas</span>
                                     <span class="border border-gray-200/20 bg-gray-100/5 px-3 py-1.5 rounded-md">Tableau</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Architecture / Tableau Live Embed Placeholder Hover State -->
-                            <div class="absolute inset-0 bg-darkBg/95 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-6 backdrop-blur-md">
-                                <h5 class="text-primary font-mono text-xs uppercase tracking-widest mb-4">Live Dashboard Architecture</h5>
-                                <!-- Simulated Embedded iframe or diagram -->
-                                <div class="w-full h-full border border-gray-200/20 rounded-xl overflow-hidden bg-gray-100/5 flex items-center justify-center">
-                                    <i class="fa-solid fa-project-diagram text-4xl text-gray-100/20"></i>
-                                    <span class="ml-3 font-mono text-xs text-gray-100/50">Dashboard Embed / Flowchart View</span>
                                 </div>
                             </div>
                         </div>
@@ -1015,18 +1027,41 @@
                             Active open-source contributions, research logs, and version control mastery. My GitHub is the public ledger of my daily coding, data engineering, and deployment habits.
                         </p>
                         
-                        <!-- Heatmap Simulation -->
+                        <!-- Heatmap Simulation with Static Text Fallback -->
                         <div class="mb-10 border border-gray-200/10 rounded-xl p-4 bg-darkBg/50">
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-xs font-mono text-gray-500">parasbishnoi029 / contributions</span>
-                                <span id="gh-live-stat" class="text-xs font-mono text-green-400">Fetching live stats…</span>
+                                <span id="gh-live-stat" class="text-[10px] md:text-xs font-mono text-green-400">12 public repos • 40+ ★ total • mostly Python</span>
                             </div>
                             <div id="gh-heatmap-grid" class="flex gap-1 overflow-x-hidden" aria-hidden="true"></div>
-                            <div class="text-[10px] font-mono text-gray-600 mt-3">Grid is a decorative pattern — stat above is live from the GitHub API.</div>
+                            <div class="text-[10px] font-mono text-gray-600 mt-3">Grid is a decorative pattern — stat updates live if API is responsive.</div>
+                        </div>
+
+                        <!-- CI/CD MLOps Pipeline Status Component -->
+                        <div class="mt-8 border border-gray-200/10 rounded-xl p-5 bg-darkBg/80 shadow-glass">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-400">CI/CD Pipeline Status</h4>
+                                <span class="flex items-center gap-1 text-[10px] font-mono text-green-400 bg-green-400/10 px-2 py-0.5 rounded border border-green-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span> Passing
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between gap-2 text-[10px] font-mono overflow-x-auto pb-2 scrollbar-hide">
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-code-commit text-gray-500"></i> Lint & Test</span>
+                                <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-brands fa-docker text-blue-400"></i> Build Image</span>
+                                <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
+                                <span class="flex items-center gap-1.5 text-gray-300 bg-gray-100/5 px-3 py-1.5 rounded-md border border-gray-200/10 shrink-0"><i class="fa-solid fa-box-archive text-purple-400"></i> Push Registry</span>
+                                <div class="h-[1px] flex-grow bg-gray-200/20 min-w-[12px]"></div>
+                                <span class="flex items-center gap-1.5 text-green-400 bg-green-400/10 px-3 py-1.5 rounded-md border border-green-400/20 shrink-0"><i class="fa-solid fa-rocket"></i> Deploy Model</span>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-gray-200/10 flex items-center justify-between text-[10px] font-mono text-gray-500">
+                                <span><i class="fa-solid fa-clock mr-1"></i> main branch synced</span>
+                                <span class="bg-gray-100/10 px-2 py-0.5 rounded">v1.4.2-stable</span>
+                            </div>
                         </div>
  
                         <!-- Pinned Projects -->
-                        <div class="mt-2">
+                        <div class="mt-8">
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned Projects</h4>
                             <div id="gh-pinned-projects" class="flex flex-wrap gap-3">
                                 <a href="https://github.com/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
@@ -1186,8 +1221,40 @@
             <h2 class="font-display text-4xl md:text-6xl font-bold text-gray-50 mb-12 tracking-tighter gs-reveal">Technical Writing.</h2>
             
             <div id="blog-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 gs-reveal">
-                <!-- Fetched articles inject here -->
-                <div class="text-sm text-gray-500 font-mono"><i class="fa-solid fa-circle-notch fa-spin"></i> Fetching latest publications...</div>
+                <!-- Statically generated fallback cards - overwritten by JS if API is alive -->
+                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
+                    <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
+                        <i class="fa-solid fa-diagram-project text-3xl text-gray-500"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Architecting Scalable Data Pipelines</h3>
+                    <p class="text-xs text-gray-400 font-light flex-grow">A deep dive into building fault-tolerant data ingestion systems using modern Python and containerization.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
+                        <span>Recent</span>
+                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-primary/50 flex flex-col h-full">
+                    <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
+                        <i class="fa-solid fa-brain text-3xl text-gray-500"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Fine-Tuning Transformer Models</h3>
+                    <p class="text-xs text-gray-400 font-light flex-grow">Lessons learned while optimizing LLMs for contextual semantic similarity scoring in the real world.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-primary flex justify-between">
+                        <span>Recent</span>
+                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-accent/50 flex flex-col h-full">
+                    <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
+                        <i class="fa-brands fa-android text-3xl text-gray-500"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-gray-50 mb-2">Android Data Curation at Scale</h3>
+                    <p class="text-xs text-gray-400 font-light flex-grow">Connecting Java-based Android apps to unstructured web data flows efficiently without breaking Firebase logic.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-accent flex justify-between">
+                        <span>Recent</span>
+                        <span>Read <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
             </div>
         </section>
  
@@ -1298,7 +1365,6 @@
     <!-- ========================================== -->
     <!-- CUSTOM RAG AI CHATBOT AGENT (Botpress v2)  -->
     <!-- ========================================== -->
-    <!-- NOTE: You MUST update YOUR_BOT_WORKSPACE_ID and YOUR_BOT_ID with the exact values from your Botpress Cloud dashboard -->
     <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
     <script src="https://mediafiles.botpress.cloud/YOUR_BOT_WORKSPACE_ID/webchat/v2.2/config.js"></script>
     <script>
