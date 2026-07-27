@@ -1040,7 +1040,7 @@
             
             <div id="blog-feed-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 gs-reveal">
                 <!-- Statically generated fallback cards - overwritten by JS if API is alive -->
-                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
+                <a href="https://dev.to/parasbishnoi029" aria-label="Read Architecting Scalable Data Pipelines" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
                         <i class="fa-solid fa-diagram-project text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
@@ -1051,7 +1051,7 @@
                         <span>Read <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
                     </div>
                 </a>
-                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-primary/50 flex flex-col h-full">
+                <a href="https://dev.to/parasbishnoi029" aria-label="Read Fine-Tuning Transformer Models" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-primary/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
                         <i class="fa-solid fa-brain text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
@@ -1062,7 +1062,7 @@
                         <span>Read <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
                     </div>
                 </a>
-                <a href="https://dev.to/parasbishnoi029" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-accent/50 flex flex-col h-full">
+                <a href="https://dev.to/parasbishnoi029" aria-label="Read Android Data Curation at Scale" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-accent/50 flex flex-col h-full">
                     <div class="w-full h-32 bg-gray-100/5 rounded-xl mb-4 flex items-center justify-center border border-gray-200/10">
                         <i class="fa-brands fa-android text-3xl text-gray-500" aria-hidden="true"></i>
                     </div>
@@ -1157,6 +1157,7 @@
         </section>
  
         <!-- FOOTER -->
+        <!-- A11y Fix: Darkened text-gray-600 to text-gray-400 to pass contrast ratios -->
         <footer class="py-12 text-center relative z-10 border-t border-gray-200/10 bg-darkBg">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="font-display font-bold text-xl tracking-tighter text-gray-50">
