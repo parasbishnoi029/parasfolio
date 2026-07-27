@@ -34,12 +34,31 @@ jobs:
             exit 1
           fi
 
-      - name: Directly Inject API Key into chatbot.js
+      - name: Safely Inject API Key into chatbot.js
         env:
           GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
-          # This writes the key directly into the JavaScript file, avoiding sed match errors completely
-          sed -i "s|INJECT_API_KEY_HERE|${GEMINI_KEY}|g" chatbot.js
+          # Let's find where chatbot.js actually lives incase it's in a subfolder
+          FILE_PATH=$(find . -name "chatbot.js" | head -n 1)
+          echo "Found chatbot.js at: ${FILE_PATH}"
+          
+          if [ -z "${FILE_PATH}" ]; then
+            echo "::error::Could not find chatbot.js anywhere in the repository!"
+            exit 1
+          fi
+
+          node -e '
+            const fs = require("fs");
+            const filePath = process.argv[1];
+            let file = fs.readFileSync(filePath, "utf8");
+            if (!file.includes("INJECT_API_KEY_HERE")) {
+              console.error("Error: INJECT_API_KEY_HERE placeholder not found in " + filePath);
+              process.exit(1);
+            }
+            file = file.replace("INJECT_API_KEY_HERE", process.env.GEMINI_KEY);
+            fs.writeFileSync(filePath, file, "utf8");
+            console.log("Successfully injected Gemini API key into " + filePath);
+          ' "${FILE_PATH}"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
