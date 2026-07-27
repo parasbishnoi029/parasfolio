@@ -193,16 +193,18 @@ button:focus-visible,
 .pop-out-subtle { transform: translateZ(20px); transition: transform 0.3s ease; }
 
 /* Custom Cursor */
+/* PERF FIX: positioned at top:0/left:0 and moved purely via `transform` (GPU-composited,
+   no layout impact) instead of writing `left`/`top` on every mousemove. */
 .cursor-dot { 
-    position: fixed; width: 8px; height: 8px; background: var(--color-primary); 
+    position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: var(--color-primary); 
     border-radius: 50%; transform: translate(-50%, -50%); z-index: var(--z-cursor); 
-    pointer-events: none; box-shadow: 0 0 10px var(--color-primary); will-change: left, top;
+    pointer-events: none; box-shadow: 0 0 10px var(--color-primary); will-change: transform;
 }
 .cursor-ring { 
-    position: fixed; width: 45px; height: 45px; border: 1px solid rgba(0, 242, 254, 0.6); 
+    position: fixed; top: 0; left: 0; width: 45px; height: 45px; border: 1px solid rgba(0, 242, 254, 0.6); 
     border-radius: 50%; transform: translate(-50%, -50%); z-index: calc(var(--z-cursor) - 1); 
     pointer-events: none; transition: width 0.3s var(--ease-out-cubic), height 0.3s var(--ease-out-cubic), background-color 0.3s ease, border-color 0.3s ease; 
-    will-change: left, top, width, height;
+    will-change: transform, width, height;
 }
 
 /* Loader */
