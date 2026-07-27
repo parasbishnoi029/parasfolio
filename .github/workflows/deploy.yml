@@ -1,0 +1,43 @@
+name: Deploy Portfolio & Inject API Key
+
+on:
+  push:
+    branches: ["main"] # Change to "master" if that is your default branch
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Inject Secret Gemini API Key into JS
+        # Pulling your specific secret: parasfolio_key
+        env:
+          GEMINI_KEY: ${{ secrets.parasfolio_key }}
+        run: |
+          sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" main_2.js
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
