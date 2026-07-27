@@ -38,6 +38,12 @@
     </noscript>
 
     <!-- Performance Preconnects (Removes chaining delays) -->
+    <!-- PERF FIX: api.github.com and dev.to are only fetched later, from deferred JS
+         (stats widget, blog cards, chatbot) — not needed for first paint. A full
+         preconnect (DNS + TCP + TLS) to them competes with the font/CSS connections
+         that actually gate FCP on a throttled mobile connection, so these are now the
+         much cheaper dns-prefetch (DNS resolution only) instead. Fonts keep the full
+         preconnect since the webfont request follows almost immediately. -->
     <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="dns-prefetch" href="https://dev.to">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +51,11 @@
     
     
     <!-- Fonts -->
+    <!-- PERF FIX: this was a plain render-blocking stylesheet link. It now loads with
+         media="print" (so it doesn't block first paint) and swaps to "all" once fetched,
+         same pattern already used below for Font Awesome/Devicon. Text still renders
+         immediately with the fallback font stack and swaps in once the webfont is ready
+         (display=swap), so there's no invisible-text flash. -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
@@ -57,7 +68,7 @@
 
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+
     <script defer data-domain="parasbishnoi029.github.io" src="https://plausible.io/js/script.js"></script>
 
     <script type="application/ld+json">
@@ -84,7 +95,27 @@
         }
     </script>
     
-    <!-- Tailwind CSS Static Build -->
+    <!-- Tailwind CSS: PERF FIX — replaced the cdn.tailwindcss.com runtime (which ships
+         the full JIT engine and recompiles CSS in-browser from scratch on every page
+         load — Tailwind's own docs say this isn't meant for production) with a
+         pre-built, purged, minified static stylesheet generated from this exact page's
+         markup via the Tailwind CLI. Same visual output, none of the runtime JS/parse
+         cost. If you add new class names later, rebuild with:
+         npx tailwindcss -i tailwind-input.css -o tailwind.css --config tailwind.config.js --minify
+
+         PERF FIX (mobile): this ~34KB file was still a plain render-blocking
+         stylesheet — on a throttled mobile connection that alone was a big chunk of
+         PERF FIX (mobile, then reverted): briefly made this non-blocking via
+         preload+print/swap, which did help mobile FCP but caused a full-page
+         unstyled -> styled reflow once it swapped in — since this stylesheet controls
+         the entire page's layout (flex/grid/positioning/sizing on every element), not
+         just decorative styling. That reflow hurt desktop CLS and pushed out the real
+         LCP timing (the browser doesn't "finish" LCP until the largest content element
+         settles into its final rendered state). Font/icon CSS above stays deferred
+         because swapping those in only changes glyphs/metrics, not layout. This one is
+         back to a normal blocking stylesheet — it's a small, same-origin, single
+         request, so blocking costs one fast round trip rather than an expensive
+         reflow. -->
     <link rel="stylesheet" href="tailwind.css">
  
     <!-- EXTERNAL LIBRARIES (Deferred for performance) -->
@@ -95,6 +126,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js" defer></script>
  
     <!-- CUSTOM CSS STYLES -->
+    <!-- PERF FIX (reverted, see tailwind.css comment above): this is layout-critical
+         CSS (positions the fixed canvas, cursor, gallery, lightbox, nav, etc.), so
+         deferring it causes the same full-page reflow problem. Back to blocking. -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="selection:bg-primary/20">
@@ -221,6 +255,17 @@
                 <div class="lg:col-span-5 relative w-full h-[500px] flex justify-center items-center perspective-1200 hidden lg:flex">
                     <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
                         <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
+                            <!-- PERF FIX: Profile.jpg was a single 283KB JPG served at every
+                                 screen size, including mobile — where this whole element is
+                                 `hidden` (see the `hidden lg:flex` container above) and never
+                                 painted, yet the browser still fetches it on parse. Now:
+                                 (1) WebP sources with JPG fallback, resized to the actual
+                                 display need (384/768px) instead of the original 546px source
+                                 — ~283KB -> ~14-34KB depending on density.
+                                 (2) <source media="(min-width:1024px)"> means only desktop
+                                 (lg breakpoint, where this is actually visible) fetches the
+                                 full-size variants at all; mobile only ever downloads the tiny
+                                 384px JPG fallback (~24KB), a >90% reduction either way. -->
                             <picture>
                                 <source media="(min-width: 1024px)" type="image/webp" srcset="profile-384.webp 384w, profile-768.webp 768w" sizes="384px">
                                 <source media="(min-width: 1024px)" type="image/jpeg" srcset="profile-384.jpg 384w, profile-768.jpg 768w" sizes="384px">
@@ -842,7 +887,7 @@
                                 <span class="bg-gray-100/10 px-2 py-0.5 rounded">v1.4.2-stable</span>
                             </div>
                         </div>
-
+ 
                         <!-- Pinned Projects (AI Focused) -->
                         <div class="mt-8">
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned AI Repositories</h4>
@@ -869,7 +914,7 @@
                         </div>
                     </div>
                 </div>
-
+ 
                 <!-- Academic Research & Activities -->
                 <div class="lg:col-span-5 flex flex-col justify-center">
                     <div class="flex items-center space-x-4 mb-4">
