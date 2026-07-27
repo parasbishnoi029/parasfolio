@@ -83,6 +83,9 @@ async function fetchWithTimeout(resource, options = {}) {
     if (!menuToggle || !mobileMenu || !menuBackdrop) return;
 
     let previousActiveElement = null;
+    
+    // Ensure properly hidden from a11y tree on load
+    mobileMenu.setAttribute('inert', '');
 
     function openMobileMenu() {
         previousActiveElement = document.activeElement;
@@ -667,6 +670,9 @@ function initGalleryLightbox() {
     const nextBtn = document.getElementById('gallery-lightbox-next');
     const cards = Array.from(document.querySelectorAll('.gallery-card'));
     if (!lightbox || !mediaHost || !closeBtn || !cards.length) return;
+
+    // Ensure hidden from a11y tree initially
+    lightbox.setAttribute('inert', '');
 
     let currentIndex = 0;
     let previousActiveElement = null;
