@@ -251,7 +251,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
                 'color:#e05d5d;font-weight:bold;',
                 '— GEMINI_API_KEY is still the literal placeholder "INJECT_API_KEY_HERE".',
                 'The GitHub Actions sed-replace step did not run, matched nothing, or the',
-                '"parasfolio_key" secret evaluated to empty. Chat will use the rule-based',
+                '"PARASFOLIO_KEY" secret evaluated to empty. Chat will use the rule-based',
                 'engine only. Fix: check the Actions tab run logs, and confirm the secret is',
                 'a Repository-scoped Actions secret in this exact repo.'
             );
