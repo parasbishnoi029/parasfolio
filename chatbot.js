@@ -1,5 +1,5 @@
 /**
- * PARASFOLIO AI ASSISTANT
+ * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
  *  1. Answers questions using a knowledge base built from this site's own content
  *     (about, education, skills, projects, achievements, contact).
@@ -8,7 +8,15 @@
  *     LinkedIn has no public, unauthenticated API and blocks cross-origin scraping
  *     from the browser, so this widget cannot live-fetch LinkedIn content — it
  *     instead answers from the profile summary already published on this site
- *     and gives a direct link to the live profile.
+ *     and links to the live profile.
+ *
+ * MATCHING ENGINE
+ * Instead of brittle single-regex-per-topic matching (which fails the moment
+ * someone rephrases a question), this file scores the user's message against
+ * a bag of keywords + synonyms per topic and picks the best-scoring topic.
+ * It also remembers the last topic discussed, so a bare follow-up like "why?"
+ * or "why that?" gets answered in context instead of falling through to the
+ * generic fallback message.
  */
 (function () {
     'use strict';
@@ -26,7 +34,6 @@
     }
 
     function linkify(text) {
-        // Turn bare URLs in an already-escaped string into clickable links.
         return text.replace(/(https?:\/\/[^\s]+)/g, (url) => {
             const clean = url.replace(/[.,)]+$/, '');
             const trail = url.slice(clean.length);
@@ -34,9 +41,9 @@
         });
     }
 
-    // ---------------- Knowledge base (derived from this site's content) ----------------
+    // ---------------- Answer knowledge base (derived from this site's content) ----------------
     const KB = {
-        greeting: `Hey! I'm ParasBot 👋 — ask me anything about Paras: his background, education, skills, projects, achievements, GitHub, LinkedIn, or how to get in touch.`,
+        greeting: `Hey! I'm ParasBot 👋 — ask me anything about Paras: his background, education, skills, projects, achievements, GitHub, LinkedIn, or how to get in touch. You can ask in your own words — I don't need exact keywords.`,
 
         about: `Paras Bishnoi is a BS student in Applied AI & Data Science at IIT Jodhpur (2025–Present), currently at a CGPA of 8.375. He's a Navodayan (JNV alumnus) focused on Machine Learning, AI, Android and Web development, building robust, production-grade software at the intersection of deep neural analytics, mathematical modeling, and scalable data infrastructure. He's actively seeking machine learning internships, open-source collaborations, and data science roles.`,
 
@@ -81,19 +88,100 @@ He's open to ML internships, open-source collaboration, and data science roles �
         linkedinStatic: `LinkedIn profile: ${LINKEDIN_URL}
 Heads up: LinkedIn doesn't expose a public API and blocks browsers from reading profile pages cross-origin, so I can't pull live LinkedIn data the way I can with GitHub. From what's published: Paras Bishnoi is an Applied AI & Data Science student at IIT Jodhpur, focused on ML/DL, NLP, and full-stack development. Tap the link above for the live, up-to-date profile.`,
 
-        fallback: `I'm not sure about that one — I know Paras's background, education, skills, projects, achievements, GitHub activity, LinkedIn, and contact info. Try one of the quick topics below, or ask me something like "what projects has Paras built?"`
+        help: `I can talk about: about/background, education, skills & tech stack, projects, achievements & certifications, GitHub (live data), LinkedIn, contact info, and resume. Ask me things like "what has he built?", "where did he study?", or "why these projects?" — I'll do my best even if you don't use the exact word.`,
+
+        thanks: `You're welcome! Let me know if you'd like to know more about Paras's projects, skills, or how to reach him.`,
+
+        bye: `Take care! Feel free to reopen this chat anytime you have more questions about Paras.`,
+
+        identity: `I'm ParasBot, a small assistant built into this portfolio. I answer from the content on this site, pull live stats from GitHub, and link out to LinkedIn (I can't live-read LinkedIn — more on that if you ask).`,
+
+        fallback: `I'm not totally sure what you mean — I can talk about Paras's background, education, skills, projects, achievements, GitHub activity, LinkedIn, resume, and contact info. Try rephrasing, or tap a topic below.`
     };
 
-    const QUICK_REPLIES = [
-        { label: 'About', intent: 'about' },
-        { label: 'Education', intent: 'education' },
-        { label: 'Skills', intent: 'skills' },
-        { label: 'Projects', intent: 'projects' },
-        { label: 'GitHub', intent: 'github' },
-        { label: 'LinkedIn', intent: 'linkedin' },
-        { label: 'Achievements', intent: 'achievements' },
-        { label: 'Contact', intent: 'contact' },
-    ];
+    // "Why" reasoning layer — used when the user asks a follow-up "why" question,
+    // either right after a topic (contextual) or by naming the topic directly.
+    const WHY_KB = {
+        education: `He's at IIT Jodhpur because it lets him specialize specifically in Applied AI & Data Science rather than a generic CS degree — the coursework is built around ML, statistics, and data pipelines from day one, which lines up directly with the kind of engineer he's trying to become.`,
+        skills: `The stack is chosen for coverage across the full ML lifecycle: Python/NumPy for first-principles understanding, PyTorch/TensorFlow/Scikit-learn for production modeling, Pandas/NumPy/Matplotlib for the data side, and LangChain/Gemini/HuggingFace because so much applied AI work now involves LLMs and RAG rather than just classic ML.`,
+        projects: `The projects are deliberately spread across the stack he cares about: Neural Net From Scratch proves he understands the math underneath frameworks like PyTorch instead of only calling library functions; CodeBridge and the ChatGPT Clone show applied GenAI/LLM engineering; and the Resume Analyser / Job Pre-Screening Bot show NLP applied to real, practical problems rather than toy datasets.`,
+        achievements: `The certifications (Google AI Studio, Google Cloud Skills Boost, Kaggle, ML Foundation, Data Science Core) were picked to validate specific gaps — cloud deployment, competitive ML practice, and core theory — rather than collecting generic badges, and the hackathon experience is there to prove he can ship under time pressure, not just study.`,
+        contact: `He's reaching out for ML internships and open-source collaboration specifically (rather than any generic role) because that's the fastest way to get real production experience on top of the from-scratch and applied projects he's already built.`,
+        about: `The overall focus — deep learning, MLOps, and scalable data infra together — is intentional: a lot of ML students stop at model training, but he's aiming at the harder, more employable skill of getting models into reliable, production-grade systems.`,
+        github: `He keeps GitHub active and public because in ML/AI hiring, a working repo is more convincing than a resume line — it lets anyone verify the from-scratch neural net or the GenAI tooling actually works.`,
+        linkedin: `LinkedIn is kept updated as the professional front door — recruiters and collaborators typically check it first before digging into GitHub or the portfolio itself.`
+    };
+
+    // ---------------- Topic keyword/synonym bank for scored matching ----------------
+    // Each topic lists many phrasings a person might actually type. The matcher
+    // scores overlap rather than requiring an exact regex hit, so rephrased or
+    // partial questions still land on the right topic.
+    const TOPICS = {
+        greeting: ['hi', 'hello', 'hey', 'yo', 'sup', 'good morning', 'good evening'],
+        thanks: ['thanks', 'thank you', 'thankyou', 'thx', 'appreciate', 'cheers'],
+        bye: ['bye', 'goodbye', 'see you', 'later', 'cya', 'exit', 'quit'],
+        help: ['help', 'what can you do', 'what do you do', 'commands', 'options', 'capabilities', 'assist'],
+        identity: ['who are you', 'what are you', 'your name', 'are you a bot', 'are you ai', 'are you real'],
+
+        about: ['about', 'who is paras', 'bio', 'background', 'introduce', 'introduction', 'summary', 'overview', 'tell me about him', 'tell me about paras', 'what does he do', 'describe him'],
+
+        education: ['education', 'college', 'school', 'university', 'degree', 'study', 'studies', 'studied', 'jnv', 'iit', 'iit jodhpur', 'cgpa', 'gpa', 'grade', 'academic', 'academics', 'course', 'where did he study', 'qualification'],
+
+        skills: ['skill', 'skills', 'stack', 'tech stack', 'technology', 'technologies', 'language', 'languages', 'tool', 'tools', 'framework', 'frameworks', 'know', 'proficient', 'expertise', 'what can he do', 'python', 'pytorch', 'tensorflow'],
+
+        projects: ['project', 'projects', 'system', 'systems', 'built', 'build', 'made', 'work', 'portfolio work', 'repositories', 'repos', 'apps', 'application', 'applications', 'demo', 'demos', 'what has he made', 'what has he built', 'showcase'],
+
+        achievements: ['award', 'awards', 'certificate', 'certificates', 'certification', 'certifications', 'achievement', 'achievements', 'credential', 'credentials', 'hackathon', 'competition', 'badge', 'badges'],
+
+        stats: ['stat', 'stats', 'statistics', 'numbers', 'figures', 'cgpa number', 'how many projects'],
+
+        resume: ['resume', 'cv', 'download resume', 'get resume'],
+
+        contact: ['contact', 'email', 'reach', 'reach him', 'hire', 'hire him', 'internship', 'internships', 'collaborate', 'collaboration', 'get in touch', 'message him', 'connect'],
+
+        github: ['github', 'repo', 'repos', 'repository', 'repositories', 'open source', 'open-source', 'commits', 'stars', 'followers', 'code online'],
+
+        linkedin: ['linkedin', 'professional profile', 'work profile'],
+
+        why: ['why', 'reason', 'reasons', 'motivation', 'rationale', 'purpose', 'why did he', 'why does he', 'why is he', 'why choose', 'why chose']
+    };
+
+    function tokenize(text) {
+        return text
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .split(/\s+/)
+            .filter(Boolean);
+    }
+
+    // Score a message against a topic's keyword bank. Multi-word phrases count
+    // extra when they appear as a substring (stronger signal than single tokens).
+    function scoreTopic(message, phrases) {
+        const lower = message.toLowerCase();
+        const tokens = new Set(tokenize(message));
+        let score = 0;
+        phrases.forEach((phrase) => {
+            if (phrase.includes(' ')) {
+                if (lower.includes(phrase)) score += 2;
+            } else if (tokens.has(phrase)) {
+                score += 1;
+            }
+        });
+        return score;
+    }
+
+    function classify(message) {
+        let best = null;
+        let bestScore = 0;
+        Object.keys(TOPICS).forEach((topic) => {
+            const s = scoreTopic(message, TOPICS[topic]);
+            if (s > bestScore) {
+                bestScore = s;
+                best = topic;
+            }
+        });
+        return bestScore > 0 ? best : null;
+    }
 
     // ---------------- Live GitHub lookup ----------------
     let ghCache = null;
@@ -134,32 +222,42 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
         }
     }
 
-    // ---------------- Intent matching ----------------
-    function getIntent(raw) {
-        const t = raw.toLowerCase().trim();
-        if (/^(hi|hello|hey|yo)\b/.test(t) && t.length < 16) return 'greeting';
-        if (/(github|repo|repositor|open source|open-source)/.test(t)) return 'github';
-        if (/(linkedin)/.test(t)) return 'linkedin';
-        if (/(resume|cv\b)/.test(t)) return 'resume';
-        if (/(contact|email|reach|hire|internship|collab)/.test(t)) return 'contact';
-        if (/(project|system|built|build|portfolio work|repositories)/.test(t)) return 'projects';
-        if (/(skill|stack|tech|language|tool|framework)/.test(t)) return 'skills';
-        if (/(educat|college|school|degree|cgpa|study|studies|jnv|iit|university)/.test(t)) return 'education';
-        if (/(award|certificat|achievement|credential|hackathon)/.test(t)) return 'achievements';
-        if (/(stat|number|figure|cgpa)/.test(t)) return 'stats';
-        if (/(who is|who are you|about paras|tell me about|introduce|bio|background)/.test(t)) return 'about';
-        return 'fallback';
-    }
+    const QUICK_REPLIES = [
+        { label: 'About', topic: 'about' },
+        { label: 'Education', topic: 'education' },
+        { label: 'Skills', topic: 'skills' },
+        { label: 'Projects', topic: 'projects' },
+        { label: 'GitHub', topic: 'github' },
+        { label: 'LinkedIn', topic: 'linkedin' },
+        { label: 'Achievements', topic: 'achievements' },
+        { label: 'Contact', topic: 'contact' },
+    ];
 
-    async function answerFor(intent) {
-        switch (intent) {
-            case 'github':
-                return fetchGithubSummary();
-            case 'linkedin':
-                return KB.linkedinStatic;
-            default:
-                return KB[intent] || KB.fallback;
+    // Conversation memory: remembers the last real topic discussed so a bare
+    // "why?" / "why though?" follow-up can be answered in context.
+    let lastTopic = null;
+
+    async function answerFor(topic, rawMessage) {
+        if (topic === 'why') {
+            const target = classify(rawMessage.replace(/\bwhy\b/gi, '')) || lastTopic;
+            if (target && WHY_KB[target]) {
+                lastTopic = target;
+                return WHY_KB[target];
+            }
+            return `Why what, exactly? Ask about a specific thing — like "why IIT Jodhpur?" or "why these projects?" — or ask a topic first (e.g. "tell me about his projects") and then just say "why?" as a follow-up.`;
         }
+
+        if (topic === 'github') {
+            lastTopic = 'github';
+            return fetchGithubSummary();
+        }
+
+        if (['about', 'education', 'skills', 'projects', 'achievements', 'contact', 'linkedin'].includes(topic)) {
+            lastTopic = topic;
+        }
+
+        if (topic === 'linkedin') return KB.linkedinStatic;
+        return KB[topic] || KB.fallback;
     }
 
     // ---------------- UI construction ----------------
@@ -215,12 +313,12 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
 
         function renderQuickReplies() {
             quickRepliesHost.innerHTML = '';
-            QUICK_REPLIES.forEach(({ label, intent }) => {
+            QUICK_REPLIES.forEach(({ label, topic }) => {
                 const chip = document.createElement('button');
                 chip.type = 'button';
                 chip.className = 'chatbot-chip hover-target';
                 chip.textContent = label;
-                chip.addEventListener('click', () => handleUserMessage(label, intent));
+                chip.addEventListener('click', () => handleUserMessage(label, topic));
                 quickRepliesHost.appendChild(chip);
             });
         }
@@ -243,15 +341,15 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
             return typing;
         }
 
-        async function handleUserMessage(displayText, forcedIntent) {
+        async function handleUserMessage(displayText, forcedTopic) {
             if (!displayText.trim()) return;
             appendMessage('user', displayText);
             input.value = '';
             sendBtn.disabled = true;
 
             const typing = showTyping();
-            const intent = forcedIntent || getIntent(displayText);
-            const reply = await answerFor(intent);
+            const topic = forcedTopic || classify(displayText) || 'fallback';
+            const reply = await answerFor(topic, displayText);
             typing.remove();
             appendMessage('bot', reply);
             sendBtn.disabled = false;
