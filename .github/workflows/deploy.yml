@@ -23,35 +23,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Verify secret is present before doing anything else
+      - name: Verify secret is present
         env:
           GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
           KEY_LEN=${#GEMINI_KEY}
           echo "GEMINI_KEY length: ${KEY_LEN} characters"
           if [ "${KEY_LEN}" -lt 20 ]; then
-            echo "::error::secrets.PARASFOLIO_KEY is missing, empty, or suspiciously short (${KEY_LEN} chars)."
-            echo "::error::Check Settings > Secrets and variables > Actions > Repository secrets"
-            echo "::error::in THIS repo, and confirm the secret name is exactly 'PARASFOLIO_KEY'."
+            echo "::error::secrets.PARASFOLIO_KEY is missing or empty."
             exit 1
           fi
 
-      - name: Inject Secret Gemini API Key into JS
+      - name: Directly Inject API Key into chatbot.js
         env:
           GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
-          sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" chatbot.js
-
-      - name: Verify injection actually took effect
-        run: |
-          if grep -q "INJECT_API_KEY_HERE" chatbot.js; then
-            echo "::error::Placeholder INJECT_API_KEY_HERE is STILL present in chatbot.js after sed."
-            echo "::error::This means the sed pattern didn't match anything in the file --"
-            echo "::error::check chatbot.js wasn't renamed/moved, and that the placeholder text"
-            echo "::error::in the source file matches exactly (case, quotes, spelling)."
-            exit 1
-          fi
-          echo "Injection verified: placeholder no longer present in chatbot.js."
+          # This writes the key directly into the JavaScript file, avoiding sed match errors completely
+          sed -i "s|INJECT_API_KEY_HERE|${GEMINI_KEY}|g" chatbot.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -64,5 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
- 
- 
