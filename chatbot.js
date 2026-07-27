@@ -18,7 +18,7 @@
 
     // ---------------- Gemini reasoning layer ----------------
     // This placeholder is automatically replaced by GitHub Actions during deployment.
-    const GEMINI_API_KEY = 'AIzaSyDc8FrS0OwgULa5YbH5fkD6OItgXfcLDVU';
+    const GEMINI_API_KEY = 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg';
     // gemini-3.5-flash-lite is the current GA lightweight model (fast + cheapest tier,
     // successor to the retired 2.0-flash-lite / 2.5-flash-lite line). If your key only
     // has access to an older tier, swap this for 'gemini-2.5-flash-lite'.
@@ -234,7 +234,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
     }
 
     function isGeminiConfigured() {
-        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'AIzaSyDc8FrS0OwgULa5YbH5fkD6OItgXfcLDVU' && !geminiDisabledForSession;
+        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg' && !geminiDisabledForSession;
     }
 
     // ---------------- Startup self-diagnostic ----------------
@@ -245,7 +245,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
         const keyPresent = Boolean(GEMINI_API_KEY);
         const keyLength = keyPresent ? GEMINI_API_KEY.length : 0;
 
-        if (!keyPresent || GEMINI_API_KEY === 'INJECT_API_KEY_HERE') {
+        if (!keyPresent || GEMINI_API_KEY === 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg') {
             console.warn(
                 '%c[ParasBot] Gemini: NOT CONFIGURED',
                 'color:#e05d5d;font-weight:bold;',
