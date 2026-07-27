@@ -3,7 +3,6 @@
   Immersive 3D SPA Portfolio for Applied AI & Data Science .
   Features: Deep CSS 3D, WebGL Particle Flight, Holographic Avatar.
   Future-Proofed: Includes expansion templates and modular architecture.
-  Assets integrated: Profile.jpg, base layout from index.html.
 -->
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
@@ -37,15 +36,22 @@
     <noscript>
         <style>#loader{display:none!important;} .gallery-card-media img,.gallery-card-media video{opacity:1!important;}</style>
     </noscript>
-    
-    <!-- ========================================== -->
-    <!-- FONTS & ICONS                              -->
-    <!-- ========================================== -->
+
+    <!-- Performance Preconnects -->
+    <link rel="preconnect" href="https://api.github.com" crossorigin>
+    <link rel="preconnect" href="https://dev.to" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    
+    <!-- Deferred CSS Loading (Performance Fix) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"></noscript>
+
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
 
@@ -75,9 +81,7 @@
         }
     </script>
     
-    <!-- ========================================== -->
-    <!-- TAILWIND CSS CONFIGURATION                 -->
-    <!-- ========================================== -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -124,18 +128,14 @@
         }
     </script>
  
-    <!-- ========================================== -->
-    <!-- EXTERNAL LIBRARIES (GSAP & THREE.JS)       -->
-    <!-- ========================================== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <!-- EXTERNAL LIBRARIES (Deferred for performance) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js" defer></script>
  
-    <!-- ========================================== -->
-    <!-- CUSTOM CSS STYLES                          -->
-    <!-- ========================================== -->
+    <!-- CUSTOM CSS STYLES -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="selection:bg-primary/20">
@@ -155,9 +155,7 @@
     <div class="cursor-dot hidden md:block" aria-hidden="true"></div>
     <div class="cursor-ring hidden md:block" aria-hidden="true"></div>
  
-    <!-- ========================================== -->
-    <!-- 1. PRELOADER SEQUENCE                      -->
-    <!-- ========================================== -->
+    <!-- PRELOADER -->
     <div id="loader" role="status" aria-label="Loading portfolio">
         <h1 class="loader-glitch font-display text-5xl md:text-7xl font-bold tracking-tighter text-gray-50 mb-4">
             PARAS<span class="text-primary">FOLIO</span>
@@ -172,14 +170,10 @@
         <div class="mt-4 text-[10px] font-mono text-gray-600" id="loading-percentage">0%</div>
     </div>
  
-    <!-- ========================================== -->
-    <!-- 2. GLOBAL 3D WEBGL CANVAS                  -->
-    <!-- ========================================== -->
+    <!-- 3D WEBGL CANVAS -->
     <canvas id="webgl-canvas" aria-hidden="true"></canvas>
  
-    <!-- ========================================== -->
-    <!-- 3. NAVIGATION HEADER                       -->
-    <!-- ========================================== -->
+    <!-- NAVIGATION HEADER -->
     <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference flex justify-between items-center pointer-events-auto" aria-label="Main Navigation">
         <a href="#home" class="font-display font-bold text-2xl tracking-tighter text-gray-50 hover-target hover:scale-105 transition-transform flex items-center">
             <i class="fa-solid fa-cube text-primary mr-2 text-xl animate-pulse-glow" aria-hidden="true"></i>
@@ -212,10 +206,9 @@
         </button>
     </nav>
 
-    <!-- ========================================== -->
-    <!-- MOBILE SLIDE-OUT MENU (DRAWER)             -->
-    <!-- ========================================== -->
-    <div id="mobile-menu" class="mobile-menu lg:hidden" aria-hidden="true">
+    <!-- MOBILE SLIDE-OUT MENU (DRAWER) -->
+    <!-- A11y Fix: inert removes from accessibility tree when closed -->
+    <div id="mobile-menu" class="mobile-menu lg:hidden" inert>
         <div class="mobile-menu-links">
             <a href="#manifesto" class="mobile-nav-link">About</a>
             <a href="#education" class="mobile-nav-link">Education</a>
@@ -232,14 +225,10 @@
     </div>
     <div id="mobile-menu-backdrop" class="mobile-menu-backdrop"></div>
  
-    <!-- ========================================== -->
-    <!-- MAIN SCROLLABLE HTML CONTENT               -->
-    <!-- ========================================== -->
+    <!-- MAIN SCROLLABLE HTML CONTENT -->
     <main id="scroll-container">
         
-        <!-- ========================================== -->
-        <!-- SECTION 1: HERO / INTRODUCTION             -->
-        <!-- ========================================== -->
+        <!-- SECTION 1: HERO / INTRODUCTION -->
         <section id="home" class="items-start justify-center pt-32 pb-0">
             <div class="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
@@ -276,7 +265,6 @@
                 
                 <!-- Right Side 3D Avatar Area -->
                 <div class="lg:col-span-5 relative w-full h-[500px] flex justify-center items-center perspective-1200 hidden lg:flex">
-                    <!-- The 3D Avatar Card using Profile.jpg -->
                     <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
                         <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
                             <!-- Fetch priority applied for hero image -->
@@ -316,9 +304,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 2: ABOUT / MANIFESTO               -->
-        <!-- ========================================== -->
+        <!-- SECTION 2: ABOUT / MANIFESTO -->
         <section id="manifesto" class="items-start">
             <div class="max-w-7xl mx-auto w-full gs-reveal">
                 <div class="flex items-center space-x-4 mb-8">
@@ -379,9 +365,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 2B: EDUCATION SPOTLIGHT            -->
-        <!-- ========================================== -->
+        <!-- SECTION 2B: EDUCATION SPOTLIGHT -->
         <section id="education" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="grid lg:grid-cols-2 gap-14 items-center gs-reveal">
@@ -429,9 +413,7 @@
             </div>
         </section> 
  
-        <!-- ========================================== -->
-        <!-- SECTION 3: TIMELINE & EDUCATION            -->
-        <!-- ========================================== -->
+        <!-- SECTION 3: TIMELINE & EDUCATION -->
         <section id="journey" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="mb-24 gs-reveal">
@@ -526,9 +508,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 4: CAPABILITIES / TECH STACK       -->
-        <!-- ========================================== -->
+        <!-- SECTION 4: CAPABILITIES / TECH STACK -->
         <section id="stack" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="mb-24 gs-reveal flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200/10 pb-8">
@@ -637,9 +617,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 4B: STATS STRIP                    -->
-        <!-- ========================================== -->
+        <!-- SECTION 4B: STATS STRIP -->
         <section class="py-24">
             <div class="max-w-7xl mx-auto w-full grid md:grid-cols-4 gap-6 gs-reveal">
  
@@ -674,9 +652,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 5: ENGINEERED SYSTEMS / PROJECTS   -->
-        <!-- ========================================== -->
+        <!-- SECTION 5: ENGINEERED SYSTEMS / PROJECTS -->
         <section id="systems" class="items-start pt-20 pb-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="mb-24 gs-reveal">
@@ -709,7 +685,7 @@
                                 </div>
  
                                 <div class="flex flex-wrap items-center gap-6">
-                                    <a href="https://github.com/parasbishnoi029/neural-net-from-scratch" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-primary transition-colors hover-target">
+                                    <a href="https://github.com/parasbishnoi029/neural-net-from-scratch" target="_blank" rel="noopener noreferrer" aria-label="View Neural Net From Scratch Repository" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-primary transition-colors hover-target">
                                         <i class="devicon-github-original text-xl" aria-hidden="true"></i><span>View Repository</span>
                                     </a>
                                 </div>
@@ -755,7 +731,7 @@
                                 </div>
  
                                 <div class="flex flex-wrap items-center gap-6">
-                                    <a href="https://github.com/parasbishnoi029/CodeBridge" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-secondary transition-colors hover-target">
+                                    <a href="https://github.com/parasbishnoi029/CodeBridge" target="_blank" rel="noopener noreferrer" aria-label="View CodeBridge Repository" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-secondary transition-colors hover-target">
                                         <i class="devicon-github-original text-xl" aria-hidden="true"></i><span>View Repository</span>
                                     </a>
                                 </div>
@@ -766,9 +742,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 5B: SYSTEM GALLERY (AI/ML ONLY)    -->
-        <!-- ========================================== -->
+        <!-- SECTION 5B: SYSTEM GALLERY (AI/ML ONLY) -->
         <section id="gallery" class="py-40">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="text-center mb-16 gs-reveal">
@@ -792,7 +766,7 @@
                                     <span class="bg-primary/10 border border-primary/30 text-primary px-2.5 py-1 rounded text-[10px] font-mono">Kotlin</span>
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Android ML</span>
                                 </div>
-                                <a href="https://github.com/parasbishnoi029/AI-Resume-Analyser" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
+                                <a href="https://github.com/parasbishnoi029/AI-Resume-Analyser" aria-label="View AI Resume Analyser Repository" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-primary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
                             </div>
                         </div>
                     </article>
@@ -810,7 +784,7 @@
                                 <div class="flex flex-wrap gap-2 mb-8">
                                     <span class="bg-secondary/10 border border-secondary/30 text-secondary px-2.5 py-1 rounded text-[10px] font-mono">Recommendation System</span>
                                 </div>
-                                <a href="https://github.com/parasbishnoi029/-Course-Recommendation-Assistant" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-secondary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
+                                <a href="https://github.com/parasbishnoi029/-Course-Recommendation-Assistant" aria-label="View Course Recommendation AI Repository" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-secondary transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
                             </div>
                         </div>
                     </article>
@@ -829,7 +803,7 @@
                                     <span class="bg-accent/10 border border-accent/30 text-accent px-2.5 py-1 rounded text-[10px] font-mono">NLP</span>
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">Chatbot</span>
                                 </div>
-                                <a href="https://github.com/parasbishnoi029/Job-Pre-Screening-Bot" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-accent transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
+                                <a href="https://github.com/parasbishnoi029/Job-Pre-Screening-Bot" aria-label="View Job Pre-Screening Bot Repository" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-accent transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
                             </div>
                         </div>
                     </article>
@@ -848,7 +822,7 @@
                                     <span class="bg-gray-400/10 border border-gray-400/30 text-gray-400 px-2.5 py-1 rounded text-[10px] font-mono">GenAI</span>
                                     <span class="bg-gray-100/5 border border-gray-200/10 text-gray-300 px-2.5 py-1 rounded text-[10px] font-mono">LLM API</span>
                                 </div>
-                                <a href="https://github.com/parasbishnoi029/chatgpt-vercel" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-gray-400 transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
+                                <a href="https://github.com/parasbishnoi029/chatgpt-vercel" aria-label="View ChatGPT Clone Repository" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-gray-50 hover:text-gray-400 transition-colors flex items-center gap-2"><i class="devicon-github-original" aria-hidden="true"></i> Repository</a>
                             </div>
                         </div>
                     </article>
@@ -856,9 +830,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 6: GITHUB & RESEARCH               -->
-        <!-- ========================================== -->
+        <!-- SECTION 6: GITHUB & RESEARCH -->
         <section id="research" class="py-40">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 gs-reveal">
                 
@@ -918,16 +890,16 @@
                         <div class="mt-8">
                             <h4 class="text-[10px] font-mono tracking-widest uppercase text-gray-500 mb-4">Pinned AI Repositories</h4>
                             <div id="gh-pinned-projects" class="flex flex-wrap gap-3">
-                                <a href="https://github.com/parasbishnoi029/neural-net-from-scratch" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029/neural-net-from-scratch" aria-label="View Neural Net From Scratch" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-primary/50 hover:text-primary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-network-wired text-[10px]" aria-hidden="true"></i> Neural Net From Scratch
                                 </a>
-                                <a href="https://github.com/parasbishnoi029/CodeBridge" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-secondary/50 hover:text-secondary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029/CodeBridge" aria-label="View CodeBridge" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-secondary/50 hover:text-secondary px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-code-compare text-[10px]" aria-hidden="true"></i> CodeBridge
                                 </a>
-                                <a href="https://github.com/parasbishnoi029/AI-Resume-Analyser" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-accent/50 hover:text-accent px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
+                                <a href="https://github.com/parasbishnoi029/AI-Resume-Analyser" aria-label="View AI Resume Analyser" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 bg-gray-100/5 border border-gray-200/10 hover:border-accent/50 hover:text-accent px-4 py-2 rounded-full text-xs font-mono text-gray-300 transition-colors">
                                     <i class="fa-solid fa-file-signature text-[10px]" aria-hidden="true"></i> AI Resume Analyser
                                 </a>
-                                <a href="https://github.com/parasbishnoi029?tab=repositories" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">
+                                <a href="https://github.com/parasbishnoi029?tab=repositories" aria-label="View all repositories on GitHub" target="_blank" rel="noopener noreferrer" class="hover-target flex items-center gap-2 text-xs font-mono text-gray-50 px-4 py-2 uppercase tracking-widest hover:text-primary transition-colors">
                                     View All <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -980,9 +952,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 7: AWARDS & CERTIFICATIONS         -->
-        <!-- ========================================== -->
+        <!-- SECTION 7: AWARDS & CERTIFICATIONS -->
         <section id="achievements" class="py-20">
             <div class="max-w-7xl mx-auto w-full">
                 <div class="text-center mb-20 gs-reveal">
@@ -997,7 +967,8 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-primary flex items-center justify-center mb-6 mx-auto shadow-neon-primary">
                                 <i class="fa-solid fa-brain text-3xl text-primary" aria-hidden="true"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Machine Learning Foundation</h4>
+                            <!-- A11y fix: Heading levels -->
+                            <h3 class="font-display font-bold text-2xl text-gray-50 mb-3">Machine Learning Foundation</h3>
                             <p class="text-sm text-gray-400 font-light mb-6">Comprehensive mastery of core supervised and unsupervised algorithms.</p>
                             <span class="text-[10px] font-mono text-primary uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Verified Credential</span>
                         </div>
@@ -1009,7 +980,7 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-secondary flex items-center justify-center mb-6 mx-auto shadow-neon-secondary">
                                 <i class="fa-solid fa-database text-3xl text-secondary" aria-hidden="true"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Data Science Core</h4>
+                            <h3 class="font-display font-bold text-2xl text-gray-50 mb-3">Data Science Core</h3>
                             <p class="text-sm text-gray-400 font-light mb-6">Advanced data analysis, cleaning methodologies, and structuring pipelines.</p>
                             <span class="text-[10px] font-mono text-secondary uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Verified Credential</span>
                         </div>
@@ -1021,7 +992,7 @@
                             <div class="w-20 h-20 rounded-full bg-darkBg border-2 border-emerald-400 flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(52,211,153,0.5)]">
                                 <i class="fa-solid fa-trophy text-3xl text-emerald-400" aria-hidden="true"></i>
                             </div>
-                            <h4 class="font-display font-bold text-2xl text-gray-50 mb-3">Hackathon Participant</h4>
+                            <h3 class="font-display font-bold text-2xl text-gray-50 mb-3">Hackathon Participant</h3>
                             <p class="text-sm text-gray-400 font-light mb-6">Proven ability to rapid-prototype, build, and deploy ML models under strict deadlines.</p>
                             <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest border-t border-gray-200/10 pt-4 block w-full">Competition Log</span>
                         </div>
@@ -1064,9 +1035,7 @@
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- SECTION 7B: TECHNICAL BLOG                 -->
-        <!-- ========================================== -->
+        <!-- SECTION 7B: TECHNICAL BLOG -->
         <section id="blog" class="py-40 max-w-7xl mx-auto w-full">
             <div class="flex items-center space-x-4 mb-8 gs-reveal">
                 <div class="h-[1px] w-12 bg-secondary"></div>
@@ -1112,16 +1081,12 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- SECTION 8: CONTACT / HANDSHAKE PROTOCOL    -->
-        <!-- ========================================== -->
+        <!-- SECTION 8: CONTACT / HANDSHAKE PROTOCOL -->
         <section id="contact" class="py-40 relative flex items-center min-h-screen border-t border-gray-200/5 overflow-hidden">
-            <!-- Background Ambient Glow -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none z-0" aria-hidden="true"></div>
 
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10 gs-reveal">
                 
-                <!-- Left Column: Typography & CTAs -->
                 <div class="pr-0 lg:pr-8">
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="h-[1px] w-12 bg-primary"></div>
@@ -1140,7 +1105,6 @@
                         Whether you are building scalable AI architectures, need an Android integration, or just want to discuss transformer models—my inbox is always open. Let's engineer something impactful.
                     </p>
 
-                    <!-- Primary Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 mb-10">
                         <a href="mailto:parasbishnoi012@gmail.com" class="hover-target px-8 py-4 bg-primary text-darkBg rounded-full text-xs font-bold uppercase tracking-widest transition-transform hover:scale-105 flex items-center justify-center shadow-neon-primary">
                             <i class="fa-solid fa-envelope mr-3 text-lg" aria-hidden="true"></i> Ping Email
@@ -1153,8 +1117,6 @@
 
                 <!-- Right Column: Python API Terminal -->
                 <div class="glass-3d rounded-[2rem] overflow-hidden interactive-3d hover-target border border-gray-200/10 shadow-glass">
-                    
-                    <!-- Terminal Header -->
                     <div class="bg-gray-100/5 border-b border-gray-200/10 px-6 py-4 flex items-center justify-between">
                         <div class="flex space-x-2" aria-hidden="true">
                             <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
@@ -1167,7 +1129,6 @@
                         </div>
                     </div>
                     
-                    <!-- Terminal Body (Syntax Highlighted) -->
                     <div class="p-8 md:p-10 font-mono text-xs md:text-sm leading-[2.2] text-gray-300">
                         <span class="text-secondary">import</span> <span class="text-gray-50">paras_portfolio</span> <span class="text-secondary">as</span> <span class="text-gray-50">ai</span><br><br>
                         
@@ -1188,9 +1149,8 @@
                         <span class="text-gray-500"># Fetch Resume</span><br>
                         <span class="text-gray-50">dev.</span><span class="text-primary">download_resume</span><span class="text-gray-50">()</span> <span class="w-2 h-4 inline-block align-middle bg-gray-400 animate-pulse ml-1" aria-hidden="true"></span>
                         
-                        <!-- Inline Terminal Button -->
                         <div class="mt-8 pt-8 border-t border-gray-200/10">
-                            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="inline-flex items-center space-x-3 text-[10px] font-bold tracking-widest uppercase text-primary transition-all group">
+                            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="inline-flex items-center space-x-3 text-[10px] font-bold tracking-widest uppercase text-primary transition-all group hover-target">
                                 <span class="bg-primary/10 border border-primary/30 px-5 py-2.5 rounded group-hover:bg-primary group-hover:text-darkBg transition-colors shadow-neon-primary">
                                     <i class="fa-solid fa-download mr-2" aria-hidden="true"></i> Execute Download
                                 </span>
@@ -1201,9 +1161,7 @@
             </div>
         </section>
  
-        <!-- ========================================== -->
-        <!-- FOOTER                                     -->
-        <!-- ========================================== -->
+        <!-- FOOTER -->
         <footer class="py-12 text-center relative z-10 border-t border-gray-200/10 bg-darkBg">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="font-display font-bold text-xl tracking-tighter text-gray-50">
@@ -1212,7 +1170,7 @@
                 
                 <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
                     <p>Engineered with HTML • Tailwind CSS • Three.js • GSAP</p>
-                    <p class="mt-2 text-gray-600">&copy; 2026 Paras. All Systems Nominal.</p>
+                    <p class="mt-2 text-gray-500">&copy; 2026 Paras. All Systems Nominal.</p>
                 </div>
                 
                 <div class="flex space-x-4">
@@ -1232,10 +1190,9 @@
         </footer>
     </main>
 
-    <!-- ========================================== -->
-    <!-- GALLERY LIGHTBOX (populated dynamically)   -->
-    <!-- ========================================== -->
-    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project Preview Modal">
+    <!-- GALLERY LIGHTBOX MODAL -->
+    <!-- A11y Fix: inert hides from accessibility tree when closed -->
+    <div id="gallery-lightbox" class="gallery-lightbox" inert role="dialog" aria-modal="true" aria-label="Project Preview Modal">
         <button type="button" id="gallery-lightbox-close" class="gallery-lightbox-close hover-target" aria-label="Close preview">
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
@@ -1254,16 +1211,7 @@
         </div>
     </div>
  
-    <!-- ========================================== -->
-    <!-- LOGIC: UI & MULTIPLE 3D ANIMATIONS         -->
-    <!-- ========================================== -->
     <script src="main.js" defer></script>
-
-    <!-- ========================================== -->
-    <!-- CUSTOM AI ASSISTANT CHATBOT (ParasBot)     -->
-    <!-- Knows this site's content in detail, pulls -->
-    <!-- live GitHub data, and links to LinkedIn.   -->
-    <!-- ========================================== -->
     <script src="chatbot.js" defer></script>
 </body>
 </html>
