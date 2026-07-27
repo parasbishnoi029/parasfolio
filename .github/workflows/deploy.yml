@@ -1,18 +1,14 @@
 name: Deploy Portfolio & Inject API Key
-
 on:
   push:
-    branches: ["main"] 
-
+    branches: ["main"]
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
-
 jobs:
   deploy:
     environment:
@@ -23,12 +19,35 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Verify secret is present before doing anything else
+        env:
+          GEMINI_KEY: ${{ secrets.parasfolio_key }}
+        run: |
+          KEY_LEN=${#GEMINI_KEY}
+          echo "GEMINI_KEY length: ${KEY_LEN} characters"
+          if [ "${KEY_LEN}" -lt 20 ]; then
+            echo "::error::secrets.parasfolio_key is missing, empty, or suspiciously short (${KEY_LEN} chars)."
+            echo "::error::Check Settings > Secrets and variables > Actions > Repository secrets"
+            echo "::error::in THIS repo, and confirm the secret name is exactly 'parasfolio_key'."
+            exit 1
+          fi
+
       - name: Inject Secret Gemini API Key into JS
         env:
           GEMINI_KEY: ${{ secrets.parasfolio_key }}
-        # CHANGED: Now targeting chatbot.js instead of main_2.js
         run: |
           sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" chatbot.js
+
+      - name: Verify injection actually took effect
+        run: |
+          if grep -q "INJECT_API_KEY_HERE" chatbot.js; then
+            echo "::error::Placeholder INJECT_API_KEY_HERE is STILL present in chatbot.js after sed."
+            echo "::error::This means the sed pattern didn't match anything in the file --"
+            echo "::error::check chatbot.js wasn't renamed/moved, and that the placeholder text"
+            echo "::error::in the source file matches exactly (case, quotes, spelling)."
+            exit 1
+          fi
+          echo "Injection verified: placeholder no longer present in chatbot.js."
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
