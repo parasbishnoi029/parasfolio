@@ -1,14 +1,18 @@
 name: Deploy Portfolio & Inject API Key
+
 on:
   push:
     branches: ["main"]
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
+
 jobs:
   deploy:
     environment:
@@ -21,12 +25,12 @@ jobs:
 
       - name: Verify secret is present before doing anything else
         env:
-          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY}}
+          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
           KEY_LEN=${#GEMINI_KEY}
           echo "GEMINI_KEY length: ${KEY_LEN} characters"
           if [ "${KEY_LEN}" -lt 20 ]; then
-            echo "::error::secrets.parasfolio_key is missing, empty, or suspiciously short (${KEY_LEN} chars)."
+            echo "::error::secrets.PARASFOLIO_KEY is missing, empty, or suspiciously short (${KEY_LEN} chars)."
             echo "::error::Check Settings > Secrets and variables > Actions > Repository secrets"
             echo "::error::in THIS repo, and confirm the secret name is exactly 'PARASFOLIO_KEY'."
             exit 1
@@ -34,7 +38,7 @@ jobs:
 
       - name: Inject Secret Gemini API Key into JS
         env:
-          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY}}
+          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
           sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" chatbot.js
 
@@ -60,4 +64,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
- 
