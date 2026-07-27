@@ -1,22 +1,9 @@
 /** 
  * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
- *  1. Answers questions using a knowledge base built from this site's own content
- *     (about, education, skills, projects, achievements, contact).
- *  2. Pulls LIVE data from the public GitHub REST API for GitHub-related questions.
- *  3. Links out to the LinkedIn profile for LinkedIn-related questions. Note:
- *     LinkedIn has no public, unauthenticated API and blocks cross-origin scraping
- *     from the browser, so this widget cannot live-fetch LinkedIn content — it
- *     instead answers from the profile summary already published on this site
- *     and links to the live profile.
- *
- * MATCHING ENGINE
- * Instead of brittle single-regex-per-topic matching (which fails the moment
- * someone rephrases a question), this file scores the user's message against
- * a bag of keywords + synonyms per topic and picks the best-scoring topic.
- * It also remembers the last topic discussed, so a bare follow-up like "why?"
- * or "why that?" gets answered in context instead of falling through to the
- * generic fallback message.
+ *  1. Answers questions using a knowledge base built from this site's own content.
+ *  2. Pulls LIVE data from the public GitHub REST API.
+ *  3. Links out to the LinkedIn profile.
  */
 (function () {
     'use strict';
@@ -26,15 +13,13 @@
     const LINKEDIN_URL = 'https://linkedin.com/in/paras029';
     const EMAIL = 'parasbishnoi012@gmail.com';
 
-    // ---------------- Gemini reasoning layer (optional) ----------------
-    // WARNING: This placeholder is replaced by GitHub Actions during deployment.
-    // Because this is client-side JS, the final key WILL be visible in the browser.
-    // You MUST restrict this API key to your domain in the Google Cloud Console.
+    // ---------------- Gemini reasoning layer ----------------
+    // This placeholder is automatically replaced by GitHub Actions during deployment.
     const GEMINI_API_KEY = 'INJECT_API_KEY_HERE'; 
-    const GEMINI_MODEL = 'gemini-2.0-flash-lite-preview-02-05';
+    const GEMINI_MODEL = 'gemini-2.5-flash-lite';
     const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
     const GEMINI_TIMEOUT_MS = 8000;
-    const GEMINI_MAX_HISTORY_TURNS = 8; // user+model pairs kept for context
+    const GEMINI_MAX_HISTORY_TURNS = 8; 
 
     function escapeHTML(str) {
         if (typeof str !== 'string') return '';
@@ -51,7 +36,7 @@
         });
     }
 
-    // ---------------- Answer knowledge base (derived from this site's content) ----------------
+    // ---------------- Answer knowledge base ----------------
     const KB = {
         greeting: `Hey! I'm ParasBot 👋 — ask me anything about Paras: his background, education, skills, projects, achievements, GitHub, LinkedIn, or how to get in touch. You can ask in your own words — I don't need exact keywords.`,
 
@@ -109,8 +94,6 @@ Heads up: LinkedIn doesn't expose a public API and blocks browsers from reading 
         fallback: `I'm not totally sure what you mean — I can talk about Paras's background, education, skills, projects, achievements, GitHub activity, LinkedIn, resume, and contact info. Try rephrasing, or tap a topic below.`
     };
 
-    // "Why" reasoning layer — used when the user asks a follow-up "why" question,
-    // either right after a topic (contextual) or by naming the topic directly.
     const WHY_KB = {
         education: `He's at IIT Jodhpur because it lets him specialize specifically in Applied AI & Data Science rather than a generic CS degree — the coursework is built around ML, statistics, and data pipelines from day one, which lines up directly with the kind of engineer he's trying to become.`,
         skills: `The stack is chosen for coverage across the full ML lifecycle: Python/NumPy for first-principles understanding, PyTorch/TensorFlow/Scikit-learn for production modeling, Pandas/NumPy/Matplotlib for the data side, and LangChain/Gemini/HuggingFace because so much applied AI work now involves LLMs and RAG rather than just classic ML.`,
@@ -122,9 +105,6 @@ Heads up: LinkedIn doesn't expose a public API and blocks browsers from reading 
         linkedin: `LinkedIn is kept updated as the professional front door — recruiters and collaborators typically check it first before digging into GitHub or the portfolio itself.`
     };
 
-    // Everything ParasBot is allowed to know, flattened into one system prompt
-    // for Gemini. Built from the same KB/WHY_KB used by the rule-based engine
-    // so the two answer paths never disagree with each other.
     const GEMINI_SYSTEM_PROMPT = `You are ParasBot, the AI assistant embedded in Paras Bishnoi's personal portfolio website.
 
 RULES:
@@ -138,21 +118,13 @@ RULES:
 
 FACTS ABOUT PARAS (from the site):
 About: ${KB.about}
-
 Education: ${KB.education}
-
 Skills: ${KB.skills}
-
 Projects: ${KB.projects}
-
 Achievements: ${KB.achievements}
-
 Stats: ${KB.stats}
-
 Resume: ${KB.resume}
-
 Contact: ${KB.contact}
-
 LinkedIn: ${KB.linkedinStatic}
 
 RATIONALE NOTES (use these when a user asks "why"):
@@ -165,50 +137,29 @@ About/focus — ${WHY_KB.about}
 GitHub — ${WHY_KB.github}
 LinkedIn — ${WHY_KB.linkedin}`;
 
-    // ---------------- Topic keyword/synonym bank for scored matching ----------------
-    // Each topic lists many phrasings a person might actually type. The matcher
-    // scores overlap rather than requiring an exact regex hit, so rephrased or
-    // partial questions still land on the right topic.
     const TOPICS = {
         greeting: ['hi', 'hello', 'hey', 'yo', 'sup', 'good morning', 'good evening'],
         thanks: ['thanks', 'thank you', 'thankyou', 'thx', 'appreciate', 'cheers'],
         bye: ['bye', 'goodbye', 'see you', 'later', 'cya', 'exit', 'quit'],
         help: ['help', 'what can you do', 'what do you do', 'commands', 'options', 'capabilities', 'assist'],
         identity: ['who are you', 'what are you', 'your name', 'are you a bot', 'are you ai', 'are you real'],
-
         about: ['about', 'who is paras', 'bio', 'background', 'introduce', 'introduction', 'summary', 'overview', 'tell me about him', 'tell me about paras', 'what does he do', 'describe him'],
-
         education: ['education', 'college', 'school', 'university', 'degree', 'study', 'studies', 'studied', 'jnv', 'iit', 'iit jodhpur', 'cgpa', 'gpa', 'grade', 'academic', 'academics', 'course', 'where did he study', 'qualification'],
-
         skills: ['skill', 'skills', 'stack', 'tech stack', 'technology', 'technologies', 'language', 'languages', 'tool', 'tools', 'framework', 'frameworks', 'know', 'proficient', 'expertise', 'what can he do', 'python', 'pytorch', 'tensorflow'],
-
         projects: ['project', 'projects', 'system', 'systems', 'built', 'build', 'made', 'work', 'portfolio work', 'repositories', 'repos', 'apps', 'application', 'applications', 'demo', 'demos', 'what has he made', 'what has he built', 'showcase'],
-
         achievements: ['award', 'awards', 'certificate', 'certificates', 'certification', 'certifications', 'achievement', 'achievements', 'credential', 'credentials', 'hackathon', 'competition', 'badge', 'badges'],
-
         stats: ['stat', 'stats', 'statistics', 'numbers', 'figures', 'cgpa number', 'how many projects'],
-
         resume: ['resume', 'cv', 'download resume', 'get resume'],
-
         contact: ['contact', 'email', 'reach', 'reach him', 'hire', 'hire him', 'internship', 'internships', 'collaborate', 'collaboration', 'get in touch', 'message him', 'connect'],
-
         github: ['github', 'repo', 'repos', 'repository', 'repositories', 'open source', 'open-source', 'commits', 'stars', 'followers', 'code online'],
-
         linkedin: ['linkedin', 'professional profile', 'work profile'],
-
         why: ['why', 'reason', 'reasons', 'motivation', 'rationale', 'purpose', 'why did he', 'why does he', 'why is he', 'why choose', 'why chose']
     };
 
     function tokenize(text) {
-        return text
-            .toLowerCase()
-            .replace(/[^a-z0-9\s]/g, ' ')
-            .split(/\s+/)
-            .filter(Boolean);
+        return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
     }
 
-    // Score a message against a topic's keyword bank. Multi-word phrases count
-    // extra when they appear as a substring (stronger signal than single tokens).
     function scoreTopic(message, phrases) {
         const lower = message.toLowerCase();
         const tokens = new Set(tokenize(message));
@@ -276,9 +227,6 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
     }
 
     // ---------------- Gemini call ----------------
-    // Multi-turn history kept as Gemini "contents" turns (role: 'user' | 'model').
-    // Trimmed to the last GEMINI_MAX_HISTORY_TURNS exchanges so the request
-    // body doesn't grow unbounded over a long chat session.
     let geminiHistory = [];
 
     function looksGithubRelated(text) {
@@ -292,24 +240,14 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
         }
     }
 
-    // Returns the reply text on success, or throws on any failure (missing
-    // key, network error, timeout, blocked/empty response, bad JSON) so the
-    // caller can fall back to the local rule-based brain.
     async function askGemini(userText) {
-        // If the key wasn't replaced or is empty, throw immediately to use rule-based fallback
         if (!GEMINI_API_KEY || GEMINI_API_KEY === 'INJECT_API_KEY_HERE') {
             throw new Error('Gemini not configured');
         }
 
-        // For GitHub-flavored questions, fetch live data first and hand it
-        // to the model as grounding context rather than letting it guess.
         let liveContext = '';
         if (looksGithubRelated(userText)) {
-            try {
-                liveContext = await fetchGithubSummary();
-            } catch (_) {
-                // fetchGithubSummary already handles its own fallback text
-            }
+            try { liveContext = await fetchGithubSummary(); } catch (_) { }
         }
 
         const turnText = liveContext
@@ -352,8 +290,6 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
 
             if (!replyText) throw new Error('Empty Gemini response');
 
-            // Only commit to history once we know the call actually succeeded,
-            // so a failed turn doesn't pollute context with a half-exchange.
             geminiHistory.push({ role: 'user', parts: [{ text: turnText }] });
             geminiHistory.push({ role: 'model', parts: [{ text: replyText }] });
             trimGeminiHistory();
@@ -375,8 +311,6 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
         { label: 'Contact', topic: 'contact' },
     ];
 
-    // Conversation memory: remembers the last real topic discussed so a bare
-    // "why?" / "why though?" follow-up can be answered in context.
     let lastTopic = null;
 
     async function answerFor(topic, rawMessage) {
@@ -496,9 +430,6 @@ Pinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analy
                 try {
                     reply = await askGemini(displayText);
                 } catch (_) {
-                    // Key missing, network hiccup, rate limit, or blocked
-                    // response — fall through to the local rule-based brain
-                    // so the widget never fully breaks.
                     reply = null;
                 }
             }
