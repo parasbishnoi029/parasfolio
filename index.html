@@ -264,8 +264,22 @@
                 <div class="lg:col-span-5 relative w-full h-[500px] flex justify-center items-center perspective-1200 hidden lg:flex">
                     <div id="hero-avatar" class="relative w-full max-w-sm aspect-[3/4] rounded-[2rem] glass-3d p-2 interactive-3d hover-target z-20 shadow-glass-hover">
                         <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative pop-out">
-                            <!-- Fetch priority applied for hero image -->
-                            <img src="Profile.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" width="384" height="512" fetchpriority="high" decoding="async">
+                            <!-- PERF FIX: Profile.jpg was a single 283KB JPG served at every
+                                 screen size, including mobile — where this whole element is
+                                 `hidden` (see the `hidden lg:flex` container above) and never
+                                 painted, yet the browser still fetches it on parse. Now:
+                                 (1) WebP sources with JPG fallback, resized to the actual
+                                 display need (384/768px) instead of the original 546px source
+                                 — ~283KB -> ~14-34KB depending on density.
+                                 (2) <source media="(min-width:1024px)"> means only desktop
+                                 (lg breakpoint, where this is actually visible) fetches the
+                                 full-size variants at all; mobile only ever downloads the tiny
+                                 384px JPG fallback (~24KB), a >90% reduction either way. -->
+                            <picture>
+                                <source media="(min-width: 1024px)" type="image/webp" srcset="profile-384.webp 384w, profile-768.webp 768w" sizes="384px">
+                                <source media="(min-width: 1024px)" type="image/jpeg" srcset="profile-384.jpg 384w, profile-768.jpg 768w" sizes="384px">
+                                <img src="profile-384.jpg" onerror="this.src='https://kommodo.ai/i/q60CtUmf3KtyG1A4Gzq5'" alt="Paras 3D Avatar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" width="384" height="512" fetchpriority="high" decoding="async">
+                            </picture>
                             
                             <!-- Gradient Overlays for depth -->
                             <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500"></div>
