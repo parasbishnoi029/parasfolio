@@ -249,7 +249,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
             console.warn(
                 '%c[ParasBot] Gemini: NOT CONFIGURED',
                 'color:#e05d5d;font-weight:bold;',
-                '— GEMINI_API_KEY is still the literal placeholder "INJECT_API_KEY_HERE".',
+                '— GEMINI_API_KEY is still the literal placeholder "AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg".',
                 'The GitHub Actions sed-replace step did not run, matched nothing, or the',
                 '"PARASFOLIO_KEY" secret evaluated to empty. Chat will use the rule-based',
                 'engine only. Fix: check the Actions tab run logs, and confirm the secret is',
