@@ -1,4 +1,4 @@
-/**
+/** 
  * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
  *  1. Answers questions using a knowledge base built from this site's own content
