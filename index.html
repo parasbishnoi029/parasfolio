@@ -44,7 +44,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- PERF FIX: this was a plain render-blocking stylesheet link. It now loads with
+         media="print" (so it doesn't block first paint) and swaps to "all" once fetched,
+         same pattern already used below for Font Awesome/Devicon. Text still renders
+         immediately with the fallback font stack and swaps in once the webfont is ready
+         (display=swap), so there's no invisible-text flash. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
     
     <!-- Deferred CSS Loading (Performance Fix) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
@@ -81,52 +88,14 @@
         }
     </script>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { 
-                        sans: ['Plus Jakarta Sans', 'sans-serif'], 
-                        display: ['Space Grotesk', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace']
-                    },
-                    colors: { 
-                        primary: '#00F2FE', 
-                        secondary: '#9D4EDD', 
-                        accent: '#4ADE80',
-                        darkBg: '#030305',
-                        glassBg: 'rgba(10, 12, 18, 0.4)',
-                        glassBorder: 'rgba(249, 250, 251, 0.05)'
-                    },
-                    boxShadow: {
-                        'glass': '0 30px 60px rgba(3, 3, 5, 0.5)',
-                        'glass-hover': '0 40px 80px rgba(0, 242, 254, 0.15)',
-                        'neon-primary': '0 0 20px rgba(0, 242, 254, 0.5)',
-                        'neon-secondary': '0 0 20px rgba(157, 78, 221, 0.5)'
-                    },
-                    animation: {
-                        'spin-slow': 'spin 15s linear infinite',
-                        'spin-reverse': 'spin 20s linear infinite reverse',
-                        'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { opacity: 1, filter: 'brightness(1)' },
-                            '50%': { opacity: 0.7, filter: 'brightness(1.5)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS: PERF FIX — replaced the cdn.tailwindcss.com runtime (which ships
+         the full JIT engine and recompiles CSS in-browser from scratch on every page
+         load — Tailwind's own docs say this isn't meant for production) with a
+         pre-built, purged, minified static stylesheet generated from this exact page's
+         markup via the Tailwind CLI. Same visual output, none of the runtime JS/parse
+         cost. If you add new class names later, rebuild with:
+         npx tailwindcss -i tailwind-input.css -o tailwind.css --config tailwind.config.js --minify -->
+    <link rel="stylesheet" href="tailwind.css">
  
     <!-- EXTERNAL LIBRARIES (Deferred for performance) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
