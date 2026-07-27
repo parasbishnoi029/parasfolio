@@ -33,13 +33,31 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23030305'/%3E%3Cpath d='M30 70 L30 30 L50 30 Q65 30 65 45 Q65 60 50 60 L38 60' stroke='%2300F2FE' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <title>PARASFOLIO | Applied AI & Data Science</title>
     
+    <!-- PERF FIX: minimal inline critical CSS. This is what makes it safe to stop
+         render-blocking on tailwind.css/styles.css below — instead of a stark white
+         flash while ~60KB of CSS downloads over a throttled mobile connection, the
+         correct dark background and a centered, readable loading state are painted
+         immediately from HTML alone. Keep this in sync only if you change the loader
+         markup or brand colors. -->
+    <style>
+        html,body{background:#030305;margin:0;color:#f9fafb;font-family:system-ui,-apple-system,sans-serif}
+        #loader{position:fixed;inset:0;background:#030305;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+        #webgl-canvas{position:fixed;inset:0;width:100vw;height:100vh}
+    </style>
+
     <noscript>
         <style>#loader{display:none!important;} .gallery-card-media img,.gallery-card-media video{opacity:1!important;}</style>
     </noscript>
 
     <!-- Performance Preconnects (Removes chaining delays) -->
-    <link rel="preconnect" href="https://api.github.com">
-    <link rel="preconnect" href="https://dev.to">
+    <!-- PERF FIX: api.github.com and dev.to are only fetched later, from deferred JS
+         (stats widget, blog cards, chatbot) — not needed for first paint. A full
+         preconnect (DNS + TCP + TLS) to them competes with the font/CSS connections
+         that actually gate FCP on a throttled mobile connection, so these are now the
+         much cheaper dns-prefetch (DNS resolution only) instead. Fonts keep the full
+         preconnect since the webfont request follows almost immediately. -->
+    <link rel="dns-prefetch" href="https://api.github.com">
+    <link rel="dns-prefetch" href="https://dev.to">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
@@ -94,8 +112,17 @@
          pre-built, purged, minified static stylesheet generated from this exact page's
          markup via the Tailwind CLI. Same visual output, none of the runtime JS/parse
          cost. If you add new class names later, rebuild with:
-         npx tailwindcss -i tailwind-input.css -o tailwind.css --config tailwind.config.js --minify -->
-    <link rel="stylesheet" href="tailwind.css">
+         npx tailwindcss -i tailwind-input.css -o tailwind.css --config tailwind.config.js --minify
+
+         PERF FIX (mobile): this ~34KB file was still a plain render-blocking
+         stylesheet — on a throttled mobile connection that alone was a big chunk of
+         the 5-6s FCP. It now loads non-blocking (preload + print/swap) same as the
+         fonts above. The inline critical CSS at the top of <head> already paints the
+         correct dark background and a centered loader, so the brief window before this
+         swaps in shows a branded loading screen instead of a stark white flash. -->
+    <link rel="preload" as="style" href="tailwind.css">
+    <link rel="stylesheet" href="tailwind.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="tailwind.css"></noscript>
  
     <!-- EXTERNAL LIBRARIES (Deferred for performance) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
@@ -105,7 +132,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js" defer></script>
  
     <!-- CUSTOM CSS STYLES -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- PERF FIX (mobile): also switched to non-blocking load, same reasoning as
+         tailwind.css above. Must stay after tailwind.css in document order so its
+         overrides still win once both are applied — media/onload swap timing doesn't
+         change CSS cascade order, only when each sheet starts blocking render. -->
+    <link rel="preload" as="style" href="styles.css">
+    <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
 </head>
 <body class="selection:bg-primary/20">
  
@@ -311,7 +344,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-fit">
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-primary">
                             <div class="text-[10px] font-mono tracking-widest text-primary uppercase mb-3 pop-out"><i class="fa-solid fa-graduation-cap mr-2" aria-hidden="true"></i>Academic Standing</div>
-                            <div class="font-display font-bold text-4xl md:text-5xl text-gray-50 pop-out drop-shadow-md">8.28<span class="text-xl text-gray-500"> CGPA</span></div>
+                            <div class="font-display font-bold text-4xl md:text-5xl text-gray-50 pop-out drop-shadow-md">8.375<span class="text-xl text-gray-500"> CGPA</span></div>
                             <p class="text-xs text-gray-400 mt-4 pop-out font-light">Consistent high performance in rigorous technical curriculum.</p>
                         </div>
                         <div class="glass-3d p-8 interactive-3d hover-target flex flex-col justify-center border-t-2 border-t-secondary">
@@ -352,7 +385,7 @@
                             <div class="glass-3d p-6 rounded-3xl interactive-3d hover-target border-t-2 border-t-primary">
                                 <div class="pop-out">
                                     <h3 class="text-primary text-[10px] font-mono uppercase tracking-widest">CGPA</h3>
-                                    <p class="text-4xl font-bold mt-3 text-gray-50 font-display">8.28</p>
+                                    <p class="text-4xl font-bold mt-3 text-gray-50 font-display">8.375</p>
                                 </div>
                             </div>
                             <div class="glass-3d p-6 rounded-3xl interactive-3d hover-target border-t-2 border-t-secondary">
@@ -587,7 +620,7 @@
  
                 <div class="glass-3d p-8 text-center interactive-3d hover-target">
                     <div class="pop-out">
-                        <h2 class="text-5xl font-bold text-primary font-display">8.28</h2>
+                        <h2 class="text-5xl font-bold text-primary font-display">8.375</h2>
                         <p class="mt-4 text-gray-400 text-sm uppercase tracking-widest font-mono">Current CGPA</p>
                     </div>
                 </div>
