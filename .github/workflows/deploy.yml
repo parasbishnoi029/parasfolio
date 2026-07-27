@@ -38,7 +38,6 @@ jobs:
         env:
           GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
-          # Let's find where chatbot.js actually lives incase it's in a subfolder
           FILE_PATH=$(find . -name "chatbot.js" | head -n 1)
           echo "Found chatbot.js at: ${FILE_PATH}"
           
