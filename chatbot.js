@@ -1,4 +1,4 @@
-/**  
+/**
  * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
  *  1. Answers questions using a knowledge base built from this site's own content.
@@ -18,7 +18,7 @@
 
     // ---------------- Gemini reasoning layer ----------------
     // This placeholder is automatically replaced by GitHub Actions during deployment.
-    const GEMINI_API_KEY = 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg';
+    const GEMINI_API_KEY = 'INJECT_API_KEY_HERE';
     // gemini-3.5-flash-lite is the current GA lightweight model (fast + cheapest tier,
     // successor to the retired 2.0-flash-lite / 2.5-flash-lite line). If your key only
     // has access to an older tier, swap this for 'gemini-2.5-flash-lite'.
@@ -234,7 +234,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
     }
 
     function isGeminiConfigured() {
-        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg' && !geminiDisabledForSession;
+        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'INJECT_API_KEY_HERE' && !geminiDisabledForSession;
     }
 
     // ---------------- Startup self-diagnostic ----------------
@@ -245,11 +245,11 @@ LinkedIn — ${WHY_KB.linkedin}`;
         const keyPresent = Boolean(GEMINI_API_KEY);
         const keyLength = keyPresent ? GEMINI_API_KEY.length : 0;
 
-        if (!keyPresent || GEMINI_API_KEY === 'AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg') {
+        if (!keyPresent || GEMINI_API_KEY === 'INJECT_API_KEY_HERE') {
             console.warn(
                 '%c[ParasBot] Gemini: NOT CONFIGURED',
                 'color:#e05d5d;font-weight:bold;',
-                '— GEMINI_API_KEY is still the literal placeholder "AIzaSyDil-OUJfJVsNgdAx6j92b57e6yGPeUDyg".',
+                '— GEMINI_API_KEY is still the literal placeholder "INJECT_API_KEY_HERE".',
                 'The GitHub Actions sed-replace step did not run, matched nothing, or the',
                 '"PARASFOLIO_KEY" secret evaluated to empty. Chat will use the rule-based',
                 'engine only. Fix: check the Actions tab run logs, and confirm the secret is',
@@ -587,4 +587,3 @@ LinkedIn — ${WHY_KB.linkedin}`;
         buildWidget();
     }
 })();
-  
