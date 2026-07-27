@@ -329,14 +329,37 @@ async function fetchWithTimeout(resource, options = {}) {
         return;
     }
 
-    let mouseX = 0, mouseY = 0;
+    // PERF FIX: previously wrote `left`/`top` (layout-triggering) on every mousemove and
+    // called cursorRing.animate() per-event (a new Web Animation object per pixel of
+    // movement). Now we just cache the pointer position and let a single rAF loop apply
+    // GPU-friendly `transform: translate3d(...)` updates at most once per frame.
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY;
+    let cursorRafId = null;
+
     window.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        cursorDot.style.left = `${mouseX}px`; 
-        cursorDot.style.top = `${mouseY}px`;
-        cursorRing.animate({ left: `${mouseX}px`, top: `${mouseY}px` }, { duration: 100, fill: "forwards" });
+        if (cursorRafId === null) {
+            cursorRafId = requestAnimationFrame(updateCursor);
+        }
     }, { passive: true });
+
+    function updateCursor() {
+        cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        // Light easing on the ring so it keeps its trailing feel without the old
+        // per-event Web Animation API call.
+        ringX += (mouseX - ringX) * 0.35;
+        ringY += (mouseY - ringY) * 0.35;
+        cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+
+        if (Math.abs(mouseX - ringX) > 0.1 || Math.abs(mouseY - ringY) > 0.1) {
+            cursorRafId = requestAnimationFrame(updateCursor);
+        } else {
+            cursorRafId = null;
+        }
+    }
+    updateCursor();
 
     document.querySelectorAll('a, button, .hover-target').forEach(el => {
         el.addEventListener('mouseenter', () => { 
@@ -358,35 +381,60 @@ async function fetchWithTimeout(resource, options = {}) {
 (function init3DTilt() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    document.querySelectorAll('.interactive-3d').forEach(el => {
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left; 
-            const y = e.clientY - rect.top;  
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const tiltX = (y - centerY) / 20; 
-            const tiltY = (centerX - x) / 20;
-            el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-        }, { passive: true });
-        el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    // PERF FIX: previously called el.getBoundingClientRect() on every mousemove event.
+    // Since the previous mousemove had already written a new `transform` (invalidating
+    // layout), the very next rect read forced a synchronous reflow — repeated on every
+    // pixel of movement, across every tilt card. We now cache the rect once on
+    // mouseenter (and refresh it on scroll/resize) and only re-measure lazily, plus
+    // throttle the actual style write to one per animation frame.
+    function initTiltGroup(selector, computeTransform) {
+        document.querySelectorAll(selector).forEach(el => {
+            let rect = null;
+            let pendingEvent = null;
+            let rafId = null;
+
+            const measure = () => { rect = el.getBoundingClientRect(); };
+
+            const applyTransform = () => {
+                rafId = null;
+                if (!rect || !pendingEvent) return;
+                el.style.transform = computeTransform(rect, pendingEvent);
+            };
+
+            el.addEventListener('mouseenter', () => {
+                measure();
+            });
+            el.addEventListener('mousemove', (e) => {
+                pendingEvent = e;
+                if (rafId === null) rafId = requestAnimationFrame(applyTransform);
+            }, { passive: true });
+            el.addEventListener('mouseleave', () => {
+                if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+                el.style.transform = computeTransform(null, null);
+            });
         });
+    }
+
+    initTiltGroup('.interactive-3d', (rect, e) => {
+        if (!rect || !e) return `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const tiltX = (y - centerY) / 20;
+        const tiltY = (centerX - x) / 20;
+        return `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
     });
 
-    document.querySelectorAll('.gallery-card-inner').forEach(el => {
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const tiltX = ((y - rect.height / 2) / rect.height) * -10;
-            const tiltY = ((x - rect.width / 2) / rect.width) * 10;
-            el.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-        }, { passive: true });
-        el.addEventListener('mouseleave', () => {
-            el.style.transform = `rotateX(0deg) rotateY(0deg)`;
-        });
+    initTiltGroup('.gallery-card-inner', (rect, e) => {
+        if (!rect || !e) return `rotateX(0deg) rotateY(0deg)`;
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const tiltX = ((y - rect.height / 2) / rect.height) * -10;
+        const tiltY = ((x - rect.width / 2) / rect.width) * 10;
+        return `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     });
+
 })();
 
 // --- 3. THREE.JS WEBGL ENGINE ---
@@ -474,7 +522,10 @@ function initWebGL() {
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     const clock = new THREE.Clock();
+    let renderingPaused = false;
+
     function animate() {
+        if (renderingPaused) { animationFrameId = null; return; }
         animationFrameId = requestAnimationFrame(animate);
         const t = clock.getElapsedTime();
 
@@ -492,6 +543,42 @@ function initWebGL() {
         renderer.render(scene, camera);
     }
     animate();
+
+    // PERF FIX: the render loop used to run forever, full-speed, even when the tab was
+    // backgrounded or the canvas had scrolled off-screen. Now we stop requestAnimationFrame
+    // entirely in both cases and resume cleanly when it's actually visible again.
+    function pauseRendering() {
+        if (renderingPaused) return;
+        renderingPaused = true;
+        if (animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
+    function resumeRendering() {
+        if (!renderingPaused) return;
+        renderingPaused = false;
+        clock.getDelta(); // avoid a large elapsed-time jump after being paused
+        animate();
+    }
+
+    let canvasIsVisible = true;
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) pauseRendering();
+        else if (canvasIsVisible) resumeRendering();
+    });
+
+    if ('IntersectionObserver' in window) {
+        const canvasObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                canvasIsVisible = entry.isIntersecting;
+                if (!entry.isIntersecting) pauseRendering();
+                else if (!document.hidden) resumeRendering();
+            });
+        }, { threshold: 0 });
+        canvasObserver.observe(canvas);
+    }
 
     gsap.to(camera.position, {
         z: -150, ease: "none",
