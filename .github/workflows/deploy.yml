@@ -21,7 +21,7 @@ jobs:
 
       - name: Verify secret is present before doing anything else
         env:
-          GEMINI_KEY: ${{ secrets.parasfolio_key }}
+          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
           KEY_LEN=${#GEMINI_KEY}
           echo "GEMINI_KEY length: ${KEY_LEN} characters"
@@ -34,7 +34,7 @@ jobs:
 
       - name: Inject Secret Gemini API Key into JS
         env:
-          GEMINI_KEY: ${{ secrets.parasfolio_key }}
+          GEMINI_KEY: ${{ secrets.PARASFOLIO_KEY }}
         run: |
           sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" chatbot.js
 
