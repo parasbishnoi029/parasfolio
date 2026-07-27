@@ -237,6 +237,46 @@ LinkedIn — ${WHY_KB.linkedin}`;
         return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'INJECT_API_KEY_HERE' && !geminiDisabledForSession;
     }
 
+    // ---------------- Startup self-diagnostic ----------------
+    // Runs once when the script loads and prints exactly what state Gemini is in,
+    // without ever printing the key itself. This turns "why isn't Gemini working"
+    // into a 2-second console check instead of a Network-tab hunt.
+    (function logGeminiDiagnostic() {
+        const keyPresent = Boolean(GEMINI_API_KEY);
+        const keyLength = keyPresent ? GEMINI_API_KEY.length : 0;
+
+        if (!keyPresent || GEMINI_API_KEY === 'INJECT_API_KEY_HERE') {
+            console.warn(
+                '%c[ParasBot] Gemini: NOT CONFIGURED',
+                'color:#e05d5d;font-weight:bold;',
+                '— GEMINI_API_KEY is still the literal placeholder "INJECT_API_KEY_HERE".',
+                'The GitHub Actions sed-replace step did not run, matched nothing, or the',
+                '"parasfolio_key" secret evaluated to empty. Chat will use the rule-based',
+                'engine only. Fix: check the Actions tab run logs, and confirm the secret is',
+                'a Repository-scoped Actions secret in this exact repo.'
+            );
+        } else if (keyLength < 20) {
+            console.warn(
+                '%c[ParasBot] Gemini: SUSPICIOUS KEY',
+                'color:#e0a95d;font-weight:bold;',
+                `— a key was injected but it's only ${keyLength} chars long, shorter than a`,
+                'real Gemini API key. It was likely injected incorrectly (truncated, wrong',
+                'secret, or extra escaping in the sed command). Chat will still attempt to',
+                'use it and fall back to the rule engine on failure.'
+            );
+        } else {
+            console.info(
+                '%c[ParasBot] Gemini: configured',
+                'color:#4ade80;font-weight:bold;',
+                `— model: ${GEMINI_MODEL}, key length: ${keyLength} chars.`,
+                'If replies still look rule-based, check for a 400/401/403 in the Network',
+                'tab against generativelanguage.googleapis.com (usually a domain/referrer',
+                'restriction mismatch on the key) — this diagnostic only confirms the key',
+                'reached the browser, not that Google\'s API accepts it from this domain.'
+            );
+        }
+    })();
+
     async function callGeminiOnce(contents, signal) {
         const res = await fetch(GEMINI_ENDPOINT, {
             method: 'POST',
@@ -397,7 +437,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
                     <span class="chatbot-dot" aria-hidden="true"></span>
                     <div>
                         ParasBot
-                        <span class="chatbot-header-sub">Ask about this portfolio, GitHub & LinkedIn</span>
+                        <span id="chatbot-header-sub" class="chatbot-header-sub">Ask about this portfolio, GitHub & LinkedIn</span>
                     </div>
                 </div>
                 <button type="button" id="chatbot-close" class="hover-target" aria-label="Close chat">
@@ -422,6 +462,20 @@ LinkedIn — ${WHY_KB.linkedin}`;
         const input = panel.querySelector('#chatbot-input');
         const sendBtn = panel.querySelector('#chatbot-send');
         const closeBtn = panel.querySelector('#chatbot-close');
+        const headerSub = panel.querySelector('#chatbot-header-sub');
+
+        // Small, honest visual tell of which engine is actually answering — no need
+        // to open DevTools to know if Gemini is live. Updates after every reply.
+        function setEngineStatus(mode) {
+            if (!headerSub) return;
+            if (mode === 'gemini') {
+                headerSub.textContent = '⚡ AI-powered (Gemini)';
+            } else if (mode === 'rules') {
+                headerSub.textContent = isGeminiConfigured()
+                    ? '📋 Rule-based (Gemini call failed — see console)'
+                    : '📋 Rule-based mode';
+            }
+        }
 
         function renderQuickReplies() {
             quickRepliesHost.innerHTML = '';
@@ -485,6 +539,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
                 }
             }
 
+            setEngineStatus(usedGemini ? 'gemini' : 'rules');
             typing.remove();
             appendMessage('bot', reply);
             sendBtn.disabled = false;
