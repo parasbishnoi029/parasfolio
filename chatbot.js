@@ -18,7 +18,7 @@
 
     // ---------------- Gemini reasoning layer ----------------
     // This placeholder is automatically replaced by GitHub Actions during deployment.
-    const GEMINI_API_KEY = 'INJECT_API_KEY_HERE';
+    const GEMINI_API_KEY = 'AIzaSyDc8FrS0OwgULa5YbH5fkD6OItgXfcLDVU';
     // gemini-3.5-flash-lite is the current GA lightweight model (fast + cheapest tier,
     // successor to the retired 2.0-flash-lite / 2.5-flash-lite line). If your key only
     // has access to an older tier, swap this for 'gemini-2.5-flash-lite'.
@@ -234,7 +234,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
     }
 
     function isGeminiConfigured() {
-        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'INJECT_API_KEY_HERE' && !geminiDisabledForSession;
+        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'AIzaSyDc8FrS0OwgULa5YbH5fkD6OItgXfcLDVU' && !geminiDisabledForSession;
     }
 
     // ---------------- Startup self-diagnostic ----------------
