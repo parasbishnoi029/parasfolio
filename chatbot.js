@@ -587,3 +587,4 @@ LinkedIn — ${WHY_KB.linkedin}`;
         buildWidget();
     }
 })();
+  
