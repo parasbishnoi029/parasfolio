@@ -458,9 +458,15 @@ function initWebGL() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 30); 
 
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    // PERF FIX: antialias was a major cost on every single frame (MSAA is expensive,
+    // especially on integrated GPUs or software-rendered contexts) for a background
+    // wireframe/particle scene where the softness barely reads anyway. Pixel ratio cap
+    // lowered from 2 -> 1.5, which cuts fragment-shading work substantially on retina
+    // displays (a 2x cap on a 1920px-wide viewport is ~7.9M shaded pixels/frame; 1.5x
+    // cuts that by ~44%).
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     const ambientLight = new THREE.AmbientLight(0xf9fafb, 0.4); 
     scene.add(ambientLight);
@@ -473,7 +479,10 @@ function initWebGL() {
     pointLight2.position.set(-10, -10, 10); 
     scene.add(pointLight2);
 
-    const terrainGeo = new THREE.PlaneGeometry(200, 300, 40, 60);
+    // PERF FIX: terrain mesh resolution halved (40x60 -> 24x36 segments = ~2,400 ->
+    // ~864 quads). It's a wireframe at 0.08 opacity in the background — the extra
+    // vertex density was invisible but not free to build or animate.
+    const terrainGeo = new THREE.PlaneGeometry(200, 300, 24, 36);
     const pos = terrainGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
         const z = Math.sin(pos.getX(i) * 0.1) * Math.cos(pos.getY(i) * 0.1) * 4;
@@ -487,8 +496,10 @@ function initWebGL() {
     terrain.position.z = -50;
     scene.add(terrain);
 
+    // PERF FIX: particle count roughly halved (3000 -> 1400). Same ambient dust-field
+    // effect at typical viewing distance, half the per-frame point-cloud cost.
     const pGeo = new THREE.BufferGeometry();
-    const pCount = 3000;
+    const pCount = 1400;
     const pPos = new Float32Array(pCount * 3);
     for(let i = 0; i < pCount * 3; i+=3) {
         pPos[i] = (Math.random() - 0.5) * 200;       
@@ -500,12 +511,15 @@ function initWebGL() {
     dust = new THREE.Points(pGeo, pMat);
     scene.add(dust);
 
+    // PERF FIX: icosahedron subdivision levels dropped one notch each (2->1, 3->2).
+    // Subdivision detail grows the face/point count ~4x per level, so this is a large
+    // cut in per-frame vertex work for shapes that are small and often partly offscreen.
     avatar3DGroup = new THREE.Group();
-    const coreGeo = new THREE.IcosahedronGeometry(4, 2);
+    const coreGeo = new THREE.IcosahedronGeometry(4, 1);
     const coreMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 });
     coreMesh = new THREE.Mesh(coreGeo, coreMat);
 
-    const outerHaloGeo = new THREE.IcosahedronGeometry(5.5, 3);
+    const outerHaloGeo = new THREE.IcosahedronGeometry(5.5, 2);
     const outerHaloMat = new THREE.PointsMaterial({ size: 0.08, color: 0x9D4EDD, transparent: true, opacity: 0.4 });
     outerHaloMesh = new THREE.Points(outerHaloGeo, outerHaloMat);
 
@@ -523,10 +537,20 @@ function initWebGL() {
 
     const clock = new THREE.Clock();
     let renderingPaused = false;
+    // PERF FIX: this loop previously rendered at full display refresh rate (60fps+)
+    // forever. It's a slow-moving ambient background, not something that needs 60fps —
+    // capping at ~30fps halves renderer.render() calls (the single most expensive line
+    // in this file) with no perceptible visual difference.
+    const FRAME_INTERVAL = 1000 / 30;
+    let lastFrameTime = 0;
 
-    function animate() {
+    function animate(now) {
         if (renderingPaused) { animationFrameId = null; return; }
         animationFrameId = requestAnimationFrame(animate);
+
+        if (now - lastFrameTime < FRAME_INTERVAL) return;
+        lastFrameTime = now;
+
         const t = clock.getElapsedTime();
 
         if (terrain) terrain.position.z = (t * 5) % 20 - 50;
@@ -542,7 +566,7 @@ function initWebGL() {
 
         renderer.render(scene, camera);
     }
-    animate();
+    animate(0);
 
     // PERF FIX: the render loop used to run forever, full-speed, even when the tab was
     // backgrounded or the canvas had scrolled off-screen. Now we stop requestAnimationFrame
@@ -559,7 +583,8 @@ function initWebGL() {
         if (!renderingPaused) return;
         renderingPaused = false;
         clock.getDelta(); // avoid a large elapsed-time jump after being paused
-        animate();
+        lastFrameTime = 0;
+        animate(performance.now());
     }
 
     let canvasIsVisible = true;
@@ -591,7 +616,26 @@ function initWebGL() {
     });
 }
 
-initWebGL();
+// PERF FIX: this used to run immediately when main.js executed — building the full
+// scene (geometry, particle buffers, materials) and kicking off a continuous render
+// loop right in the middle of the page's critical loading window, which is exactly
+// what Lighthouse's Total Blocking Time measures. The WebGL scene is a decorative
+// background, not needed for first paint or for the page to be usable, so we now wait
+// for the page to finish loading and the main thread to actually go idle before doing
+// any of this work. Falls back to a short timeout on browsers without
+// requestIdleCallback (e.g. Safari).
+function scheduleWebGLInit() {
+    const start = () => {
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(initWebGL, { timeout: 2000 });
+        } else {
+            setTimeout(initWebGL, 300);
+        }
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+}
+scheduleWebGLInit();
 
 window.addEventListener('resize', () => {
     if (!renderer || !camera) return;
