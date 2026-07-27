@@ -10,13 +10,7 @@
 function escapeHTML(str) {
     if (typeof str !== 'string') return '';
     return str.replace(/[&<>"']/g, (match) => {
-        const escapeMap = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;'
-        };
+        const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
         return escapeMap[match];
     });
 }
@@ -26,10 +20,7 @@ async function fetchWithTimeout(resource, options = {}) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
     try {
-        const response = await fetch(resource, {
-            ...options,
-            signal: controller.signal
-        });
+        const response = await fetch(resource, { ...options, signal: controller.signal });
         clearTimeout(id);
         return response;
     } catch (error) {
@@ -92,14 +83,17 @@ async function fetchWithTimeout(resource, options = {}) {
     if (!menuToggle || !mobileMenu || !menuBackdrop) return;
 
     let previousActiveElement = null;
+    
+    // Ensure properly hidden from a11y tree on load
+    mobileMenu.setAttribute('inert', '');
 
     function openMobileMenu() {
         previousActiveElement = document.activeElement;
+        mobileMenu.removeAttribute('inert');
         mobileMenu.classList.add('open');
         menuBackdrop.classList.add('open');
         document.body.classList.add('menu-open');
         menuToggle.setAttribute('aria-expanded', 'true');
-        mobileMenu.setAttribute('aria-hidden', 'false');
         if (menuIcon) {
             menuIcon.classList.remove('fa-bars-staggered');
             menuIcon.classList.add('fa-xmark');
@@ -110,11 +104,11 @@ async function fetchWithTimeout(resource, options = {}) {
     }
 
     function closeMobileMenu() {
+        mobileMenu.setAttribute('inert', '');
         mobileMenu.classList.remove('open');
         menuBackdrop.classList.remove('open');
         document.body.classList.remove('menu-open');
         menuToggle.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
         if (menuIcon) {
             menuIcon.classList.remove('fa-xmark');
             menuIcon.classList.add('fa-bars-staggered');
@@ -308,7 +302,7 @@ async function fetchWithTimeout(resource, options = {}) {
         if (Array.isArray(articles) && articles.length > 0) {
             container.innerHTML = articles.map(article => `
                 <a href="${escapeHTML(article.url)}" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
-                    <img src="${escapeHTML(article.cover_image || 'assets/placeholder.jpg')}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
+                    <img src="${escapeHTML(article.cover_image || 'assets/placeholder.jpg')}" width="400" height="128" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
                     <h3 class="font-display font-bold text-lg text-gray-50 mb-2">${escapeHTML(article.title)}</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">${escapeHTML(article.description)}</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
@@ -341,10 +335,7 @@ async function fetchWithTimeout(resource, options = {}) {
         mouseY = e.clientY;
         cursorDot.style.left = `${mouseX}px`; 
         cursorDot.style.top = `${mouseY}px`;
-        cursorRing.animate({ 
-            left: `${mouseX}px`, 
-            top: `${mouseY}px` 
-        }, { duration: 100, fill: "forwards" });
+        cursorRing.animate({ left: `${mouseX}px`, top: `${mouseY}px` }, { duration: 100, fill: "forwards" });
     }, { passive: true });
 
     document.querySelectorAll('a, button, .hover-target').forEach(el => {
@@ -374,13 +365,10 @@ async function fetchWithTimeout(resource, options = {}) {
             const y = e.clientY - rect.top;  
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
             const tiltX = (y - centerY) / 20; 
             const tiltY = (centerX - x) / 20;
-            
             el.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
         }, { passive: true });
-
         el.addEventListener('mouseleave', () => {
             el.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
         });
@@ -395,7 +383,6 @@ async function fetchWithTimeout(resource, options = {}) {
             const tiltY = ((x - rect.width / 2) / rect.width) * 10;
             el.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
         }, { passive: true });
-
         el.addEventListener('mouseleave', () => {
             el.style.transform = `rotateX(0deg) rotateY(0deg)`;
         });
@@ -438,7 +425,6 @@ function initWebGL() {
     pointLight2.position.set(-10, -10, 10); 
     scene.add(pointLight2);
 
-    // Terrain Mesh
     const terrainGeo = new THREE.PlaneGeometry(200, 300, 40, 60);
     const pos = terrainGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
@@ -446,19 +432,13 @@ function initWebGL() {
         pos.setZ(i, z);
     }
     terrainGeo.computeVertexNormals();
-    const terrainMat = new THREE.MeshStandardMaterial({ 
-        color: 0x00F2FE, 
-        wireframe: true, 
-        transparent: true, 
-        opacity: 0.08 
-    });
+    const terrainMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.08 });
     terrain = new THREE.Mesh(terrainGeo, terrainMat);
     terrain.rotation.x = -Math.PI / 2;
     terrain.position.y = -20;
     terrain.position.z = -50;
     scene.add(terrain);
 
-    // Dust Particles
     const pGeo = new THREE.BufferGeometry();
     const pCount = 3000;
     const pPos = new Float32Array(pCount * 3);
@@ -468,16 +448,10 @@ function initWebGL() {
         pPos[i+2] = (Math.random() - 0.5) * 300 - 50; 
     }
     pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-    const pMat = new THREE.PointsMaterial({ 
-        size: 0.05, 
-        color: 0xe2e8f0, 
-        transparent: true, 
-        opacity: 0.3 
-    });
+    const pMat = new THREE.PointsMaterial({ size: 0.05, color: 0xe2e8f0, transparent: true, opacity: 0.3 });
     dust = new THREE.Points(pGeo, pMat);
     scene.add(dust);
 
-    // Holographic Core
     avatar3DGroup = new THREE.Group();
     const coreGeo = new THREE.IcosahedronGeometry(4, 2);
     const coreMat = new THREE.MeshStandardMaterial({ color: 0x00F2FE, wireframe: true, transparent: true, opacity: 0.6 });
@@ -492,19 +466,13 @@ function initWebGL() {
     avatar3DGroup.position.set(12, 0, -10); 
     scene.add(avatar3DGroup);
 
-    // Mouse Tracking Parallax
-    let targetX = 0, targetY = 0;
-    let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0, mouseX = 0, mouseY = 0;
     const halfX = window.innerWidth / 2;
     const halfY = window.innerHeight / 2;
 
-    const onMouseMove = (event) => {
-        mouseX = (event.clientX - halfX);
-        mouseY = (event.clientY - halfY);
-    };
+    const onMouseMove = (event) => { mouseX = (event.clientX - halfX); mouseY = (event.clientY - halfY); };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    // Render Loop
     const clock = new THREE.Clock();
     function animate() {
         animationFrameId = requestAnimationFrame(animate);
@@ -513,44 +481,26 @@ function initWebGL() {
         if (terrain) terrain.position.z = (t * 5) % 20 - 50;
         if (dust) dust.rotation.y = t * 0.02;
         
-        if (coreMesh) {
-            coreMesh.rotation.x = t * 0.4;
-            coreMesh.rotation.y = t * 0.5;
-        }
+        if (coreMesh) { coreMesh.rotation.x = t * 0.4; coreMesh.rotation.y = t * 0.5; }
         if (outerHaloMesh) outerHaloMesh.rotation.z = -t * 0.15;
 
-        targetX = mouseX * 0.005;
-        targetY = mouseY * 0.005;
+        targetX = mouseX * 0.005; targetY = mouseY * 0.005;
         camera.position.x += (targetX - camera.position.x) * 0.05;
         camera.position.y += (-targetY - camera.position.y) * 0.05;
-        
         camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 50);
 
         renderer.render(scene, camera);
     }
     animate();
 
-    // Scroll Camera Flight Trigger
     gsap.to(camera.position, {
-        z: -150, 
-        ease: "none",
-        scrollTrigger: {
-            trigger: "#scroll-container",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1.5 
-        }
+        z: -150, ease: "none",
+        scrollTrigger: { trigger: "#scroll-container", start: "top top", end: "bottom bottom", scrub: 1.5 }
     });
 
     gsap.to(dust.rotation, {
-        z: Math.PI / 4,
-        ease: "none",
-        scrollTrigger: {
-            trigger: "#scroll-container",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 2
-        }
+        z: Math.PI / 4, ease: "none",
+        scrollTrigger: { trigger: "#scroll-container", start: "top top", end: "bottom bottom", scrub: 2 }
     });
 }
 
@@ -571,7 +521,6 @@ window.addEventListener('load', () => {
         const pctEl = document.getElementById('loading-percentage');
         if (pctEl) pctEl.innerText = Math.round(this.progress() * 100) + '%';
     }, onComplete: () => {
-        
         gsap.to('#loader', { opacity: 0, duration: 0.8, onComplete: () => {
             const loader = document.getElementById('loader');
             if (loader) loader.style.display = 'none';
@@ -592,14 +541,8 @@ window.addEventListener('load', () => {
         gsap.utils.toArray('.gs-reveal').forEach((elem) => {
             if(!elem.closest('#home')) {
                 gsap.from(elem, { 
-                    y: 80, 
-                    opacity: 0, 
-                    duration: 1.2, 
-                    ease: 'power3.out', 
-                    scrollTrigger: { 
-                        trigger: elem, 
-                        start: 'top 85%' 
-                    }
+                    y: 80, opacity: 0, duration: 1.2, ease: 'power3.out', 
+                    scrollTrigger: { trigger: elem, start: 'top 85%' }
                 });
             }
         });
@@ -621,9 +564,7 @@ function initGalleryScroll() {
     if (!pinWrap || !track || !cards.length) return;
 
     const pad = (n) => String(n).padStart(2, '0');
-    const setCounter = (i) => {
-        if (counterEl) counterEl.textContent = `${pad(i + 1)} / ${pad(cards.length)}`;
-    };
+    const setCounter = (i) => { if (counterEl) counterEl.textContent = `${pad(i + 1)} / ${pad(cards.length)}`; };
     setCounter(0);
 
     let dots = [];
@@ -631,35 +572,25 @@ function initGalleryScroll() {
         dotsWrap.innerHTML = '';
         dots = cards.map((_, i) => {
             const dot = document.createElement('button');
-            dot.type = 'button';
-            dot.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
-            dot.setAttribute('aria-label', `Go to project ${i + 1}`);
-            dot.setAttribute('role', 'tab');
-            dotsWrap.appendChild(dot);
-            return dot;
+            dot.type = 'button'; dot.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
+            dot.setAttribute('aria-label', `Go to project ${i + 1}`); dot.setAttribute('role', 'tab');
+            dotsWrap.appendChild(dot); return dot;
         });
     }
-    const setActiveDot = (i) => {
-        dots.forEach((d, di) => d.classList.toggle('is-active', di === i));
-    };
+    const setActiveDot = (i) => { dots.forEach((d, di) => d.classList.toggle('is-active', di === i)); };
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-        if (prevBtn) prevBtn.style.display = 'none';
-        if (nextBtn) nextBtn.style.display = 'none';
+        if (prevBtn) prevBtn.style.display = 'none'; if (nextBtn) nextBtn.style.display = 'none';
         const step = () => cards[0].getBoundingClientRect().width + 32; 
         const updateNative = () => {
             const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step())));
-            setCounter(idx);
-            setActiveDot(idx);
+            setCounter(idx); setActiveDot(idx);
             if (progressFill) progressFill.style.width = `${(idx / (cards.length - 1)) * 100}%`;
         };
         pinWrap.addEventListener('scroll', updateNative, { passive: true });
-        dots.forEach((dot, i) => dot.addEventListener('click', () => {
-            pinWrap.scrollTo({ left: i * step(), behavior: 'smooth' });
-        }));
-        updateNative();
-        return;
+        dots.forEach((dot, i) => dot.addEventListener('click', () => { pinWrap.scrollTo({ left: i * step(), behavior: 'smooth' }); }));
+        updateNative(); return;
     }
 
     const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
@@ -673,45 +604,24 @@ function initGalleryScroll() {
     updateNavState();
 
     const galleryTween = gsap.to(track, {
-        x: () => -getScrollDistance(),
-        ease: 'none',
-        force3D: true,
+        x: () => -getScrollDistance(), ease: 'none', force3D: true,
         scrollTrigger: {
-            trigger: pinWrap,
-            start: 'top top',
-            end: () => `+=${getScrollDistance() + window.innerHeight * 0.5}`,
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
+            trigger: pinWrap, start: 'top top', end: () => `+=${getScrollDistance() + window.innerHeight * 0.5}`,
+            scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
             onUpdate: (self) => {
                 if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
                 const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
-                if (idx !== currentIndex) {
-                    currentIndex = idx;
-                    updateNavState();
-                }
+                if (idx !== currentIndex) { currentIndex = idx; updateNavState(); }
                 setCounter(currentIndex);
             }
         }
     });
 
     cards.forEach((card) => {
-        gsap.fromTo(card,
-            { scale: 0.85, opacity: 0.5 },
-            {
-                scale: 1,
-                opacity: 1,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: card,
-                    containerAnimation: galleryTween,
-                    start: 'left 78%',
-                    end: 'left 35%',
-                    scrub: true
-                }
-            }
-        );
+        gsap.fromTo(card, { scale: 0.85, opacity: 0.5 }, {
+            scale: 1, opacity: 1, ease: 'none',
+            scrollTrigger: { trigger: card, containerAnimation: galleryTween, start: 'left 78%', end: 'left 35%', scrub: true }
+        });
     });
 
     function goToIndex(i) {
@@ -737,12 +647,8 @@ function initGalleryScroll() {
         goToIndex(currentIndex + (e.key === 'ArrowRight' ? 1 : -1));
     });
 
-    let touchStartX = 0;
-    let touchStartY = 0;
-    pinWrap.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
+    let touchStartX = 0, touchStartY = 0;
+    pinWrap.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
     pinWrap.addEventListener('touchend', (e) => {
         const dx = e.changedTouches[0].clientX - touchStartX;
         const dy = e.changedTouches[0].clientY - touchStartY;
@@ -765,6 +671,9 @@ function initGalleryLightbox() {
     const cards = Array.from(document.querySelectorAll('.gallery-card'));
     if (!lightbox || !mediaHost || !closeBtn || !cards.length) return;
 
+    // Ensure hidden from a11y tree initially
+    lightbox.setAttribute('inert', '');
+
     let currentIndex = 0;
     let previousActiveElement = null;
 
@@ -785,11 +694,7 @@ function initGalleryLightbox() {
         } else {
             const video = document.createElement('video');
             video.src = sourceMedia.currentSrc || sourceMedia.querySelector('source')?.src || '';
-            video.controls = true;
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.playsInline = true;
+            video.controls = true; video.autoplay = true; video.loop = true; video.muted = true; video.playsInline = true;
             mediaHost.appendChild(video);
         }
         if (titleEl) titleEl.textContent = title ? title.textContent : '';
@@ -800,16 +705,16 @@ function initGalleryLightbox() {
 
     function open(index) {
         previousActiveElement = document.activeElement;
+        lightbox.removeAttribute('inert');
         renderCard(index);
         lightbox.classList.add('open');
-        lightbox.setAttribute('aria-hidden', 'false');
         document.body.classList.add('menu-open'); 
         closeBtn.focus();
     }
 
     function close() {
+        lightbox.setAttribute('inert', '');
         lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('menu-open');
         mediaHost.innerHTML = ''; 
         if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
@@ -817,9 +722,7 @@ function initGalleryLightbox() {
         }
     }
 
-    function nav(delta) {
-        renderCard(currentIndex + delta);
-    }
+    function nav(delta) { renderCard(currentIndex + delta); }
 
     cards.forEach((card, i) => {
         const media = card.querySelector('.gallery-card-media');
@@ -833,9 +736,7 @@ function initGalleryLightbox() {
     closeBtn.addEventListener('click', close);
     if (prevBtn) prevBtn.addEventListener('click', () => nav(-1));
     if (nextBtn) nextBtn.addEventListener('click', () => nav(1));
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) close();
-    });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
 
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('open')) return;
@@ -846,16 +747,9 @@ function initGalleryLightbox() {
         if (e.key === 'Tab') {
             const focusables = Array.from(lightbox.querySelectorAll('button:not([disabled]), a[href]'));
             if (!focusables.length) return;
-            const first = focusables[0];
-            const last = focusables[focusables.length - 1];
-
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-            }
+            const first = focusables[0]; const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
     });
 }
@@ -871,27 +765,21 @@ initGalleryLightbox();
             e.stopPropagation();
             video.muted = !video.muted;
             btn.setAttribute('aria-label', video.muted ? 'Unmute preview' : 'Mute preview');
-            btn.innerHTML = video.muted
-                ? '<i class="fa-solid fa-volume-xmark"></i>'
-                : '<i class="fa-solid fa-volume-high"></i>';
+            btn.innerHTML = video.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
         });
     });
 
     document.querySelectorAll('.gallery-card-media img').forEach((img) => {
-        if (img.complete && img.naturalWidth > 0) {
-            img.classList.add('is-loaded');
-        } else {
+        if (img.complete && img.naturalWidth > 0) { img.classList.add('is-loaded'); }
+        else {
             img.addEventListener('load', () => img.classList.add('is-loaded'));
             img.addEventListener('error', () => img.classList.add('is-loaded'));
         }
     });
 
     document.querySelectorAll('.gallery-card-media video').forEach((video) => {
-        if (video.readyState >= 2) {
-            video.classList.add('is-loaded');
-        } else {
-            video.addEventListener('loadeddata', () => video.classList.add('is-loaded'));
-        }
+        if (video.readyState >= 2) { video.classList.add('is-loaded'); }
+        else { video.addEventListener('loadeddata', () => video.classList.add('is-loaded')); }
     });
 
     const videos = document.querySelectorAll('.gallery-card-media video');
@@ -899,11 +787,7 @@ initGalleryLightbox();
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             const vid = entry.target;
-            if (entry.isIntersecting) {
-                vid.play().catch(() => {});
-            } else {
-                vid.pause();
-            }
+            if (entry.isIntersecting) { vid.play().catch(() => {}); } else { vid.pause(); }
         });
     }, { threshold: 0.25 });
     videos.forEach((v) => observer.observe(v));
