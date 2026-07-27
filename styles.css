@@ -49,7 +49,9 @@ body {
 }
 
 @media (pointer: fine) {
-    body { cursor: none; }
+    body {
+        cursor: none;
+    }
 }
 
 /* Cinematic Noise Overlay */
@@ -255,7 +257,9 @@ button:focus-visible,
     transition: width 0.3s ease;
 }
 .nav-link:hover::after { width: 100%; }
-.hero-title { font-size: clamp(2.75rem, 9vw, 7rem) !important; }
+
+/* Prevent CLS on Hero Title */
+.hero-title { font-size: clamp(2.75rem, 9vw, 7rem) !important; min-height: 1.1em; }
 
 .clip-hex { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
