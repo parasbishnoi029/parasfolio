@@ -22,7 +22,7 @@
     // gemini-3.5-flash-lite is the current GA lightweight model (fast + cheapest tier,
     // successor to the retired 2.0-flash-lite / 2.5-flash-lite line). If your key only
     // has access to an older tier, swap this for 'gemini-2.5-flash-lite'.
-    const GEMINI_MODEL = 'gemini-1.5-pro';
+    const GEMINI_MODEL = 'gemini-1.5-flash';
     const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
     const GEMINI_TIMEOUT_MS = 8000;
     const GEMINI_MAX_HISTORY_TURNS = 8;
