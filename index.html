@@ -1260,17 +1260,10 @@
     <script src="main.js" defer></script>
 
     <!-- ========================================== -->
-    <!-- CUSTOM RAG AI CHATBOT AGENT (Botpress v2)  -->
+    <!-- CUSTOM AI ASSISTANT CHATBOT (ParasBot)     -->
+    <!-- Knows this site's content in detail, pulls -->
+    <!-- live GitHub data, and links to LinkedIn.   -->
     <!-- ========================================== -->
-    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
-    <script src="https://mediafiles.botpress.cloud/YOUR_BOT_WORKSPACE_ID/webchat/v2.2/config.js"></script>
-    <script>
-      // Extra UI overrides for the v2.2 widget
-      window.botpressWebChat.onEvent(function (event) {
-          if (event.type === 'LIFECYCLE.LOADED') {
-              window.botpressWebChat.sendEvent({ type: 'UI.SET_THEME', payload: 'dark' });
-          }
-      }, ['LIFECYCLE.LOADED']);
-    </script>
+    <script src="chatbot.js" defer></script>
 </body>
 </html>
