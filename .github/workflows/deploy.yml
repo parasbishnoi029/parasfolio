@@ -28,7 +28,7 @@ jobs:
           if [ "${KEY_LEN}" -lt 20 ]; then
             echo "::error::secrets.parasfolio_key is missing, empty, or suspiciously short (${KEY_LEN} chars)."
             echo "::error::Check Settings > Secrets and variables > Actions > Repository secrets"
-            echo "::error::in THIS repo, and confirm the secret name is exactly 'parasfolio_key'."
+            echo "::error::in THIS repo, and confirm the secret name is exactly 'PARASFOLIO_KEY'."
             exit 1
           fi
 
