@@ -1,9 +1,12 @@
-/**   
+/**
  * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
  *  1. Answers questions using a knowledge base built from this site's own content.
  *  2. Pulls LIVE data from the public GitHub REST API.
  *  3. Links out to the LinkedIn profile.
+ *  4. Reasons with the Gemini API (client-side, domain-restricted key) when available,
+ *     and silently degrades to the local rule-based engine if the key is missing,
+ *     rate-limited, blocked, or the network call fails.
  */
 (function () {
     'use strict';
@@ -15,11 +18,16 @@
 
     // ---------------- Gemini reasoning layer ----------------
     // This placeholder is automatically replaced by GitHub Actions during deployment.
-    const GEMINI_API_KEY = 'INJECT_API_KEY_HERE'; 
-    const GEMINI_MODEL = 'gemini-2.5-flash-lite';
+    const GEMINI_API_KEY = 'INJECT_API_KEY_HERE';
+    // gemini-3.5-flash-lite is the current GA lightweight model (fast + cheapest tier,
+    // successor to the retired 2.0-flash-lite / 2.5-flash-lite line). If your key only
+    // has access to an older tier, swap this for 'gemini-2.5-flash-lite'.
+    const GEMINI_MODEL = 'gemini-3.5-flash-lite';
     const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
     const GEMINI_TIMEOUT_MS = 8000;
-    const GEMINI_MAX_HISTORY_TURNS = 8; 
+    const GEMINI_MAX_HISTORY_TURNS = 8;
+    const GEMINI_MAX_INPUT_CHARS = 800; // guard against pathological input blowing up token usage
+    const GEMINI_MAX_RETRIES = 1; // one retry on 429/5xx, then fall back to the rule engine
 
     function escapeHTML(str) {
         if (typeof str !== 'string') return '';
@@ -34,6 +42,10 @@
             const trail = url.slice(clean.length);
             return `<a href="${clean}" target="_blank" rel="noopener noreferrer">${clean}</a>${trail}`;
         });
+    }
+
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     // ---------------- Answer knowledge base ----------------
@@ -98,6 +110,18 @@ About/focus — ${WHY_KB.about}
 GitHub — ${WHY_KB.github}
 LinkedIn — ${WHY_KB.linkedin}`;
 
+    // Loosen the default safety thresholds for the higher-severity-only categories.
+    // This is a portfolio Q&A bot with no user-generated harmful content risk, so the
+    // stock "block medium and above" defaults occasionally over-trigger on ordinary
+    // phrasing (e.g. "hire him", "attack this problem"). We keep categories at a sane
+    // threshold rather than disabling safety entirely.
+    const GEMINI_SAFETY_SETTINGS = [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' }
+    ];
+
     const TOPICS = {
         greeting: ['hi', 'hello', 'hey', 'yo', 'sup', 'good morning', 'good evening'],
         thanks: ['thanks', 'thank you', 'thankyou', 'thx', 'appreciate', 'cheers'],
@@ -148,9 +172,13 @@ LinkedIn — ${WHY_KB.linkedin}`;
         return bestScore > 0 ? best : null;
     }
 
+    // ---------------- Live GitHub lookup ----------------
+    const GH_CACHE_TTL_MS = 5 * 60 * 1000; // refresh at most every 5 minutes
     let ghCache = null;
+    let ghCacheAt = 0;
+
     async function fetchGithubSummary() {
-        if (ghCache) return ghCache;
+        if (ghCache && Date.now() - ghCacheAt < GH_CACHE_TTL_MS) return ghCache;
         try {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), 6000);
@@ -174,83 +202,137 @@ LinkedIn — ${WHY_KB.linkedin}`;
                 .join('\n');
 
             ghCache = `Live from GitHub (@${GH_USER}):\n• ${user.public_repos} public repos, ${user.followers} followers, ${user.following} following\n• ${totalStars}★ total across repos\n${user.bio ? `• Bio: ${user.bio}\n` : ''}Top repos:\n${topList || '  – (no repos returned)'}\nFull profile: ${GITHUB_URL}`;
+            ghCacheAt = Date.now();
             return ghCache;
         } catch (err) {
             return `I couldn't reach the live GitHub API just now (rate limit or network hiccup), but here's the profile directly: ${GITHUB_URL}\nPinned AI repos include Neural Net From Scratch, CodeBridge, and AI Resume Analyser.`;
         }
     }
 
+    // ---------------- Gemini call layer ----------------
     let geminiHistory = [];
+    let geminiDisabledForSession = false; // set true after an auth/config error that a retry can't fix
 
     function looksGithubRelated(text) {
         return /\bgithub\b|\brepo(s|sitor(y|ies))?\b|open[\s-]?source|\bcommits?\b|\bstars?\b/i.test(text);
     }
 
     function trimGeminiHistory() {
-        const maxEntries = GEMINI_MAX_HISTORY_TURNS * 2; 
+        const maxEntries = GEMINI_MAX_HISTORY_TURNS * 2;
         if (geminiHistory.length > maxEntries) {
             geminiHistory = geminiHistory.slice(geminiHistory.length - maxEntries);
         }
     }
 
-    async function askGemini(userText) {
-        if (!GEMINI_API_KEY || GEMINI_API_KEY === 'INJECT_API_KEY_HERE') {
-            throw new Error('Gemini not configured');
+    // Records a turn that was answered locally (quick-reply chip or rule-engine match)
+    // into the Gemini conversation log, so a later free-text "why?" or follow-up still
+    // has the right context even though that particular turn skipped the API.
+    function recordLocalTurn(userText, botText) {
+        geminiHistory.push({ role: 'user', parts: [{ text: userText }] });
+        geminiHistory.push({ role: 'model', parts: [{ text: botText }] });
+        trimGeminiHistory();
+    }
+
+    function isGeminiConfigured() {
+        return Boolean(GEMINI_API_KEY) && GEMINI_API_KEY !== 'INJECT_API_KEY_HERE' && !geminiDisabledForSession;
+    }
+
+    async function callGeminiOnce(contents, signal) {
+        const res = await fetch(GEMINI_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': GEMINI_API_KEY
+            },
+            signal,
+            body: JSON.stringify({
+                systemInstruction: { parts: [{ text: GEMINI_SYSTEM_PROMPT }] },
+                contents,
+                safetySettings: GEMINI_SAFETY_SETTINGS,
+                generationConfig: {
+                    temperature: 0.4,
+                    maxOutputTokens: 400
+                }
+            })
+        });
+
+        if (res.status === 400 || res.status === 401 || res.status === 403) {
+            // Bad request / bad or domain-restricted key — retrying won't help this session.
+            geminiDisabledForSession = true;
+            throw new Error(`Gemini config error (HTTP ${res.status})`);
+        }
+        if (res.status === 429 || res.status >= 500) {
+            const err = new Error(`Gemini transient error (HTTP ${res.status})`);
+            err.retryable = true;
+            throw err;
+        }
+        if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+
+        const data = await res.json();
+        const candidate = data.candidates && data.candidates[0];
+
+        if (!candidate) {
+            // Whole prompt got blocked (promptFeedback.blockReason) or no candidate returned.
+            throw new Error('Gemini returned no candidates');
         }
 
+        const finishReason = candidate.finishReason;
+        if (finishReason && finishReason !== 'STOP' && finishReason !== 'MAX_TOKENS') {
+            // SAFETY, RECITATION, OTHER, etc. — don't surface a truncated/blocked reply.
+            throw new Error(`Gemini finishReason: ${finishReason}`);
+        }
+
+        const replyText = candidate.content && candidate.content.parts
+            ? candidate.content.parts.map((p) => p.text || '').join('').trim()
+            : '';
+
+        if (!replyText) throw new Error('Empty Gemini response');
+        return replyText;
+    }
+
+    async function askGemini(userText) {
+        if (!isGeminiConfigured()) throw new Error('Gemini not configured');
+
+        const trimmedInput = userText.length > GEMINI_MAX_INPUT_CHARS
+            ? userText.slice(0, GEMINI_MAX_INPUT_CHARS)
+            : userText;
+
         let liveContext = '';
-        if (looksGithubRelated(userText)) {
-            try { liveContext = await fetchGithubSummary(); } catch (_) { }
+        if (looksGithubRelated(trimmedInput)) {
+            try { liveContext = await fetchGithubSummary(); } catch (_) { /* fall through without live data */ }
         }
 
         const turnText = liveContext
-            ? `${userText}\n\n[LIVE_GITHUB_DATA — use this if relevant, ignore otherwise]\n${liveContext}`
-            : userText;
+            ? `${trimmedInput}\n\n[LIVE_GITHUB_DATA — use this if relevant, ignore otherwise]\n${liveContext}`
+            : trimmedInput;
 
         const contents = [
             ...geminiHistory,
             { role: 'user', parts: [{ text: turnText }] }
         ];
 
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+        let lastErr = null;
+        for (let attempt = 0; attempt <= GEMINI_MAX_RETRIES; attempt++) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+            try {
+                const replyText = await callGeminiOnce(contents, controller.signal);
+                clearTimeout(timer);
 
-        try {
-            const res = await fetch(GEMINI_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': GEMINI_API_KEY
-                },
-                signal: controller.signal,
-                body: JSON.stringify({
-                    system_instruction: { parts: [{ text: GEMINI_SYSTEM_PROMPT }] },
-                    contents,
-                    generationConfig: {
-                        temperature: 0.4,
-                        maxOutputTokens: 400
-                    }
-                })
-            });
+                geminiHistory.push({ role: 'user', parts: [{ text: turnText }] });
+                geminiHistory.push({ role: 'model', parts: [{ text: replyText }] });
+                trimGeminiHistory();
 
-            if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
-
-            const data = await res.json();
-            const candidate = data.candidates && data.candidates[0];
-            const replyText = candidate && candidate.content && candidate.content.parts
-                ? candidate.content.parts.map((p) => p.text || '').join('').trim()
-                : '';
-
-            if (!replyText) throw new Error('Empty Gemini response');
-
-            geminiHistory.push({ role: 'user', parts: [{ text: turnText }] });
-            geminiHistory.push({ role: 'model', parts: [{ text: replyText }] });
-            trimGeminiHistory();
-
-            return replyText;
-        } finally {
-            clearTimeout(timer);
+                return replyText;
+            } catch (err) {
+                clearTimeout(timer);
+                lastErr = err;
+                const canRetry = err && err.retryable && attempt < GEMINI_MAX_RETRIES;
+                if (!canRetry) break;
+                await sleep(500 * (attempt + 1)); // brief backoff before the single retry
+            }
         }
+        throw lastErr || new Error('Gemini call failed');
     }
 
     const QUICK_REPLIES = [
@@ -289,6 +371,7 @@ LinkedIn — ${WHY_KB.linkedin}`;
         return KB[topic] || KB.fallback;
     }
 
+    // ---------------- UI construction ----------------
     let panelOpen = false;
     let previousActiveElement = null;
 
@@ -378,17 +461,28 @@ LinkedIn — ${WHY_KB.linkedin}`;
 
             const typing = showTyping();
 
-            let reply;
-            if (!forcedTopic && GEMINI_API_KEY && GEMINI_API_KEY !== 'INJECT_API_KEY_HERE') {
+            let reply = null;
+            let usedGemini = false;
+
+            if (!forcedTopic && isGeminiConfigured()) {
                 try {
                     reply = await askGemini(displayText);
-                } catch (_) {
+                    usedGemini = true;
+                } catch (err) {
+                    console.warn('[ParasBot] Gemini unavailable, falling back to rule engine:', err && err.message);
                     reply = null;
                 }
             }
+
             if (!reply) {
                 const topic = forcedTopic || classify(displayText) || 'fallback';
                 reply = await answerFor(topic, displayText);
+                // Keep Gemini's context in sync even when a turn was answered locally
+                // (quick-reply chip, or a Gemini failure that fell through to the rule engine),
+                // so a later free-text follow-up still has the right conversational context.
+                if (isGeminiConfigured() && !usedGemini) {
+                    recordLocalTurn(displayText, reply);
+                }
             }
 
             typing.remove();
