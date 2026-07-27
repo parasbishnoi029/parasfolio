@@ -2,7 +2,7 @@ name: Deploy Portfolio & Inject API Key
 
 on:
   push:
-    branches: ["main"] # Change to "master" if that is your default branch
+    branches: ["main"] 
 
 permissions:
   contents: read
@@ -24,11 +24,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Inject Secret Gemini API Key into JS
-        # Pulling your specific secret: parasfolio_key
         env:
           GEMINI_KEY: ${{ secrets.parasfolio_key }}
+        # CHANGED: Now targeting chatbot.js instead of main_2.js
         run: |
-          sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" main_2.js
+          sed -i "s/INJECT_API_KEY_HERE/${GEMINI_KEY}/g" chatbot.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
