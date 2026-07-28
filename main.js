@@ -704,7 +704,7 @@ function initGalleryScroll() {
         dots = cards.map((_, i) => {
             const dot = document.createElement('button');
             dot.type = 'button'; dot.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
-            dot.setAttribute('aria-label', `Go to project ${i + 1}`); dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-label', `Go to photo ${i + 1}`); dot.setAttribute('role', 'tab');
             dotsWrap.appendChild(dot); return dot;
         });
     }
@@ -820,7 +820,7 @@ function initGalleryLightbox() {
         if (sourceMedia.tagName === 'IMG') {
             const img = document.createElement('img');
             img.src = sourceMedia.currentSrc || sourceMedia.src;
-            img.alt = escapeHTML(sourceMedia.alt || 'Project Preview');
+            img.alt = escapeHTML(sourceMedia.alt || 'Photo preview');
             mediaHost.appendChild(img);
         } else {
             const video = document.createElement('video');
@@ -830,8 +830,8 @@ function initGalleryLightbox() {
         }
         if (titleEl) titleEl.textContent = title ? title.textContent : '';
         if (descEl) descEl.textContent = desc ? desc.textContent : '';
-        if (prevBtn) prevBtn.setAttribute('aria-label', `Previous project (${currentIndex + 1} of ${cards.length})`);
-        if (nextBtn) nextBtn.setAttribute('aria-label', `Next project (${currentIndex + 1} of ${cards.length})`);
+        if (prevBtn) prevBtn.setAttribute('aria-label', `Previous photo (${currentIndex + 1} of ${cards.length})`);
+        if (nextBtn) nextBtn.setAttribute('aria-label', `Next photo (${currentIndex + 1} of ${cards.length})`);
     }
 
     function open(index) {
