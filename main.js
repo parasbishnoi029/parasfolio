@@ -923,3 +923,4 @@ initGalleryLightbox();
     }, { threshold: 0.25 });
     videos.forEach((v) => observer.observe(v));
 })();
+ 
