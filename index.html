@@ -68,7 +68,7 @@
 
     <link rel="canonical" href="https://parasbishnoi029.github.io/parasfolio/">  
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://parasbishnoi029.github.io/parasfolio/sitemap.xml">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+
     <script defer data-domain="parasbishnoi029.github.io" src="https://plausible.io/js/script.js"></script>
 
     <script type="application/ld+json">
@@ -181,6 +181,7 @@
             <a href="#stack" data-nav-section="stack" class="nav-link hover:text-primary transition-colors hover-target">Stack</a>
             <a href="#systems" data-nav-section="systems" class="nav-link hover:text-primary transition-colors hover-target">Systems</a>
             <a href="#gallery" data-nav-section="gallery" class="nav-link hover:text-primary transition-colors hover-target">Gallery</a>
+            <a href="#photos" data-nav-section="photos" class="nav-link hover:text-primary transition-colors hover-target">Photos</a>
             <a href="#research" data-nav-section="research" class="nav-link hover:text-primary transition-colors hover-target">Research</a>
             <a href="#achievements" data-nav-section="achievements" class="nav-link hover:text-primary transition-colors hover-target">Awards</a>
             <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="px-6 py-2.5 border border-gray-200/20 rounded-full hover:border-primary hover:text-primary transition-all hover-target text-gray-50 flex items-center space-x-2 bg-gray-100/5 backdrop-blur-md">
@@ -204,6 +205,7 @@
             <a href="#stack" class="mobile-nav-link">Stack</a>
             <a href="#systems" class="mobile-nav-link">Systems</a>
             <a href="#gallery" class="mobile-nav-link">Gallery</a>
+            <a href="#photos" class="mobile-nav-link">Photos</a>
             <a href="#research" class="mobile-nav-link">Research</a>
             <a href="#achievements" class="mobile-nav-link">Awards</a>
             <a href="resume.pdf" target="_blank" rel="noopener noreferrer" download data-asset-check="resume.pdf" class="mobile-nav-link mobile-nav-resume">
@@ -755,7 +757,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 gs-reveal">
 
                     <!-- AI Resume Analyser -->
-                    <article class="gallery-card hover-target">
+                    <article class="showcase-card project-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner border-t-2 border-primary">
                             <div class="gallery-card-body p-8">
@@ -774,7 +776,7 @@
                     </article>
 
                     <!-- Course Recommendation Assistant -->
-                    <article class="gallery-card hover-target">
+                    <article class="showcase-card project-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner border-t-2 border-secondary">
                             <div class="gallery-card-body p-8">
@@ -792,7 +794,7 @@
                     </article>
 
                     <!-- Job Pre-Screening Bot -->
-                    <article class="gallery-card hover-target">
+                    <article class="showcase-card project-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner border-t-2 border-accent">
                             <div class="gallery-card-body p-8">
@@ -811,7 +813,7 @@
                     </article>
 
                     <!-- ChatGPT Vercel -->
-                    <article class="gallery-card hover-target">
+                    <article class="showcase-card project-card hover-target">
                         <div class="gallery-card-glow"></div>
                         <div class="gallery-card-inner border-t-2 border-gray-400">
                             <div class="gallery-card-body p-8">
@@ -828,6 +830,138 @@
                             </div>
                         </div>
                     </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5B: PHOTOS -->
+        <!-- This activates the pinned horizontal-scroll gallery + lightbox system that
+             already existed in styles.css/main.js (#gallery-pin, #gallery-track,
+             .gallery-card-media, gallery-lightbox) but had no markup using it yet.
+             PLACEHOLDER CONTENT: images are lightweight generated SVGs and captions are
+             generic — swap both for real photos + captions. To replace a photo, keep the
+             same <picture>/<img> attributes (width/height/loading/decoding) and just
+             point src/srcset at your real, pre-optimized image files (see profile-384/
+             768.webp+jpg for the compression pattern used elsewhere on this page). -->
+        <section id="photos" class="py-40">
+            <div class="max-w-7xl mx-auto w-full">
+                <div class="text-center mb-16 gs-reveal">
+                    <span class="text-[10px] font-mono tracking-widest text-primary uppercase block mb-4">Behind The Work</span>
+                    <h2 class="font-display text-5xl md:text-6xl font-bold text-gray-50 tracking-tighter">Photos.</h2>
+                </div>
+
+                <div class="relative gs-reveal">
+                    <button type="button" id="gallery-prev" class="gallery-nav-btn gallery-nav-prev hover-target" aria-label="Previous photo">
+                        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" id="gallery-next" class="gallery-nav-btn gallery-nav-next hover-target" aria-label="Next photo">
+                        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+
+                    <div id="gallery-pin" role="region" aria-roledescription="carousel" aria-label="Photo gallery" tabindex="0">
+                        <div id="gallery-track">
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-1.svg" alt="Campus life at IIT Jodhpur" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">Campus Life</h3>
+                                        <p class="text-sm text-gray-400 font-light">IIT Jodhpur — replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-2.svg" alt="Hackathon or team event" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">Hackathon Nights</h3>
+                                        <p class="text-sm text-gray-400 font-light">Replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-3.svg" alt="Team or club moment" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">Team Moments</h3>
+                                        <p class="text-sm text-gray-400 font-light">Replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-4.svg" alt="Conference or talk" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">On Stage</h3>
+                                        <p class="text-sm text-gray-400 font-light">Replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-5.svg" alt="Workspace or desk setup" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">The Setup</h3>
+                                        <p class="text-sm text-gray-400 font-light">Replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="showcase-card gallery-card hover-target">
+                                <div class="gallery-card-glow"></div>
+                                <div class="gallery-card-inner">
+                                    <div class="gallery-card-media">
+                                        <img src="photo-placeholder-6.svg" alt="Travel or personal moment" loading="lazy" decoding="async" width="460" height="320">
+                                        <div class="gallery-expand-hint" aria-hidden="true"><i class="fa-solid fa-expand"></i></div>
+                                    </div>
+                                    <div class="gallery-card-body">
+                                        <h3 class="font-display text-xl font-bold text-gray-50">Off The Clock</h3>
+                                        <p class="text-sm text-gray-400 font-light">Replace with a real caption.</p>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="gallery-card gallery-cta-card hover-target">
+                                <div class="gallery-cta-inner">
+                                    <i class="fa-brands fa-instagram text-3xl text-pink-400 mb-4 block" aria-hidden="true"></i>
+                                    <h3 class="font-display text-xl font-bold text-gray-50 mb-2">More on Instagram</h3>
+                                    <a href="https://www.instagram.com/parasbishnoi.03/" target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest text-primary hover:text-gray-50 transition-colors hover-target">@parasbishnoi.03</a>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+
+                    <div class="gallery-controls-row">
+                        <span id="gallery-counter" class="gallery-counter-text">01 / 07</span>
+                        <div class="gallery-progress-track"><div id="gallery-progress-fill"></div></div>
+                    </div>
+                    <div id="gallery-dots" class="gallery-dots" role="tablist" aria-label="Photo navigation"></div>
+                    <p class="gallery-swipe-hint"><i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i> Swipe to explore</p>
                 </div>
             </div>
         </section>
@@ -1195,14 +1329,14 @@
 
     <!-- GALLERY LIGHTBOX MODAL -->
     <!-- A11y Fix: inert hides from accessibility tree when closed -->
-    <div id="gallery-lightbox" class="gallery-lightbox" inert role="dialog" aria-modal="true" aria-label="Project Preview Modal">
+    <div id="gallery-lightbox" class="gallery-lightbox" inert role="dialog" aria-modal="true" aria-label="Photo Preview Modal">
         <button type="button" id="gallery-lightbox-close" class="gallery-lightbox-close hover-target" aria-label="Close preview">
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
-        <button type="button" id="gallery-lightbox-prev" class="gallery-lightbox-nav gallery-lightbox-prev hover-target" aria-label="Previous project">
+        <button type="button" id="gallery-lightbox-prev" class="gallery-lightbox-nav gallery-lightbox-prev hover-target" aria-label="Previous photo">
             <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
         </button>
-        <button type="button" id="gallery-lightbox-next" class="gallery-lightbox-nav gallery-lightbox-next hover-target" aria-label="Next project">
+        <button type="button" id="gallery-lightbox-next" class="gallery-lightbox-nav gallery-lightbox-next hover-target" aria-label="Next photo">
             <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
         </button>
         <div class="gallery-lightbox-inner">
