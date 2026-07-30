@@ -1,4 +1,4 @@
-/** 
+/**
  * PARASFOLIO CORE LOGIC
  * Features: Custom Cursor, 3D Hover Tilt, GSAP ScrollTriggers, 
  * Memory-Managed Three.js WebGL Engine, Abortable API Feeds & Dynamic Lightbox Focus Trap.
@@ -683,10 +683,24 @@ window.addEventListener('load', () => {
 });
 
 // --- GALLERY SCROLL LOGIC ---
+// PERF/RELIABILITY FIX: this used to pin the section and scrub a GSAP transform across
+// it, with a second, separate touch-swipe gesture detector layered on top that also
+// tried to jump the position on every swipe. Two things could make it break in
+// practice: (1) the pinned scroll-distance calculation only has to be off by a little
+// for the pin to release before the track has translated far enough — and since the
+// container clips overflow, everything past that point is simply clipped off (shows as
+// blank space), which is exactly the "first few show, then blank" symptom; (2) on
+// touch, the scroll-driven animation and the separate swipe-jump handler could both
+// fire for the same gesture and fight each other.
+// Now it's real native horizontal scrolling with CSS scroll-snap (the codebase already
+// had this exact approach built as a prefers-reduced-motion fallback — it's simply the
+// only path now). No distance math to get wrong, no pinning, no second gesture handler
+// competing with the browser's own scrolling — mouse, trackpad, and touch all just work
+// because they're driving a real scroll container instead of a simulated one.
 function initGalleryScroll() {
     const pinWrap = document.getElementById('gallery-pin');
     const track = document.getElementById('gallery-track');
-    const cards = gsap.utils.toArray('.gallery-card');
+    const cards = Array.from(document.querySelectorAll('#gallery-track .gallery-card'));
     const progressFill = document.getElementById('gallery-progress-fill');
     const counterEl = document.getElementById('gallery-counter');
     const prevBtn = document.getElementById('gallery-prev');
@@ -696,7 +710,6 @@ function initGalleryScroll() {
 
     const pad = (n) => String(n).padStart(2, '0');
     const setCounter = (i) => { if (counterEl) counterEl.textContent = `${pad(i + 1)} / ${pad(cards.length)}`; };
-    setCounter(0);
 
     let dots = [];
     if (dotsWrap) {
@@ -710,62 +723,31 @@ function initGalleryScroll() {
     }
     const setActiveDot = (i) => { dots.forEach((d, di) => d.classList.toggle('is-active', di === i)); };
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-        if (prevBtn) prevBtn.style.display = 'none'; if (nextBtn) nextBtn.style.display = 'none';
-        const step = () => cards[0].getBoundingClientRect().width + 32; 
-        const updateNative = () => {
-            const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step())));
-            setCounter(idx); setActiveDot(idx);
-            if (progressFill) progressFill.style.width = `${(idx / (cards.length - 1)) * 100}%`;
-        };
-        pinWrap.addEventListener('scroll', updateNative, { passive: true });
-        dots.forEach((dot, i) => dot.addEventListener('click', () => { pinWrap.scrollTo({ left: i * step(), behavior: 'smooth' }); }));
-        updateNative(); return;
-    }
-
-    const getScrollDistance = () => Math.max(track.scrollWidth - pinWrap.clientWidth, 0);
     let currentIndex = 0;
+    // Real gap between card starts (works even if individual card widths differ, e.g.
+    // the CTA card), rather than assuming every card is the same width.
+    const cardStep = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].getBoundingClientRect().width);
 
-    const updateNavState = () => {
-        if (prevBtn) prevBtn.disabled = currentIndex === 0;
-        if (nextBtn) nextBtn.disabled = currentIndex === cards.length - 1;
-        setActiveDot(currentIndex);
+    const updateFromScroll = () => {
+        const step = cardStep() || 1;
+        const idx = Math.min(cards.length - 1, Math.max(0, Math.round(pinWrap.scrollLeft / step)));
+        if (idx !== currentIndex) { currentIndex = idx; setActiveDot(idx); }
+        setCounter(idx);
+        const maxScroll = Math.max(track.scrollWidth - pinWrap.clientWidth, 1);
+        if (progressFill) progressFill.style.width = `${Math.min(100, (pinWrap.scrollLeft / maxScroll) * 100)}%`;
+        if (prevBtn) prevBtn.disabled = idx === 0;
+        if (nextBtn) nextBtn.disabled = idx === cards.length - 1;
     };
-    updateNavState();
-
-    const galleryTween = gsap.to(track, {
-        x: () => -getScrollDistance(), ease: 'none', force3D: true,
-        scrollTrigger: {
-            trigger: pinWrap, start: 'top top', end: () => `+=${getScrollDistance() + window.innerHeight * 0.5}`,
-            scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
-            onUpdate: (self) => {
-                if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
-                const idx = Math.min(cards.length - 1, Math.round(self.progress * (cards.length - 1)));
-                if (idx !== currentIndex) { currentIndex = idx; updateNavState(); }
-                setCounter(currentIndex);
-            }
-        }
-    });
-
-    cards.forEach((card) => {
-        gsap.fromTo(card, { scale: 0.85, opacity: 0.5 }, {
-            scale: 1, opacity: 1, ease: 'none',
-            scrollTrigger: { trigger: card, containerAnimation: galleryTween, start: 'left 78%', end: 'left 35%', scrub: true }
-        });
-    });
 
     function goToIndex(i) {
         const clamped = Math.min(Math.max(i, 0), cards.length - 1);
-        const st = galleryTween.scrollTrigger;
-        const targetProgress = clamped / (cards.length - 1);
-        const targetScroll = st.start + targetProgress * (st.end - st.start);
-        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        pinWrap.scrollTo({ left: cards[clamped].offsetLeft - track.offsetLeft, behavior: 'smooth' });
     }
 
+    pinWrap.addEventListener('scroll', updateFromScroll, { passive: true });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goToIndex(i)));
     if (prevBtn) prevBtn.addEventListener('click', () => goToIndex(currentIndex - 1));
     if (nextBtn) nextBtn.addEventListener('click', () => goToIndex(currentIndex + 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => goToIndex(i)));
 
     document.addEventListener('keydown', (e) => {
         const tag = e.target && e.target.tagName;
@@ -778,16 +760,7 @@ function initGalleryScroll() {
         goToIndex(currentIndex + (e.key === 'ArrowRight' ? 1 : -1));
     });
 
-    let touchStartX = 0, touchStartY = 0;
-    pinWrap.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
-    pinWrap.addEventListener('touchend', (e) => {
-        const dx = e.changedTouches[0].clientX - touchStartX;
-        const dy = e.changedTouches[0].clientY - touchStartY;
-        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return; 
-        goToIndex(currentIndex + (dx < 0 ? 1 : -1));
-    }, { passive: true });
-
-    ScrollTrigger.refresh();
+    updateFromScroll();
 }
 
 // --- GALLERY LIGHTBOX WITH FOCUS TRAP ---
@@ -923,4 +896,3 @@ initGalleryLightbox();
     }, { threshold: 0.25 });
     videos.forEach((v) => observer.observe(v));
 })();
- 
