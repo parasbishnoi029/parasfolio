@@ -1,4 +1,4 @@
-/* ========================================== */ 
+/* ========================================== */
 /* DESIGN SYSTEM TOKENS                       */
 /* ========================================== */
 :root {
@@ -268,26 +268,36 @@ button:focus-visible,
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ========================================== */
-/* GALLERY: PINNED HORIZONTAL SCROLL SYSTEM   */
+/* GALLERY: NATIVE HORIZONTAL SCROLL + SNAP   */
 /* ========================================== */
-#gallery-pin { overflow: hidden; position: relative; }
+/* RELIABILITY FIX: previously a GSAP-pinned section with the track's position driven
+   by a scrubbed transform, calculated from track.scrollWidth. If that distance
+   calculation came out even slightly off, the pin released before the track had
+   translated far enough — and since this container clips overflow, everything past
+   that point was simply clipped off (visible as blank space after the first few
+   cards). Now it's a real native horizontal scroll container with CSS scroll-snap:
+   the browser handles the scrolling itself, so there's no distance math to get wrong
+   and no separate touch-gesture handler that could fight the scroll. */
+#gallery-pin {
+    position: relative; overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; overscroll-behavior-x: contain;
+}
 #gallery-pin[role="region"] { outline: none; }
-#gallery-track { display: flex; align-items: center; gap: 2rem; will-change: transform; padding: 4rem 4vw; }
+#gallery-track { display: flex; align-items: center; gap: 2rem; padding: 4rem 4vw; }
 /* PERF/CORRECTNESS FIX: .gallery-card is queried directly by JS
-   (gsap.utils.toArray('.gallery-card') in initGalleryScroll, and
-   document.querySelectorAll('.gallery-card') in initGalleryLightbox) to build the
-   pinned horizontal-scroll photo gallery + its lightbox. The ML Portfolio project
-   cards want the same glass-card visual language but must NOT be swept into that
-   selection (they have no .gallery-card-media, which would produce dead slides in
-   the scroller/lightbox). So the shared base look now lives on .showcase-card
-   (used by both project cards and photo cards); .gallery-card stays reserved for
-   elements that should actually participate in the scroll/lightbox system. */
+   (initGalleryScroll and initGalleryLightbox) to build the horizontal photo gallery +
+   its lightbox. The ML Portfolio project cards want the same glass-card visual
+   language but must NOT be swept into that selection (they have no
+   .gallery-card-media, which would produce dead slides in the lightbox). So the
+   shared base look now lives on .showcase-card (used by both project cards and photo
+   cards); .gallery-card stays reserved for elements that should actually participate
+   in the scroll/lightbox system. */
 .showcase-card { position: relative; border-radius: 28px; overflow: hidden; transition: box-shadow 0.4s ease; }
-.gallery-card { position: relative; border-radius: 28px; overflow: hidden; transition: box-shadow 0.4s ease; }
+.gallery-card { position: relative; border-radius: 28px; overflow: hidden; transition: box-shadow 0.4s ease; scroll-snap-align: center; }
 
-/* Pinned horizontal-scroll variant */
+/* Horizontal-scroll track sizing */
 #gallery-track .gallery-card {
-    flex: 0 0 auto; width: min(90vw, 460px); transform: translate3d(0,0,0) scale(0.85); opacity: 0.5; will-change: transform, opacity;
+    flex: 0 0 auto; width: min(90vw, 460px);
 }
 #gallery-track .gallery-card:nth-child(even) { margin-top: 4rem; }
 #gallery-track .gallery-card:nth-child(odd) { margin-bottom: 4rem; }
@@ -479,12 +489,6 @@ body.menu-open { overflow: hidden; }
         scroll-behavior: auto !important;
     }
     .cursor-dot, .cursor-ring { display: none !important; }
-    #gallery-pin {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-    }
-    .gallery-card { scroll-snap-align: center; opacity: 1 !important; transform: scale(1) !important; }
     .loader-glitch::before, .loader-glitch::after { animation: none !important; }
 }
 
@@ -550,4 +554,3 @@ body.menu-open { overflow: hidden; }
     .chatbot-header-title span.chatbot-dot { animation: none; }
     .chatbot-typing span { animation: none; opacity: 0.7; }
 }
- 
