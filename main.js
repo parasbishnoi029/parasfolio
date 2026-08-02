@@ -161,6 +161,99 @@ async function fetchWithTimeout(resource, options = {}) {
     toggle();
 })();
 
+// --- 0C-2. SCROLL PROGRESS BAR ---
+(function initScrollProgress() {
+    const fill = document.getElementById('scroll-progress-fill');
+    if (!fill) return;
+    let rafId = null;
+    const update = () => {
+        rafId = null;
+        const doc = document.documentElement;
+        const scrollable = doc.scrollHeight - doc.clientHeight;
+        const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+        fill.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+    };
+    window.addEventListener('scroll', () => {
+        if (rafId === null) rafId = requestAnimationFrame(update);
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+})();
+
+// --- 0C-3. COPY EMAIL BUTTON ---
+(function initCopyEmail() {
+    const btn = document.getElementById('copy-email-btn');
+    const label = document.getElementById('copy-email-label');
+    if (!btn || !label) return;
+    const email = btn.dataset.email;
+    const defaultLabel = label.textContent;
+    let resetTimer = null;
+
+    btn.addEventListener('click', async () => {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(email);
+            } else {
+                // Fallback for non-HTTPS/older browsers: select+copy via a hidden textarea.
+                const ta = document.createElement('textarea');
+                ta.value = email; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+            }
+            label.textContent = 'Copied!';
+            btn.classList.add('is-copied');
+        } catch (err) {
+            label.textContent = 'Copy failed';
+        }
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+            label.textContent = defaultLabel;
+            btn.classList.remove('is-copied');
+        }, 2000);
+    });
+})();
+
+// --- 0C-4. CONSOLE EASTER EGG ---
+// Harmless: just prints to devtools console for anyone poking around the site's code.
+(function initConsoleEasterEgg() {
+    try {
+        console.log(
+            '%cPARASFOLIO',
+            'font-family: monospace; font-size: 28px; font-weight: 700; color: #00F2FE; text-shadow: 0 0 12px rgba(0,242,254,0.6);'
+        );
+        console.log(
+            '%cLooking under the hood? Nice.\n%cIf you spot something worth fixing — or just want to talk ML/AI — reach out: parasbishnoi012@gmail.com',
+            'font-family: monospace; font-size: 13px; color: #9D4EDD;',
+            'font-family: monospace; font-size: 12px; color: #9ca3af;'
+        );
+    } catch (e) { /* console may be restricted in some environments; fail silently */ }
+})();
+
+// --- 0C-5. KONAMI CODE EASTER EGG ---
+// Classic up-up-down-down-left-right-left-right-b-a sequence triggers a brief,
+// self-contained visual flourish. Purely decorative, auto-reverts, no effect on
+// anything else on the page.
+(function initKonamiCode() {
+    const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let progress = 0;
+    let activeTimer = null;
+
+    document.addEventListener('keydown', (e) => {
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        progress = (key === sequence[progress]) ? progress + 1 : (key === sequence[0] ? 1 : 0);
+
+        if (progress === sequence.length) {
+            progress = 0;
+            document.body.classList.add('konami-active');
+            clearTimeout(activeTimer);
+            activeTimer = setTimeout(() => document.body.classList.remove('konami-active'), 2600);
+        }
+    });
+})();
+
 // --- 0D. ACTIVE NAV LINK HIGHLIGHTING ---
 (function initActiveNav() {
     const navLinks = document.querySelectorAll('.nav-link[data-nav-section]');
