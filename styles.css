@@ -465,14 +465,31 @@ body.menu-open { overflow: hidden; }
 }
 
 @media (max-width: 768px) {
-    body { cursor: auto; overflow-x: hidden; }
+    body { cursor: auto; overflow-x: hidden; overscroll-behavior-y: contain; }
+    * { -webkit-tap-highlight-color: transparent; }
     .cursor-dot, .cursor-ring { display: none !important; } 
     .glass-3d { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
     #hero-avatar { max-width: 320px; }
-    .gallery-card { width: 85vw; margin: 0 !important; }
+    .gallery-card { width: 85vw; margin: 0 !important; scroll-snap-stop: always; }
     .gallery-card-media { height: 38vh; }
     #journey .group { flex-direction: column !important; }
+
+    /* MOBILE UX FIX: enlarge invisible tap area on small circular controls to the
+       ~44px touch-target size recommended for mobile, without changing how they
+       look. Uses a transparent ::before overlay rather than resizing the element
+       itself, so nothing shifts visually. */
+    .gallery-dot { position: relative; }
+    .gallery-dot::before { content: ''; position: absolute; inset: -14px; }
+    #chatbot-close { position: relative; }
+    #chatbot-close::before { content: ''; position: absolute; inset: -8px; }
+    .gallery-video-toggle { width: 40px; height: 40px; }
 }
+
+/* MOBILE UX FIX: the hamburger menu button only ever renders below the `lg`
+   breakpoint (it's `lg:hidden` in the markup), so this is effectively mobile-only
+   already — no media query needed. Negative margin keeps the icon in the same visual
+   spot while padding enlarges the actual tappable area to a comfortable size. */
+#mobile-menu-toggle { padding: 12px; margin: -12px; }
 
 @media (hover: none) {
     .glass-3d:hover { transform: none; box-shadow: none; }
