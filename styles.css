@@ -137,6 +137,47 @@ button:focus-visible,
 }
 .skip-link:focus { top: 1rem; }
 
+/* Scroll progress bar — thin fixed strip at the very top of the viewport, fill width
+   tracks how far down the page the reader is. Sits above regular content but below
+   the mobile menu/lightbox/cursor layers. */
+#scroll-progress {
+    position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: var(--z-scroll);
+    background: rgba(249, 250, 251, 0.06); pointer-events: none;
+}
+#scroll-progress-fill {
+    height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.5); transform-origin: left; transition: width 0.05s linear;
+}
+
+/* Copy-email button feedback state */
+#copy-email-btn.is-copied { border-color: var(--color-accent) !important; color: var(--color-accent) !important; }
+
+/* Konami code easter egg — brief, self-reverting, purely decorative */
+@keyframes konamiPulse {
+    0% { filter: hue-rotate(0deg) saturate(1); }
+    50% { filter: hue-rotate(360deg) saturate(1.8); }
+    100% { filter: hue-rotate(360deg) saturate(1); }
+}
+body.konami-active #scroll-container { animation: konamiPulse 2.2s ease-in-out; }
+body.konami-active::after {
+    content: '🎉 You found the secret. ML nerd confirmed.';
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Fira Code', monospace; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--color-primary); background: rgba(10, 12, 18, 0.92); border: 1px solid rgba(0, 242, 254, 0.4);
+    padding: 1rem 2rem; border-radius: 999px; z-index: var(--z-preloader); pointer-events: none;
+    text-align: center; white-space: nowrap; box-shadow: 0 20px 60px rgba(0, 242, 254, 0.3);
+    animation: konamiToast 2.6s ease forwards;
+}
+@keyframes konamiToast {
+    0% { opacity: 0; transform: translate(-50%, -40%); }
+    15% { opacity: 1; transform: translate(-50%, -50%); }
+    85% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -60%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    body.konami-active #scroll-container { animation: none; }
+}
+
 /* Back-to-top control */
 #back-to-top {
     position: fixed;
@@ -470,6 +511,7 @@ body.menu-open { overflow: hidden; }
     .cursor-dot, .cursor-ring { display: none !important; } 
     .glass-3d { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
     #hero-avatar { max-width: 320px; }
+    #hero-avatar-wrap { height: 380px; margin: 0 auto 1rem; }
     .gallery-card { width: 85vw; margin: 0 !important; scroll-snap-stop: always; }
     .gallery-card-media { height: 38vh; }
     #journey .group { flex-direction: column !important; }
