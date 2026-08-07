@@ -679,7 +679,7 @@
                                     <span class="text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-network-wired" aria-hidden="true"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
-                                    A modular deep learning framework built strictly in Python and NumPy without relying on PyTorch or TensorFlow. Implements forward/backward propagation, activation layers, and custom optimizers to deeply understand mathematical mechanics.
+                                    Most ML coursework treats backprop as a library call. I wanted to know what <code class="text-primary text-base">model.fit()</code> actually does under the hood — so I built the engine myself: a PyTorch-style <code class="text-primary text-base">Sequential</code> container with Dense layers, ReLU, Softmax + Cross-Entropy, and SGD/Adam optimizers, all hand-derived from matrix calculus in raw NumPy. Trained end-to-end on MNIST, it reaches <strong class="text-gray-50">~97% test accuracy</strong> — with zero PyTorch or TensorFlow anywhere in the stack.
                                 </p>
 
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-50 mb-10">
@@ -691,6 +691,9 @@
                                 <div class="flex flex-wrap items-center gap-6">
                                     <a href="https://github.com/parasbishnoi029/neural-net-from-scratch" aria-label="View Neural Net From Scratch Repository" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-primary transition-colors hover-target">
                                         <i class="devicon-github-original text-xl" aria-hidden="true"></i><span>View Repository</span>
+                                    </a>
+                                    <a href="https://github.com/parasbishnoi029/neural-net-from-scratch/tree/main/src" aria-label="See the core engine source code" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-xs font-mono tracking-widest uppercase text-gray-500 hover:text-primary transition-colors hover-target">
+                                        <i class="fa-solid fa-code" aria-hidden="true"></i><span>See the Engine →</span>
                                     </a>
                                 </div>
                             </div>
@@ -725,18 +728,21 @@
                                     <span class="text-secondary text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
-                                    An AI-powered IDE extension that automatically translates legacy codebases into modern frameworks, cutting migration time in half using applied Generative AI and LLM parsing.
+                                    Feeding a whole legacy file to an LLM in one shot reliably produced hallucinated variables and truncated logic — context windows just aren't built for large-scale refactors. My fix: a Python backend that parses each file into an <strong class="text-gray-50">Abstract Syntax Tree</strong> first, breaks it into self-contained semantic chunks, translates each in isolation, then re-stitches the result — preserving type information and structure throughout. Ships as a real VS Code extension.
                                 </p>
 
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-50 mb-10">
-                                    <span class="bg-secondary/10 border border-secondary/30 text-secondary px-3 py-1.5 rounded-md">JavaScript</span>
-                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">LLMs</span>
-                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">GenAI</span>
+                                    <span class="bg-secondary/10 border border-secondary/30 text-secondary px-3 py-1.5 rounded-md">TypeScript</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">Python / AST</span>
+                                    <span class="bg-gray-100/5 border border-gray-200/10 px-3 py-1.5 rounded-md">GPT-4o</span>
                                 </div>
  
                                 <div class="flex flex-wrap items-center gap-6">
                                     <a href="https://github.com/parasbishnoi029/CodeBridge" aria-label="View CodeBridge Repository" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-secondary transition-colors hover-target">
                                         <i class="devicon-github-original text-xl" aria-hidden="true"></i><span>View Repository</span>
+                                    </a>
+                                    <a href="https://github.com/parasbishnoi029/CodeBridge/tree/main/src" aria-label="See the AST parsing engine source code" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-xs font-mono tracking-widest uppercase text-gray-500 hover:text-secondary transition-colors hover-target">
+                                        <i class="fa-solid fa-code" aria-hidden="true"></i><span>See the Engine →</span>
                                     </a>
                                 </div>
                             </div>
@@ -752,7 +758,7 @@
                                     <span class="text-accent text-3xl opacity-50 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
                                 </div>
                                 <p class="text-lg font-light leading-relaxed text-gray-400 mb-8">
-                                    An AI-powered DevSecOps code review platform that audits source code and GitHub pull requests for security, performance, reliability, and quality concerns. Powered by Gemini and LangGraph, it produces a structured report with a score, risk level, validated strengths, severity-classified findings, and issue-linked fixes — with FastAPI, Celery, Redis, and Supabase running automated PR reviews behind a Streamlit command center.
+                                    Manual PR review doesn't scale — reviewers skim, security issues slip through, and feedback loops stretch for days. Aegis AI turns a pull request into a structured engineering audit instead: an overall score, risk level, severity-classified findings (with confidence ratings, not just "this looks wrong"), and fixes linked directly to the issue they address. Gemini + LangGraph drive the analysis; a FastAPI/Celery/Redis pipeline handles webhooks asynchronously so GitHub never times out waiting on the AI, and a Streamlit dashboard surfaces review history and trends from Supabase.
                                 </p>
 
                                 <div class="flex flex-wrap gap-2 text-[10px] font-mono text-gray-50 mb-10">
@@ -772,6 +778,9 @@
                                     </a>
                                     <a href="https://www.linkedin.com/posts/paras029_ai-generativeai-googlegemini-ugcPost-7490684475769532416-U7T3/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF60u9IBpVmvRsrkMAd5SUnLs9uxbs9DkL8" aria-label="View Aegis AI LinkedIn Announcement" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-sm font-bold tracking-widest uppercase text-gray-50 hover:text-[#0077b5] transition-colors hover-target">
                                         <i class="devicon-linkedin-plain text-xl" aria-hidden="true"></i><span>LinkedIn Post</span>
+                                    </a>
+                                    <a href="https://github.com/parasbishnoi029/ai-reviewer/blob/main/graph.py" aria-label="See the AI review workflow source code" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-xs font-mono tracking-widest uppercase text-gray-500 hover:text-accent transition-colors hover-target">
+                                        <i class="fa-solid fa-code" aria-hidden="true"></i><span>See the Engine →</span>
                                     </a>
                                 </div>
                             </div>
