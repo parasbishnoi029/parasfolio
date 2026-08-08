@@ -1,7 +1,7 @@
 /**
  * PARASFOLIO AI ASSISTANT ("ParasBot")
  * A lightweight, dependency-free chat widget that:
- *  1. Answers questions using a knowledge base built from this site's own content.
+ *  1. Answers questions using a knowledge base built from this site's own content. 
  *  2. Pulls LIVE data from the public GitHub REST API.
  *  3. Links out to the LinkedIn profile.
  *  4. Reasons with the Gemini API (client-side, domain-restricted key) when available,
