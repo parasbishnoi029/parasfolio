@@ -395,7 +395,7 @@ async function fetchWithTimeout(resource, options = {}) {
         if (Array.isArray(articles) && articles.length > 0) {
             container.innerHTML = articles.map(article => `
                 <a href="${escapeHTML(article.url)}" target="_blank" rel="noopener noreferrer" class="glass-3d p-6 rounded-2xl interactive-3d hover-target group border-t-2 border-secondary/50 flex flex-col h-full">
-                    <img src="${escapeHTML(article.cover_image || 'assets/placeholder.jpg')}" width="400" height="128" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
+                    <img src="${escapeHTML(article.cover_image || '/assets/placeholder.jpg')}" width="400" height="128" class="w-full h-32 object-cover rounded-xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity" alt="Article Cover" onerror="this.style.display='none'">
                     <h3 class="font-display font-bold text-lg text-gray-50 mb-2">${escapeHTML(article.title)}</h3>
                     <p class="text-xs text-gray-400 font-light flex-grow">${escapeHTML(article.description)}</p>
                     <div class="mt-4 pt-4 border-t border-gray-200/10 text-[10px] font-mono text-secondary flex justify-between">
